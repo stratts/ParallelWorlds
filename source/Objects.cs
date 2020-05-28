@@ -1,6 +1,6 @@
 using System;
 
-public struct ObjectInfo {
+public class ObjectInfo {
     public int x, y;
 	public int cx, cy;
 	public int vy, vx;
@@ -36,6 +36,7 @@ static class Objects {
 
         // Initialise and set our struct + variables
         //------------------------------------------------------------------------
+		objects[MAXOBJECTS] = new ObjectInfo();
 
 		// Starting positions, can be used to reset the object
 		objects[MAXOBJECTS].startX = x << 8;		
@@ -99,8 +100,8 @@ static class Objects {
 
 		/*PA_LoadSpritePal(MAINSCREEN, objects[MAXOBJECTS].objClass.palNum, (void*)objects[MAXOBJECTS].objClass.palbuf);
 		PA_CreateSprite(MAINSCREEN, objects[MAXOBJECTS].sprite, objects[MAXOBJECTS].objClass.spritebuf, OBJ_SIZE_64X64, 1, objects[MAXOBJECTS].objClass.palNum, x - (camera.x>>8), y - (camera.y>>8));
-		PA_SetSpritePrio(MAINSCREEN, objects[MAXOBJECTS].sprite, 1);
-		setSpriteXY(MAINSCREEN, objects[MAXOBJECTS].sprite, x-(camera.x>>8), y - (camera.y>>8));*/
+		PA_SetSpritePrio(MAINSCREEN, objects[MAXOBJECTS].sprite, 1);*/
+		Functions.setSpriteXY(Globals.MAINSCREEN, objects[MAXOBJECTS].sprite, x-(Camera.camera.x>>8), y - (Camera.camera.y>>8));
 
 		objects[MAXOBJECTS].alive = true;
     }

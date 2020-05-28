@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using ParallelWorlds;
 
 static class PA {
@@ -15,6 +16,8 @@ static class PA {
         public bool Loaded { get; private set; } = false;
         public string Path { get; }
 
+        private Color[] _colors;
+
         public Background(string path) {
             Path = path;
         }
@@ -23,12 +26,21 @@ static class PA {
             using (var f = new FileStream(Path, FileMode.Open)) {
                 Texture = Texture2D.FromStream(Game.GraphicsDevice, f);
             }
+            _colors = new Color[Texture.Width * Texture.Height];
+            Texture.GetData<Color>(_colors);
             Loaded = true;
+        }
+
+        public Color GetColor(int x, int y) {
+            if (!Loaded) Load();
+            return _colors[Texture.Width * y + x];
         }
     }
 
     public static Background[] MainBackgrounds = new Background[4];
     public static Background[] MiscBackgrounds = new Background[4];
+
+    public static Dictionary<int, Vector2> sprites = new Dictionary<int, Vector2>();
 
     private static Background[] GetScreen(byte screen) {
         if (screen == Globals.MAINSCREEN) return MainBackgrounds;
@@ -67,7 +79,11 @@ static class PA {
     }
 
     public static bool EasyBgGetPixel(byte screen, byte layer, int x, int y) {
-        return false;
+        var background = GetBackground(screen, layer);
+        if (background == null) return false;
+        var color = background.GetColor(x, y);
+        var result = (color.A != 0);
+        return result;
     }
 
 	public static void SetBrightness(byte screen, sbyte brightness) {
@@ -84,7 +100,7 @@ static class PA {
     }
 
     public static void SetSpriteXY(byte screen, int sprite, int x, int y) {
-
+        sprites[sprite] = new Vector2(x + 32 - (Classes.MARIO.width / 2) , y + 64 - Classes.MARIO.height);
     }
 
     public static void SetSpriteAnim(byte screen, int sprite, int animframe) {
@@ -126,7 +142,18 @@ static class Pad {
     public static Buttons Newpress;
     public static Buttons Held;
 
+    private static KeyboardState _prev;
+
     public struct Buttons {
         public bool A, B, X, Y, Up, Down, Left, Right, Start, Select, L, R;
+    }
+
+    public static void Update(KeyboardState kstate) {
+        if (kstate.IsKeyDown(Keys.Left)) Held.Left = true;
+        else Held.Left = false;
+        if (kstate.IsKeyDown(Keys.Right)) Held.Right = true;
+        else Held.Right = false;
+        if (kstate.IsKeyDown(Keys.Up)) Newpress.Up = true;
+        else Newpress.Up = false;
     }
 }

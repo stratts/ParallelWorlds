@@ -13,7 +13,7 @@ public static class CA {
     }
 
     public static void SimpleText(uint screen, int x, int y, string text) {
-        Console.WriteLine(text);
+
     }
 
     public static void SimpleText(uint screen, int x, int y, string format, params object[] args) {

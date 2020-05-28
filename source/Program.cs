@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace ParallelWorlds
@@ -14,6 +15,8 @@ namespace ParallelWorlds
             }
         }
 
+        private int _width = 256;
+        private int _height = 192;
         private SpriteBatch _spriteBatch;
 
         private ParallelWorlds()
@@ -21,8 +24,8 @@ namespace ParallelWorlds
             var gdm = new GraphicsDeviceManager(this);
 
             // Typically you would load a config here...
-            gdm.PreferredBackBufferWidth = 1280;
-            gdm.PreferredBackBufferHeight = 720;
+            gdm.PreferredBackBufferWidth = 256;
+            gdm.PreferredBackBufferHeight = 192;
             gdm.IsFullScreen = false;
             gdm.SynchronizeWithVerticalRetrace = true;
             IsFixedTimeStep = true;
@@ -55,6 +58,7 @@ namespace ParallelWorlds
         protected override void Update(GameTime gameTime)
         {
             // Run game logic in here. Do NOT render anything here!
+            Pad.Update(Keyboard.GetState());
             Rooms.Update();
             base.Update(gameTime);
         }
@@ -68,10 +72,23 @@ namespace ParallelWorlds
                 var background = PA.MainBackgrounds[i];
                 if (background == null) continue;
                 if (!background.Loaded) background.Load();
-                var sourceRect = new Rectangle(background.Pos.ToPoint(), new Point(256, 192));
+                var sourceRect = new Rectangle(background.Pos.ToPoint(), new Point(_width, _height));
                 _spriteBatch.Draw(background.Texture, Vector2.Zero, sourceRect, Color.White);
             }
             _spriteBatch.End();
+
+            _spriteBatch.Begin();
+            var width = Classes.MARIO.width;
+            var height = Classes.MARIO.height;
+            var square = new Texture2D(GraphicsDevice, width, height);
+            var colors = new Color[width * height];
+            for (int i = 0; i < colors.Length; i++) colors[i] = Color.Black;
+            square.SetData<Color>(colors);
+            foreach (Vector2 pos in PA.sprites.Values) {
+                _spriteBatch.Draw(square, new Vector2(pos.X, pos.Y), Color.White);
+            }
+            _spriteBatch.End();
+
             base.Draw(gameTime);
         }
     }
