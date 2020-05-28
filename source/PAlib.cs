@@ -1,7 +1,47 @@
 using System;
-using System.Numerics;
+using System.IO;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ParallelWorlds;
 
 static class PA {
+
+    public static Game Game { get; set; }
+
+    public class Background {
+        public Vector2 Pos { get; set; }
+        public Texture2D Texture { get; set; }
+        public bool Loaded { get; private set; } = false;
+        public string Path { get; }
+
+        public Background(string path) {
+            Path = path;
+        }
+
+        public void Load() {
+            using (var f = new FileStream(Path, FileMode.Open)) {
+                Texture = Texture2D.FromStream(Game.GraphicsDevice, f);
+            }
+            Loaded = true;
+        }
+    }
+
+    public static Background[] MainBackgrounds = new Background[4];
+    public static Background[] MiscBackgrounds = new Background[4];
+
+    private static Background[] GetScreen(byte screen) {
+        if (screen == Globals.MAINSCREEN) return MainBackgrounds;
+        else return MiscBackgrounds;
+    }
+
+    private static Background GetBackground(byte screen, byte layer) { 
+        return GetScreen(screen)[layer] ;
+    }
+
+    private static void SetBackground(byte screen, byte layer, Background background) {
+        GetScreen(screen)[layer] = background;
+    }
 
     public static void Init16cBg(byte screen, byte layer) {
 
@@ -16,12 +56,14 @@ static class PA {
     }
 
     public static void EasyBgScrollXY(byte screen, byte layer, 
-        int x, int y) {
-
+            int x, int y) {
+        var background = GetBackground(screen, layer);
+        if (background != null) background.Pos = new Vector2(x, y);
     }
 
     public static void EasyLoadBackground(byte screen, byte layer, string path) {
         Console.WriteLine($"Load background {path}");
+        SetBackground(screen, layer, new Background(path));
     }
 
     public static bool EasyBgGetPixel(byte screen, byte layer, int x, int y) {
@@ -33,7 +75,7 @@ static class PA {
     }
 
     public static void WaitForVBL() {
-        System.Threading.Thread.Sleep(33);
+
     }
 
     public static int _16cText(byte screen, int basex, int basey, 

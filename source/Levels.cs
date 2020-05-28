@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using IniParser;
-using System.Text.Json;
 
 struct LevelInfo {
     public string name;
@@ -53,7 +52,6 @@ static class Levels {
         var MISCSCREEN = Globals.MISCSCREEN;
 
         string levelPath;
-        string bgPath;
         string rootPath;
 
         PA.Init16cBg(0, 0);
@@ -62,13 +60,12 @@ static class Levels {
         bool midLoaded, backLoaded;
 
         rootPath = CA.rootf("/levels");	
-        levelPath = String.Format("{0}/{1}/{2}", rootPath, world.level[levelNum].name, "StageBG");
-        bgPath = String.Format("{0}/{1}", levelPath, "info.bin");
+        levelPath = String.Format("{0}/{1}/{2}.png", rootPath, world.level[levelNum].name, "StageBG");
 
         CA.Information(1, "Loading...");
         CA.FadeIn(0);
 
-        if(!File.Exists(bgPath))
+        if(!File.Exists(levelPath))
         {
             Functions.displayError(String.Format("Could not load stage for {0}.", world.level[levelNum].name));
         }
@@ -78,9 +75,8 @@ static class Levels {
             PA.HideBg(MAINSCREEN, 1);
         }
 
-        levelPath = String.Format("{0}/{1}/{2}", rootPath, world.level[levelNum].name, "MidBG");
-        bgPath = String.Format("{0}/{1}", levelPath, "info.bin");
-        if(!File.Exists(bgPath)) 
+        levelPath = String.Format("{0}/{1}/{2}.png", rootPath, world.level[levelNum].name, "MidBG");
+        if(File.Exists(levelPath)) 
         {
             PA.EasyLoadBackground(MAINSCREEN, 2, levelPath);
             PA.HideBg(MAINSCREEN, 2);
@@ -88,9 +84,8 @@ static class Levels {
         }
         else midLoaded = false;
 
-        levelPath = String.Format("{0}/{1}/{2}", rootPath, world.level[levelNum].name, "BackBG");
-        bgPath = String.Format("{0}/{1}", levelPath, "info.bin");
-        if(!File.Exists(bgPath)) 
+        levelPath = String.Format("{0}/{1}/{2}.png", rootPath, world.level[levelNum].name, "BackBG");
+        if(File.Exists(levelPath)) 
         {
             PA.EasyLoadBackground(MAINSCREEN, 3, levelPath);
             PA.HideBg(MAINSCREEN, 3);
@@ -98,9 +93,8 @@ static class Levels {
         }
         else backLoaded = false;
 
-        levelPath = String.Format("{0}/{1}/{2}", rootPath, world.level[levelNum].name, "CollisionMap");
-        bgPath = String.Format("{0}/{1}", levelPath, "info.bin");
-        if(File.Exists(bgPath)) 
+        levelPath = String.Format("{0}/{1}/{2}.png", rootPath, world.level[levelNum].name, "CollisionMap");
+        if(File.Exists(levelPath)) 
         {
             PA.EasyLoadBackground(MISCSCREEN, 3, levelPath);
             PA.HideBg(MAINSCREEN, 3);

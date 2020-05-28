@@ -3,7 +3,13 @@ using System.Collections;
 using IniParser;
 
 public static partial class Rooms {
-    public static void mainMenu() {
+    public static IEnumerator CurrentRoom { get; set; } = mainMenu();
+
+    public static void Update() {
+        CurrentRoom.MoveNext();
+    }
+
+    public static IEnumerator mainMenu() {
         Globals.selectedLevel = 0;
         Globals.selectedCharacter = 0;
         Globals.selectedItem = 0;
@@ -40,15 +46,16 @@ public static partial class Rooms {
 
             PA.WaitForVBL();
             CA.Update16c();
+            yield return null;
             break;
         }
 
         CA.FadeOut(0); 
 
-        Rooms.mainGame();
+        CurrentRoom = mainGame();
     }
 
-    public static void mainGame() {
+    public static IEnumerator mainGame() {
         var Jelli = Levels.Jelli;
         Levels.loadLevel(Jelli, Globals.selectedLevel);
 		
@@ -121,11 +128,13 @@ public static partial class Rooms {
                     CA.SimpleText(0, 4, 12, "Mario sprite by RangeTE");
                     PA.WaitForVBL();
                     CA.Update16c();
+                    yield return null;
                 }
                 CA.Information(0, "\n- Paused -\nPress START to unpause the game\nHold SELECT for credits");
                 CA.SimpleText(0, 4, 180, "Hint: your movement affects the points you gain...");
                 PA.WaitForVBL();
                 CA.Update16c();
+                yield return null;
             }
             if(Pad.Newpress.Start) { paused = true; }
   
@@ -150,6 +159,7 @@ public static partial class Rooms {
             
             PA.WaitForVBL();
             CA.Update16c();    
+            yield return null;
         }
         
     }
