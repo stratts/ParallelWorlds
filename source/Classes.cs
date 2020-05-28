@@ -20,7 +20,7 @@ public static class Classes {
     //--------------------------------------------------------------
     // Start defining characters
     //--------------------------------------------------------------
-    public static ObjectClass MARIO;
+    public static ObjectClass FROG;
     public static ObjectClass DUMMY;
     public static ObjectClass LINK;
     //--------------------------------------------------------------
@@ -28,38 +28,38 @@ public static class Classes {
     public static ObjectClass[] classes;
 
     public static void setClasses() {
-        MARIO.name = "Mario";
-        MARIO.sprite = CA.rootf("/characters/Mario/mario");
-        MARIO.speed = 512;
-        MARIO.weight = 80;
-        MARIO.ai = AI.generalCharacter;
-        MARIO.width = 27;
-        MARIO.height = 36;
-        MARIO.animSpeed = 7;
-        MARIO.idle.start = 0;
-        MARIO.idle.end = 3;
-        MARIO.walk.start = 4;
-        MARIO.walk.end = 11;
-        MARIO.run.start = 0;
-        MARIO.run.end = 0;
-        MARIO.jump.start = 12;
-        MARIO.jump.end = 12;
-        MARIO.fall.start = 19;
-        MARIO.fall.end = 20;
+        FROG.name = "Frog";
+        FROG.sprite = CA.rootf("/characters/Frog/frog.png");
+        FROG.speed = 512;
+        FROG.weight = 80;
+        FROG.ai = AI.generalCharacter;
+        FROG.width = 24;
+        FROG.height = 28;
+        FROG.animSpeed = 3;
+        FROG.idle.start = 0;
+        FROG.idle.end = 10;
+        FROG.walk.start = 12;
+        FROG.walk.end = 23;
+        FROG.run.start = 0;
+        FROG.run.end = 0;
+        FROG.jump.start = 24;
+        FROG.jump.end = 24;
+        FROG.fall.start = 25;
+        FROG.fall.end = 25;
 
         DUMMY.name = "Dummy";
-        DUMMY.sprite = CA.rootf("/characters/Mario/mario");
+        DUMMY.sprite = CA.rootf("/characters/Frog/frog.png");
         DUMMY.speed = 256;
         DUMMY.weight = 80;
         DUMMY.ai = AI.aiGenericGround;
-        DUMMY.width = 27;
-        DUMMY.height = 40;
-        DUMMY.animSpeed = 7;
+        DUMMY.width = 24;
+        DUMMY.height = 28;
+        DUMMY.animSpeed = 3;
         DUMMY.idle.start = 0;
-        DUMMY.idle.end = 3;
-        DUMMY.walk.start = 4;
-        DUMMY.walk.end = 11;
+        DUMMY.idle.end = 10;
+        DUMMY.walk.start = 12;
+        DUMMY.walk.end = 23;
 
-        classes = new [] { LINK, MARIO, DUMMY };
+        classes = new [] { LINK, FROG, DUMMY };
     }
 }

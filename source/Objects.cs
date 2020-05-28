@@ -72,6 +72,7 @@ static class Objects {
 		objects[MAXOBJECTS].vy = 0;
 
         Console.WriteLine($"Create {objClass.name} at {x}, {y}");
+
 	// Load the object's sprite and palette
 	//------------------------------------------------------------------------
 
@@ -98,15 +99,14 @@ static class Objects {
 		// Flush the cache: else there would be glitches
 		DC_FlushAll();*/
 
-
 	// Create the object
-	//------------------------------------------------------------------------
-
+	//------------------------------------------------------------------------	
 		/*PA_LoadSpritePal(MAINSCREEN, objects[MAXOBJECTS].objClass.palNum, (void*)objects[MAXOBJECTS].objClass.palbuf);
 		PA_CreateSprite(MAINSCREEN, objects[MAXOBJECTS].sprite, objects[MAXOBJECTS].objClass.spritebuf, OBJ_SIZE_64X64, 1, objects[MAXOBJECTS].objClass.palNum, x - (camera.x>>8), y - (camera.y>>8));
-		PA_SetSpritePrio(MAINSCREEN, objects[MAXOBJECTS].sprite, 1);*/
+		PA_SetSpritePrio(MAINSCREEN, objects[MAXOBJECTS].sprite, 1);*/	
+		
+		PA.CreateSprite(MAINSCREEN, objects[MAXOBJECTS].sprite, 32, 32, objClass.sprite);
 		setSpriteXY(MAINSCREEN, objects[MAXOBJECTS].sprite, x-(Camera.camera.x>>8), y - (Camera.camera.y>>8));
-
 		objects[MAXOBJECTS].alive = true;
     }
 
@@ -157,7 +157,7 @@ static class Objects {
 			//PA_SetRotsetNoZoom(MAINSCREEN, object[currentObject].rotsetSlot, 300);
 
 			//PA_SetSpriteRotDisable(MAINSCREEN, object[currentObject].sprite);
-					//PA_SetSpriteHflip(MAINSCREEN, object[currentObject].sprite, 1);
+			//PA_SetSpriteHflip(MAINSCREEN, object[currentObject].sprite, 1);
 
 			if(objects[currentObject].loaded) objects[currentObject].objClass.ai();
 		}

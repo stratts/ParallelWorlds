@@ -65,9 +65,11 @@ namespace ParallelWorlds
 
         protected override void Draw(GameTime gameTime)
         {
-            // Render stuff in here. Do NOT run game logic in here!
             GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            // Render backgrounds
             _spriteBatch.Begin(samplerState: SamplerState.LinearWrap);
+
             for (int i = PA.MainBackgrounds.Length - 1; i >= 0; i--) {
                 var background = PA.MainBackgrounds[i];
                 if (background == null) continue;
@@ -75,17 +77,27 @@ namespace ParallelWorlds
                 var sourceRect = new Rectangle(background.Pos.ToPoint(), new Point(_width, _height));
                 _spriteBatch.Draw(background.Texture, Vector2.Zero, sourceRect, Color.White);
             }
+
             _spriteBatch.End();
 
+            // Render sprites
             _spriteBatch.Begin();
-            var width = Classes.MARIO.width;
-            var height = Classes.MARIO.height;
-            var square = new Texture2D(GraphicsDevice, width, height);
-            var colors = new Color[width * height];
-            for (int i = 0; i < colors.Length; i++) colors[i] = Color.Black;
-            square.SetData<Color>(colors);
-            foreach (Vector2 pos in PA.sprites.Values) {
-                _spriteBatch.Draw(square, new Vector2(pos.X, pos.Y), Color.White);
+
+            foreach (var sprite in PA.Sprites) {
+                if (sprite == null) continue;
+                if (!sprite.Loaded) sprite.Load();
+
+                var w = sprite.Size.X;
+                var h = sprite.Size.Y;
+                var sheetSize = new Point(sprite.Texture.Width / w, sprite.Texture.Height / h);
+                var frame = new Point(sprite.Frame % sheetSize.X, sprite.Frame / sheetSize.X);
+                var sourceRect = new Rectangle(new Point(frame.X * w, frame.Y * h), new Point(w, h));
+
+                var effects = SpriteEffects.None;
+                if (sprite.Flip) effects = SpriteEffects.FlipHorizontally;
+
+                _spriteBatch.Draw(sprite.Texture, sprite.Pos, sourceRect, Color.White, 0,
+                    Vector2.Zero, 1, effects, 0);
             }
             _spriteBatch.End();
 

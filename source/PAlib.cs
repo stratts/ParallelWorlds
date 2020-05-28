@@ -5,31 +5,43 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
-using ParallelWorlds;
 
 static class PA {
 
     public static Game Game { get; set; }
 
-    public class Background {
+    public class Sprite {
         public Vector2 Pos { get; set; }
         public Texture2D Texture { get; set; }
         public bool Loaded { get; private set; } = false;
         public string Path { get; }
+        public int Frame { get; set; } = 0;
+        public Point Size { get; set; }
+        public bool Flip { get; set; } = false;
 
-        private Color[] _colors;
-
-        public Background(string path) {
+        public Sprite(string path) {
             Path = path;
         }
 
-        public void Load() {
+        public virtual void Load() {
             using (var f = new FileStream(Path, FileMode.Open)) {
                 Texture = Texture2D.FromStream(Game.GraphicsDevice, f);
             }
+            Loaded = true;
+        }
+    }
+
+    public class Background : Sprite {
+
+        private Color[] _colors;
+
+        public Background(string path) : base(path) { }
+
+        public override void Load() {
+            base.Load();
+            Size = new Point(Texture.Width, Texture.Height);
             _colors = new Color[Texture.Width * Texture.Height];
             Texture.GetData<Color>(_colors);
-            Loaded = true;
         }
 
         public Color GetColor(int x, int y) {
@@ -41,7 +53,7 @@ static class PA {
     public static Background[] MainBackgrounds = new Background[4];
     public static Background[] MiscBackgrounds = new Background[4];
 
-    public static Dictionary<int, Vector2> sprites = new Dictionary<int, Vector2>();
+    public static Sprite[] Sprites = new Sprite[128];
 
     private static Background[] GetScreen(byte screen) {
         if (screen == Globals.MAINSCREEN) return MainBackgrounds;
@@ -100,16 +112,24 @@ static class PA {
             return 0;
     }
 
+    public static void CreateSprite(byte screen, int sprite, int width, int height, string path) {
+        var s = new Sprite(path);
+        s.Size = new Point(width, height);
+        Sprites[sprite] = s;
+    }
+
     public static void SetSpriteXY(byte screen, int sprite, int x, int y) {
-        sprites[sprite] = new Vector2(x + 32 - (Classes.MARIO.width / 2) , y + 64 - Classes.MARIO.height);
+        Sprites[sprite].Pos = new Vector2(x + 32 - (Classes.FROG.width / 2) , y + 31);
     }
 
     public static void SetSpriteAnim(byte screen, int sprite, int animframe) {
-
+        Sprites[sprite].Frame = animframe;
     }
 
     public static void SetSpriteHflip(byte screen, int sprite, byte hflip) {
-
+        var s = Sprites[sprite];
+        if (hflip > 0) s.Flip = true;
+        else s.Flip = false;
     }
 
     public static void DeleteSprite(byte screen, int sprite) {
