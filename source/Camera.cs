@@ -81,8 +81,8 @@ static class Camera {
         const int h_border = 80;
 
         // Just to make the code easier to read
-        int x = (camera.target.x) >> 8;
-        int y = (camera.target.y) >> 8;
+        int x = (camera.target.cx) >> 8;
+        int y = (camera.target.cy) >> 8;
         int speed = (camera.target.objClass.speed);
         int fall = (camera.target.vy);	
         int camerax = (camera.x) >> 8;

@@ -126,9 +126,9 @@ static class Levels {
         int xPos = x;
         int yPos = y;
 
-        if(xPos > currentWorld.level[currentLevel].width) xPos = currentWorld.level[currentLevel].width;
+        if(xPos > currentWorld.level[currentLevel].width - 1) xPos = currentWorld.level[currentLevel].width - 1;
         if(xPos < 0) xPos = 0;
-        if(yPos > currentWorld.level[currentLevel].height) yPos = currentWorld.level[currentLevel].height;
+        if(yPos > currentWorld.level[currentLevel].height - 1) yPos = currentWorld.level[currentLevel].height - 1;
         if (yPos < 0) yPos = 0;
 
         return PA.EasyBgGetPixel(screen, bglayer, xPos, yPos);
