@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using ParallelWorlds;
 
 static class PA {
@@ -135,6 +136,13 @@ static class PA {
 
     public static int Cos(int angle) {
         return 0;
+    }
+
+    public static void PlayOgg(string path) {
+        var p = Path.GetFullPath(path);
+        var song = Song.FromUri(Path.GetFileName(path), new Uri(p));
+        MediaPlayer.Play(song);
+        MediaPlayer.IsRepeating = true;
     }
 }
 

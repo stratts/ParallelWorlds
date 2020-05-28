@@ -118,8 +118,8 @@ static class Levels {
 
         if(world.level[levelNum].music != null)
         {
-            string music = CA.rootf("music/") + world.level[levelNum].music;
-            // Load music in loop
+            string music = CA.rootf("/music/") + world.level[levelNum].music;
+            PA.PlayOgg(music);
         }	
     }
 
