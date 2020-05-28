@@ -2,6 +2,9 @@ using System;
 using System.IO;
 using IniParser;
 
+using static Globals;
+using static Functions;
+
 struct LevelInfo {
     public string name;
 	public string music;
@@ -23,7 +26,7 @@ static class Levels {
     public static WorldInfo Jelli = new WorldInfo();
 
     public static void setLevels() {
-        Globals.LEVELNUM = -1;
+        LEVELNUM = -1;
 
         int i = 0;
 
@@ -40,7 +43,7 @@ static class Levels {
             Jelli.level[i].midscroll = int.Parse(data["Scrolling"]["midscroll"]);
             Jelli.level[i].backscroll = int.Parse(data["Scrolling"]["backscroll"]);
             i++;
-            Globals.LEVELNUM++;
+            LEVELNUM++;
         }
     }
 
@@ -48,8 +51,6 @@ static class Levels {
     {
         currentWorld = world;
         currentLevel = levelNum;
-        var MAINSCREEN = Globals.MAINSCREEN;
-        var MISCSCREEN = Globals.MISCSCREEN;
 
         string levelPath;
         string rootPath;
@@ -67,7 +68,7 @@ static class Levels {
 
         if(!File.Exists(levelPath))
         {
-            Functions.displayError(String.Format("Could not load stage for {0}.", world.level[levelNum].name));
+            displayError(String.Format("Could not load stage for {0}.", world.level[levelNum].name));
         }
         else 
         {
@@ -101,7 +102,7 @@ static class Levels {
         }
         else
         {
-            Functions.displayError(String.Format("Could not load collision map for {0}.", world.level[levelNum].name));
+            displayError(String.Format("Could not load collision map for {0}.", world.level[levelNum].name));
         }
 
         CA.FadeOut(0);

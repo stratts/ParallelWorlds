@@ -4,8 +4,8 @@ public struct ObjectClass {
     public string name;
 	public string sprite;
 	public int speed, weight, jumpPower, width, height;
-	public (int f0, int f1) idle;
-	public (int f0, int f1) walk, run, hurt, jump, fall;
+	public (int start, int end) idle;
+	public (int start, int end) walk, run, hurt, jump, fall;
 	public int animSpeed;
 	public int type;
 	//void (*ai)();
@@ -36,16 +36,16 @@ public static class Classes {
         MARIO.width = 27;
         MARIO.height = 36;
         MARIO.animSpeed = 7;
-        MARIO.idle.f0 = 0;
-        MARIO.idle.f1 = 3;
-        MARIO.walk.f0 = 4;
-        MARIO.walk.f1 = 11;
-        MARIO.run.f0 = 0;
-        MARIO.run.f1 = 0;
-        MARIO.jump.f0 = 12;
-        MARIO.jump.f1 = 12;
-        MARIO.fall.f0 = 19;
-        MARIO.fall.f1 = 20;
+        MARIO.idle.start = 0;
+        MARIO.idle.end = 3;
+        MARIO.walk.start = 4;
+        MARIO.walk.end = 11;
+        MARIO.run.start = 0;
+        MARIO.run.end = 0;
+        MARIO.jump.start = 12;
+        MARIO.jump.end = 12;
+        MARIO.fall.start = 19;
+        MARIO.fall.end = 20;
 
         DUMMY.name = "Dummy";
         DUMMY.sprite = CA.rootf("/characters/Mario/mario");
@@ -55,10 +55,10 @@ public static class Classes {
         DUMMY.width = 27;
         DUMMY.height = 40;
         DUMMY.animSpeed = 7;
-        DUMMY.idle.f0 = 0;
-        DUMMY.idle.f1 = 3;
-        DUMMY.walk.f0 = 4;
-        DUMMY.walk.f1 = 11;
+        DUMMY.idle.start = 0;
+        DUMMY.idle.end = 3;
+        DUMMY.walk.start = 4;
+        DUMMY.walk.end = 11;
 
         classes = new [] { LINK, MARIO, DUMMY };
     }

@@ -1,7 +1,9 @@
+using static Objects;
+using static Levels;
+using static Globals;
 
 public static class Collisions {
     public static bool objectCollision(int object1,int object2){
-        var objects = Objects.objects;
         //grab sprite demensions (center positions and length and width)
         int w1 = objects[object1].objClass.width;
         int h1 = objects[object1].objClass.height;
@@ -19,7 +21,6 @@ public static class Collisions {
     }
 
     public static bool objectCollisionTop(int object1,int object2){
-        var objects = Objects.objects;
         //grab sprite demensions (center positions and length and width)
         int w1 = objects[object1].objClass.width;
         int h1 = objects[object1].objClass.height;
@@ -40,7 +41,6 @@ public static class Collisions {
 
     public static bool upCollision(int objectNum)
     {
-        var objects = Objects.objects;
         if(!objects[objectNum].alive) return false;
 
         int playerheight=objects[objectNum].objClass.height;
@@ -48,9 +48,9 @@ public static class Collisions {
         int playerx = objects[objectNum].cx>>8;
         int playery = (objects[objectNum].y>>8) + 62;
 
-        if(Levels.getCollisionPix(Globals.MISCSCREEN,3,playerx,playery-playerheight))return true;
-        if(Levels.getCollisionPix(Globals.MISCSCREEN,3,(playerx-(playerwidth>>1))+Globals.COLLISION_BORDER,playery-playerheight))return true;
-        if(Levels.getCollisionPix(Globals.MISCSCREEN,3,(playerx+(playerwidth>>1))-Globals.COLLISION_BORDER,playery-playerheight))return true;
+        if(getCollisionPix(MISCSCREEN,3,playerx,playery-playerheight))return true;
+        if(getCollisionPix(MISCSCREEN,3,(playerx-(playerwidth>>1))+COLLISION_BORDER,playery-playerheight))return true;
+        if(getCollisionPix(MISCSCREEN,3,(playerx+(playerwidth>>1))-COLLISION_BORDER,playery-playerheight))return true;
         return false;
 
 
@@ -58,7 +58,6 @@ public static class Collisions {
 
     public static bool downCollision(int objectNum)
     {
-        var objects = Objects.objects;
         if(!objects[objectNum].alive) return false;
 
         int playerheight=objects[objectNum].objClass.height;
@@ -67,15 +66,14 @@ public static class Collisions {
         int playery = (objects[objectNum].y>>8) + 62;
 
         
-        if(Levels.getCollisionPix(Globals.MISCSCREEN,3,playerx,playery))return true;
-        if(Levels.getCollisionPix(Globals.MISCSCREEN,3,(playerx-(playerwidth>>1))+Globals.COLLISION_BORDER,playery))return true;
-        if(Levels.getCollisionPix(Globals.MISCSCREEN,3,(playerx+(playerwidth>>1))-Globals.COLLISION_BORDER,playery))return true;
+        if(getCollisionPix(MISCSCREEN,3,playerx,playery))return true;
+        if(getCollisionPix(MISCSCREEN,3,(playerx-(playerwidth>>1))+COLLISION_BORDER,playery))return true;
+        if(getCollisionPix(MISCSCREEN,3,(playerx+(playerwidth>>1))-COLLISION_BORDER,playery))return true;
         return false;
     }
 
     public static bool touchingGround(int objectNum)
     {
-        var objects = Objects.objects;
         if(!objects[objectNum].alive) return false;
 
         int playerheight=objects[objectNum].objClass.height;
@@ -83,9 +81,9 @@ public static class Collisions {
         int playerx = objects[objectNum].cx>>8;
         int playery = (objects[objectNum].y>>8) + 63;
 
-        if(Levels.getCollisionPix(Globals.MISCSCREEN,3,playerx,playery))return true;
-        if(Levels.getCollisionPix(Globals.MISCSCREEN,3,(playerx-(playerwidth>>1))+Globals.COLLISION_BORDER,playery))return true;
-        if(Levels.getCollisionPix(Globals.MISCSCREEN,3,(playerx+(playerwidth>>1))-Globals.COLLISION_BORDER,playery))return true;
+        if(getCollisionPix(MISCSCREEN,3,playerx,playery))return true;
+        if(getCollisionPix(MISCSCREEN,3,(playerx-(playerwidth>>1))+COLLISION_BORDER,playery))return true;
+        if(getCollisionPix(MISCSCREEN,3,(playerx+(playerwidth>>1))-COLLISION_BORDER,playery))return true;
         return false;
     }
 
@@ -99,12 +97,12 @@ public static class Collisions {
         int playerx = objects[objectNum].cx>>8;
         int playery = (objects[objectNum].y>>8) + 62;
 
-        if(Levels.getCollisionPix(Globals.MISCSCREEN,3,playerx-(playerwidth>>1),playery-Globals.COLLISION_BORDER))return true;
-        if(Levels.getCollisionPix(Globals.MISCSCREEN,3,playerx-(playerwidth>>1),playery-(playerheight>>1)))return true;
-        if(Levels.getCollisionPix(Globals.MISCSCREEN,3,playerx-(playerwidth>>1),playery-(playerheight>>2)))return true;
-        if(Levels.getCollisionPix(Globals.MISCSCREEN,3,playerx-(playerwidth>>1),(playery-playerheight)+Globals.COLLISION_BORDER))return true;
-        if(Levels.getCollisionPix(Globals.MISCSCREEN,3,playerx-(playerwidth>>1),(playery-playerheight)+(playerheight>>2)+(playerheight>>3)))return true;
-        if(Levels.getCollisionPix(Globals.MISCSCREEN,3,playerx-(playerwidth>>1),(playery-playerheight)+(playerheight>>3)))return true;
+        if(getCollisionPix(MISCSCREEN,3,playerx-(playerwidth>>1),playery-COLLISION_BORDER))return true;
+        if(getCollisionPix(MISCSCREEN,3,playerx-(playerwidth>>1),playery-(playerheight>>1)))return true;
+        if(getCollisionPix(MISCSCREEN,3,playerx-(playerwidth>>1),playery-(playerheight>>2)))return true;
+        if(getCollisionPix(MISCSCREEN,3,playerx-(playerwidth>>1),(playery-playerheight)+COLLISION_BORDER))return true;
+        if(getCollisionPix(MISCSCREEN,3,playerx-(playerwidth>>1),(playery-playerheight)+(playerheight>>2)+(playerheight>>3)))return true;
+        if(getCollisionPix(MISCSCREEN,3,playerx-(playerwidth>>1),(playery-playerheight)+(playerheight>>3)))return true;
         return false;
     }
 
@@ -119,18 +117,17 @@ public static class Collisions {
         int playery = (objects[objectNum].y>>8) + 62;
 
 
-        if(Levels.getCollisionPix(Globals.MISCSCREEN,3,playerx+(playerwidth>>1),playery-Globals.COLLISION_BORDER))return true;
-        if(Levels.getCollisionPix(Globals.MISCSCREEN,3,playerx+(playerwidth>>1),playery-(playerheight>>1)))return true;
-        if(Levels.getCollisionPix(Globals.MISCSCREEN,3,playerx+(playerwidth>>1),playery-(playerheight>>2)))return true;
-        if(Levels.getCollisionPix(Globals.MISCSCREEN,3,playerx+(playerwidth>>1),(playery-playerheight)+Globals.COLLISION_BORDER))return true;
-        if(Levels.getCollisionPix(Globals.MISCSCREEN,3,playerx+(playerwidth>>1),(playery-playerheight)+(playerheight>>2)+(playerheight>>3)))return true;
-        if(Levels.getCollisionPix(Globals.MISCSCREEN,3,playerx+(playerwidth>>1),(playery-playerheight)+(playerheight>>3)))return true;
+        if(getCollisionPix(MISCSCREEN,3,playerx+(playerwidth>>1),playery-COLLISION_BORDER))return true;
+        if(getCollisionPix(MISCSCREEN,3,playerx+(playerwidth>>1),playery-(playerheight>>1)))return true;
+        if(getCollisionPix(MISCSCREEN,3,playerx+(playerwidth>>1),playery-(playerheight>>2)))return true;
+        if(getCollisionPix(MISCSCREEN,3,playerx+(playerwidth>>1),(playery-playerheight)+COLLISION_BORDER))return true;
+        if(getCollisionPix(MISCSCREEN,3,playerx+(playerwidth>>1),(playery-playerheight)+(playerheight>>2)+(playerheight>>3)))return true;
+        if(getCollisionPix(MISCSCREEN,3,playerx+(playerwidth>>1),(playery-playerheight)+(playerheight>>3)))return true;
         return false;
     }
 
     public static bool leftCollisionLarge(int objectNum)
     {
-        var objects = Objects.objects;
         if(!objects[objectNum].alive) return false;
 
         int playerheight=objects[objectNum].objClass.height;
@@ -138,15 +135,14 @@ public static class Collisions {
         int playerx = objects[objectNum].cx>>8;
         int playery = (objects[objectNum].y>>8) + 24;
 
-        if(Levels.getCollisionPix(Globals.MISCSCREEN,3,playerx-(playerwidth>>1),playery-Globals.COLLISION_BORDER))return true;
-        if(Levels.getCollisionPix(Globals.MISCSCREEN,3,playerx-(playerwidth>>1),playery-(playerheight>>1)))return true;
-        if(Levels.getCollisionPix(Globals.MISCSCREEN,3,playerx-(playerwidth>>1),(playery-playerheight)+Globals.COLLISION_BORDER))return true;
+        if(getCollisionPix(MISCSCREEN,3,playerx-(playerwidth>>1),playery-COLLISION_BORDER))return true;
+        if(getCollisionPix(MISCSCREEN,3,playerx-(playerwidth>>1),playery-(playerheight>>1)))return true;
+        if(getCollisionPix(MISCSCREEN,3,playerx-(playerwidth>>1),(playery-playerheight)+COLLISION_BORDER))return true;
         return false;
     }
 
     public static bool rightCollisionLarge(int objectNum)
     {
-        var objects = Objects.objects;
         if(!objects[objectNum].alive) return false;
 
         int playerheight=objects[objectNum].objClass.height;
@@ -155,9 +151,9 @@ public static class Collisions {
         int playery = (objects[objectNum].y>>8) + 32;
 
 
-        if(Levels.getCollisionPix(Globals.MISCSCREEN,3,playerx+(playerwidth>>1),playery-Globals.COLLISION_BORDER))return true;
-        if(Levels.getCollisionPix(Globals.MISCSCREEN,3,playerx+(playerwidth>>1),playery-(playerheight>>1)))return true;
-        if(Levels.getCollisionPix(Globals.MISCSCREEN,3,playerx+(playerwidth>>1),(playery-playerheight)+Globals.COLLISION_BORDER))return true;
+        if(getCollisionPix(MISCSCREEN,3,playerx+(playerwidth>>1),playery-COLLISION_BORDER))return true;
+        if(getCollisionPix(MISCSCREEN,3,playerx+(playerwidth>>1),playery-(playerheight>>1)))return true;
+        if(getCollisionPix(MISCSCREEN,3,playerx+(playerwidth>>1),(playery-playerheight)+COLLISION_BORDER))return true;
         return false;
     }
 }

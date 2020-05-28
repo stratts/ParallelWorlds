@@ -1,5 +1,9 @@
 using System;
 
+using static Collisions;
+using static Functions;
+using static Globals;
+
 public class ObjectInfo {
     public int x, y;
 	public int cx, cy;
@@ -101,7 +105,7 @@ static class Objects {
 		/*PA_LoadSpritePal(MAINSCREEN, objects[MAXOBJECTS].objClass.palNum, (void*)objects[MAXOBJECTS].objClass.palbuf);
 		PA_CreateSprite(MAINSCREEN, objects[MAXOBJECTS].sprite, objects[MAXOBJECTS].objClass.spritebuf, OBJ_SIZE_64X64, 1, objects[MAXOBJECTS].objClass.palNum, x - (camera.x>>8), y - (camera.y>>8));
 		PA_SetSpritePrio(MAINSCREEN, objects[MAXOBJECTS].sprite, 1);*/
-		Functions.setSpriteXY(Globals.MAINSCREEN, objects[MAXOBJECTS].sprite, x-(Camera.camera.x>>8), y - (Camera.camera.y>>8));
+		setSpriteXY(MAINSCREEN, objects[MAXOBJECTS].sprite, x-(Camera.camera.x>>8), y - (Camera.camera.y>>8));
 
 		objects[MAXOBJECTS].alive = true;
     }
@@ -130,7 +134,7 @@ static class Objects {
 			objects[currentObject].cy = (objects[currentObject].y + (64<<8)) - (objects[currentObject].objClass.height << 8);
 
 			/*if(object[currentObject].loaded)*/ 
-			Functions.setSpriteXY(Globals.MAINSCREEN, objects[currentObject].sprite, 
+			setSpriteXY(MAINSCREEN, objects[currentObject].sprite, 
 				(objects[currentObject].x-Camera.camera.x)>>8, (objects[currentObject].y-Camera.camera.y)>>8);
 			
 		}
@@ -174,7 +178,7 @@ static class Objects {
 		if (objects[objectNum].currentFrame < startFrame) objects[objectNum].currentFrame = startFrame;
 		if (objects[objectNum].currentFrame > endFrame) objects[objectNum].currentFrame = startFrame;
 
-		PA.SetSpriteAnim(Globals.MAINSCREEN, objects[objectNum].sprite, objects[objectNum].currentFrame);
+		PA.SetSpriteAnim(MAINSCREEN, objects[objectNum].sprite, objects[objectNum].currentFrame);
 	}
 
 	//----------------------------------------------------------------------------
@@ -182,7 +186,7 @@ static class Objects {
 	//----------------------------------------------------------------------------
 
 		objects[objectNum].alive = false;
-		PA.SetSpriteXY(Globals.MAINSCREEN, objects[objectNum].sprite, 256, 192);
+		PA.SetSpriteXY(MAINSCREEN, objects[objectNum].sprite, 256, 192);
 	}
 
 	//----------------------------------------------------------------------------
@@ -190,7 +194,7 @@ static class Objects {
 	//----------------------------------------------------------------------------
 
 		objects[objectNum].alive = true;
-		PA.SetSpriteXY(Globals.MAINSCREEN, objects[objectNum].sprite, objects[objectNum].x, objects[objectNum].y);
+		PA.SetSpriteXY(MAINSCREEN, objects[objectNum].sprite, objects[objectNum].x, objects[objectNum].y);
 	}
 
 	//----------------------------------------------------------------------------
@@ -200,33 +204,33 @@ static class Objects {
 		sprite[objects[objectNum].sprite] = 0;
 		objects[objectNum].alive = false;
 		objects[objectNum].loaded = false;
-		PA.DeleteSprite(Globals.MAINSCREEN, objects[objectNum].sprite);
+		PA.DeleteSprite(MAINSCREEN, objects[objectNum].sprite);
 	}
 
 	//----------------------------------------------------------------------------
 	public static void objectCheckCollision() {
 	//----------------------------------------------------------------------------
 
-		if(Collisions.rightCollision(currentObject)) 
+		if(rightCollision(currentObject)) 
 		{
 			if(objects[currentObject].relspeedx <= -256) objects[currentObject].x += objects[currentObject].relspeedx;
 			else objects[currentObject].x -= 256;
 		}
 
-		if(Collisions.leftCollision(currentObject))
+		if(leftCollision(currentObject))
 		{
 			if(objects[currentObject].relspeedx >= 256) objects[currentObject].x += objects[currentObject].relspeedx;
 			else objects[currentObject].x += 256;
 		}
 
-		if(Collisions.upCollision(currentObject)) 
+		if(upCollision(currentObject)) 
 		{
 			if(objects[currentObject].relspeedy <= -256) objects[currentObject].y -= objects[currentObject].relspeedy;
 			else objects[currentObject].y += 256;
 			objects[currentObject].vy = 0;
 		}
 
-		if(Collisions.downCollision(currentObject))
+		if(downCollision(currentObject))
 		{
 			if(objects[currentObject].relspeedy >= 256) objects[currentObject].y -= objects[currentObject].relspeedy;
 			else objects[currentObject].y -= 512;
@@ -246,8 +250,8 @@ static class Objects {
 		var currentWorld = Levels.currentWorld;
 		var currentLevel = Levels.currentLevel;
 		objects[currentObject].y += objects[currentObject].vy;
-		if(!Collisions.touchingGround(currentObject) && objects[currentObject].vy < currentWorld.level[currentLevel].gravity) objects[currentObject].vy += objects[currentObject].objClass.weight;
-		else if(Collisions.touchingGround(currentObject)) objects[currentObject].vy = 0;
+		if(!touchingGround(currentObject) && objects[currentObject].vy < currentWorld.level[currentLevel].gravity) objects[currentObject].vy += objects[currentObject].objClass.weight;
+		else if(touchingGround(currentObject)) objects[currentObject].vy = 0;
 	}
 
 	//----------------------------------------------------------------------------

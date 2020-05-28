@@ -2,6 +2,12 @@ using System;
 using System.Collections;
 using IniParser;
 
+using static Globals;
+using static Levels;
+using static Objects;
+using static Classes;
+using static Camera;
+
 public static partial class Rooms {
     public static IEnumerator CurrentRoom { get; set; } = mainMenu();
 
@@ -10,10 +16,9 @@ public static partial class Rooms {
     }
 
     public static IEnumerator mainMenu() {
-        Globals.selectedLevel = 0;
-        Globals.selectedCharacter = 0;
-        Globals.selectedItem = 0;
-        var Jelli = Levels.Jelli;
+        selectedLevel = 0;
+        selectedCharacter = 0;
+        selectedItem = 0;
 
         PA.Init16cBg(0, 0);
 
@@ -33,14 +38,14 @@ public static partial class Rooms {
             }
 
             CA.SimpleText(0, 5, 5, "Choose a level:");
-            CA.SimpleText(0, 5, 15+(8*Globals.selectedLevel), "->");
+            CA.SimpleText(0, 5, 15+(8*selectedLevel), "->");
 
-            if(Globals.LEVELNUM == -1) CA.SimpleText(0, 5, 180, "Found no levels.");
-            else if(Globals.LEVELNUM == 0) CA.SimpleText(0, 5, 180, "Found {0} level.", Globals.LEVELNUM+1);
-            else CA.SimpleText(0, 5, 180, "Found {0} levels.", Globals.LEVELNUM+1);
+            if(LEVELNUM == -1) CA.SimpleText(0, 5, 180, "Found no ");
+            else if(LEVELNUM == 0) CA.SimpleText(0, 5, 180, "Found {0} level.", LEVELNUM+1);
+            else CA.SimpleText(0, 5, 180, "Found {0} ", LEVELNUM+1);
 
-            if(Pad.Newpress.Up && Globals.selectedLevel > 0) Globals.selectedLevel--;
-            if(Pad.Newpress.Down && Globals.selectedLevel < Globals.LEVELNUM) Globals.selectedLevel++;
+            if(Pad.Newpress.Up && selectedLevel > 0) selectedLevel--;
+            if(Pad.Newpress.Down && selectedLevel < LEVELNUM) selectedLevel++;
 
             if(Pad.Newpress.A) break;
 
@@ -56,13 +61,12 @@ public static partial class Rooms {
     }
 
     public static IEnumerator mainGame() {
-        var Jelli = Levels.Jelli;
-        Levels.loadLevel(Jelli, Globals.selectedLevel);
+        loadLevel(Jelli, selectedLevel);
 		
         //AS_MP3StreamPlay(rootf("music/jumper.mp3"));
         int i = 1;
 
-        var path = CA.rootf("/levels") + $"/{Jelli.level[Levels.currentLevel].name}/config.ini";
+        var path = CA.rootf("/levels") + $"/{Jelli.level[currentLevel].name}/config.ini";
         var data = new FileIniDataParser().ReadFile(path);
         
         while(true)
@@ -70,32 +74,27 @@ public static partial class Rooms {
             string key = $"Object{i}";
             if(data.Sections.ContainsSection(key))
             {
-                Objects.createObject(Classes.classes[int.Parse(data[key]["class"])],
+                createObject(classes[int.Parse(data[key]["class"])],
                                     int.Parse(data[key]["x"]),
                                      int.Parse(data[key]["y"]),
                                     0
                 );
                 int flip = -1;
                 if (data[key].ContainsKey("flip")) flip = int.Parse(data[key]["flip"]);
-                Objects.objects[i-1].moveDirection = flip;
+                objects[i-1].moveDirection = flip;
             }
             else break;
             i++;
         }
 
-        var objects = Objects.objects;
-        var currentWorld = Levels.currentWorld;
-        var currentLevel = Levels.currentLevel;
-
-        Camera.cameraInit(0, (objects[0].x>>8) - 128, (objects[0].y>>8) - 96);
-        Camera.cameraTarget(objects[0], currentWorld.level[currentLevel].width, currentWorld.level[currentLevel].height);
-        Objects.moveObjects();
-        Camera.cameraScroll();
-        Objects.processObjects();
-        var camera = Camera.camera;
-        PA.EasyBgScrollXY(Globals.MAINSCREEN, 1, camera.x>>8, camera.y>>8);
-	    PA.EasyBgScrollXY(Globals.MAINSCREEN, 2, (camera.x>>8)>>1, (camera.y>>8)>>1);
-	    PA.EasyBgScrollXY(Globals.MAINSCREEN, 3, (camera.x>>8)>>2, (camera.y>>8)>>2);
+        cameraInit(0, (objects[0].x>>8) - 128, (objects[0].y>>8) - 96);
+        cameraTarget(objects[0], currentWorld.level[currentLevel].width, currentWorld.level[currentLevel].height);
+        moveObjects();
+        cameraScroll();
+        processObjects();
+        PA.EasyBgScrollXY(MAINSCREEN, 1, camera.x>>8, camera.y>>8);
+	    PA.EasyBgScrollXY(MAINSCREEN, 2, (camera.x>>8)>>1, (camera.y>>8)>>1);
+	    PA.EasyBgScrollXY(MAINSCREEN, 3, (camera.x>>8)>>2, (camera.y>>8)>>2);
 
         CA.FadeIn(0);
 
@@ -139,23 +138,22 @@ public static partial class Rooms {
             if(Pad.Newpress.Start) { paused = true; }
   
             if(Pad.Newpress.B && Pad.Newpress.L && Pad.Newpress.R) { 
-                Objects.createObject(Classes.DUMMY, Objects.objects[0].x>>8, Objects.objects[0].y>>8, 0); 
+                createObject(DUMMY, objects[0].x>>8, objects[0].y>>8, 0); 
             }
 
-            Objects.processObjects();
-            Camera.cameraScroll();
-            Objects.moveObjects();
-            camera = Camera.camera;
-            PA.EasyBgScrollXY(Globals.MAINSCREEN, 1, camera.x>>8, camera.y>>8);
-            PA.EasyBgScrollXY(Globals.MAINSCREEN, 2, ((camera.x+midBgX)>>8)>>1, (camera.y>>8)>>1);
-            PA.EasyBgScrollXY(Globals.MAINSCREEN, 3, ((camera.x+backBgX)>>8)>>2, (camera.y>>8)>>2);
+            processObjects();
+            cameraScroll();
+            moveObjects();
+            PA.EasyBgScrollXY(MAINSCREEN, 1, camera.x>>8, camera.y>>8);
+            PA.EasyBgScrollXY(MAINSCREEN, 2, ((camera.x+midBgX)>>8)>>1, (camera.y>>8)>>1);
+            PA.EasyBgScrollXY(MAINSCREEN, 3, ((camera.x+backBgX)>>8)>>2, (camera.y>>8)>>2);
 
             //displayDebug(0);
 
             //CA_BoxText(0, 100, 48, 32, "Welcome to Alpha 2 of Parallel Worlds! The aim of this demo is to gather as many points as you can by jumping on the Mario streakers. Be quick though, as your points decrease over time!");
             
-            CA.SimpleText(0, 4, 180, "Points: {0}", Globals.playerPoints>>12);
-            CA.SimpleText(0, 208, 180, Globals.VERSION);
+            CA.SimpleText(0, 4, 180, "Points: {0}", playerPoints>>12);
+            CA.SimpleText(0, 208, 180, VERSION);
             
             PA.WaitForVBL();
             CA.Update16c();    
