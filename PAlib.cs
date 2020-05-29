@@ -167,7 +167,7 @@ static class PA {
     }
 
     public static void DeleteSprite(byte screen, int sprite) {
-        throw new NotImplementedException();
+
     }
 
     public static int Distance(int x1, int y1, int x2, int y2) {
