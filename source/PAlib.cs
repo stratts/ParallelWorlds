@@ -18,6 +18,7 @@ static class PA {
         public int Frame { get; set; } = 0;
         public Point Size { get; set; }
         public bool Flip { get; set; } = false;
+        public bool Visible { get; set; } = true;
 
         public Sprite(string path) {
             Path = path;
@@ -50,22 +51,25 @@ static class PA {
         }
     }
 
-    public static Background[] MainBackgrounds = new Background[4];
-    public static Background[] MiscBackgrounds = new Background[4];
+    public class Screen {
+        public Background[] Backgrounds = new Background[4];
+        public Sprite[] Sprites = new Sprite[128];
+    }
 
-    public static Sprite[] Sprites = new Sprite[128];
+    public static Screen TopScreen = new Screen();
+    public static Screen BottomScreen = new Screen();
 
-    private static Background[] GetScreen(byte screen) {
-        if (screen == Globals.MAINSCREEN) return MainBackgrounds;
-        else return MiscBackgrounds;
+    private static Screen GetScreen(byte screen) {
+        if (screen == 0) return BottomScreen;
+        else return TopScreen;
     }
 
     private static Background GetBackground(byte screen, byte layer) { 
-        return GetScreen(screen)[layer] ;
+        return GetScreen(screen).Backgrounds[layer] ;
     }
 
     private static void SetBackground(byte screen, byte layer, Background background) {
-        GetScreen(screen)[layer] = background;
+        GetScreen(screen).Backgrounds[layer] = background;
     }
 
     public static void Init16cBg(byte screen, byte layer) {
@@ -73,11 +77,11 @@ static class PA {
     }
 
     public static void HideBg(byte screen, byte layer) {
-
+        GetBackground(screen, layer).Visible = false;
     }
 
     public static void ShowBg(byte screen, byte layer) {
-
+        GetBackground(screen, layer).Visible = true;
     }
 
     public static void EasyBgScrollXY(byte screen, byte layer, 
@@ -115,19 +119,21 @@ static class PA {
     public static void CreateSprite(byte screen, int sprite, int width, int height, string path) {
         var s = new Sprite(path);
         s.Size = new Point(width, height);
-        Sprites[sprite] = s;
+        GetScreen(screen).Sprites[sprite] = s;
     }
 
     public static void SetSpriteXY(byte screen, int sprite, int x, int y) {
-        Sprites[sprite].Pos = new Vector2(x + 32 - (Classes.FROG.width / 2) , y + 31);
+        // Hacky sprite specific positioning
+        var s = GetScreen(screen).Sprites[sprite];
+        s.Pos = new Vector2(x + 2 + s.Size.X / 2 , y + s.Size.Y - 1); 
     }
 
     public static void SetSpriteAnim(byte screen, int sprite, int animframe) {
-        Sprites[sprite].Frame = animframe;
+        GetScreen(screen).Sprites[sprite].Frame = animframe;
     }
 
     public static void SetSpriteHflip(byte screen, int sprite, byte hflip) {
-        var s = Sprites[sprite];
+        var s = GetScreen(screen).Sprites[sprite];
         if (hflip > 0) s.Flip = true;
         else s.Flip = false;
     }
@@ -147,15 +153,15 @@ static class PA {
     }
 
     public static int GetAngle(int x1, int y1, int x2, int y2) {
-        return 0;
+        throw new NotImplementedException();
     }
 
     public static int Sin(int angle) {
-        return 0;
+        throw new NotImplementedException();
     }
 
     public static int Cos(int angle) {
-        return 0;
+        throw new NotImplementedException();
     }
 
     public static void PlayOgg(string path) {
@@ -163,6 +169,7 @@ static class PA {
         var song = Song.FromUri(Path.GetFileName(path), new Uri(p));
         MediaPlayer.Play(song);
         MediaPlayer.IsRepeating = true;
+        MediaPlayer.Volume = 1;
     }
 }
 

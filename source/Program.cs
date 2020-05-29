@@ -15,17 +15,21 @@ namespace ParallelWorlds
             }
         }
 
+        private int scale = 2;
         private int _width = 256;
         private int _height = 192;
         private SpriteBatch _spriteBatch;
+        
+        private RenderTarget2D _topScreen;
+        private RenderTarget2D _bottomScreen;
 
         private ParallelWorlds()
         {
             var gdm = new GraphicsDeviceManager(this);
 
             // Typically you would load a config here...
-            gdm.PreferredBackBufferWidth = 256;
-            gdm.PreferredBackBufferHeight = 192;
+            gdm.PreferredBackBufferWidth = _width * scale;
+            gdm.PreferredBackBufferHeight = _height * scale * 2;
             gdm.IsFullScreen = false;
             gdm.SynchronizeWithVerticalRetrace = true;
             IsFixedTimeStep = true;
@@ -37,7 +41,11 @@ namespace ParallelWorlds
             * loading configuration stuff in the constructor
             */
             base.Initialize();
+
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+            _topScreen = CreateRenderTarget();
+            _bottomScreen = CreateRenderTarget();
+
             PA.Game = this;
             Classes.setClasses();
             Levels.setLevels();
@@ -67,11 +75,38 @@ namespace ParallelWorlds
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
+            GraphicsDevice.SetRenderTarget(_topScreen);
+            GraphicsDevice.Clear(Color.Black);
+            DrawScreen(PA.TopScreen, gameTime);
+
+            GraphicsDevice.SetRenderTarget(_bottomScreen);
+            GraphicsDevice.Clear(Color.Black);
+            DrawScreen(PA.BottomScreen, gameTime);
+
+            GraphicsDevice.SetRenderTarget(null);
+            var rectSize = new Point(_width * scale, _height * scale);
+            var topRect = new Rectangle(Point.Zero, rectSize);
+            var bottomRect = new Rectangle(new Point(0, _height * scale), rectSize);
+
+            _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+            _spriteBatch.Draw(_topScreen, topRect, Color.White); 
+            _spriteBatch.Draw(_bottomScreen, bottomRect, Color.White);
+            _spriteBatch.End();
+
+            base.Draw(gameTime);
+        }
+
+        private RenderTarget2D CreateRenderTarget() {
+            var renderTarget = new RenderTarget2D(GraphicsDevice, _width, _height);
+            return renderTarget;
+        }
+
+        private void DrawScreen(PA.Screen screen, GameTime gameTime) {
             // Render backgrounds
             _spriteBatch.Begin(samplerState: SamplerState.LinearWrap);
 
-            for (int i = PA.MainBackgrounds.Length - 1; i >= 0; i--) {
-                var background = PA.MainBackgrounds[i];
+            for (int i = screen.Backgrounds.Length - 1; i >= 0; i--) {
+                var background = screen.Backgrounds[i];
                 if (background == null) continue;
                 if (!background.Loaded) background.Load();
                 var sourceRect = new Rectangle(background.Pos.ToPoint(), new Point(_width, _height));
@@ -83,7 +118,7 @@ namespace ParallelWorlds
             // Render sprites
             _spriteBatch.Begin();
 
-            foreach (var sprite in PA.Sprites) {
+            foreach (var sprite in screen.Sprites) {
                 if (sprite == null) continue;
                 if (!sprite.Loaded) sprite.Load();
 
@@ -99,9 +134,8 @@ namespace ParallelWorlds
                 _spriteBatch.Draw(sprite.Texture, sprite.Pos, sourceRect, Color.White, 0,
                     Vector2.Zero, 1, effects, 0);
             }
-            _spriteBatch.End();
 
-            base.Draw(gameTime);
+            _spriteBatch.End();
         }
     }
 }
