@@ -2,12 +2,12 @@ using static Objects;
 using static Collisions;
 using static Defines;
 using static Functions;
+using static Levels;
 
 static class AI {
 
     public static void generalCharacter()
-    {
-        
+    {   
         objects[currentObject].oldposx = objects[currentObject].x;
 
         if(Pad.Held.Left || Pad.Held.Right)
@@ -300,9 +300,6 @@ static class AI {
 
     public static void aiDummy()
     {
-        var currentWorld = Levels.currentWorld;
-        var currentLevel = Levels.currentLevel;
-
         objects[currentObject].oldposx = objects[currentObject].x;
         objects[currentObject].oldposy = objects[currentObject].y;
 
