@@ -70,7 +70,7 @@ public static class CA {
             {
             for (i = -31; i <= 0; i++) 
             {
-                //PA.SetBrightness(0, i); 
+                PA.SetBrightness(0, i); 
                 PA.SetBrightness(1, i);
                 PA.WaitForVBL();
                 yield return null;

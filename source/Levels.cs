@@ -69,7 +69,7 @@ static class Levels {
 
         if(!File.Exists(levelPath))
         {
-            displayError(String.Format("Could not load stage for {0}.", world.level[levelNum].name));
+            yield return displayError(String.Format("Could not load stage for {0}.", world.level[levelNum].name));
         }
         else 
         {
@@ -103,7 +103,7 @@ static class Levels {
         }
         else
         {
-            displayError(String.Format("Could not load collision map for {0}.", world.level[levelNum].name));
+            yield return displayError(String.Format("Could not load collision map for {0}.", world.level[levelNum].name));
         }
 
         yield return CA.FadeOut(0);

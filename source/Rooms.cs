@@ -49,9 +49,9 @@ public static partial class Rooms {
             CA.SimpleText(0, 5, 5, "Choose a level:");
             CA.SimpleText(0, 5, 15+(8*selectedLevel), "->");
 
-            if(LEVELNUM == -1) CA.SimpleText(0, 5, 180, "Found no ");
+            if(LEVELNUM == -1) CA.SimpleText(0, 5, 180, "Found no levels.");
             else if(LEVELNUM == 0) CA.SimpleText(0, 5, 180, "Found {0} level.", LEVELNUM+1);
-            else CA.SimpleText(0, 5, 180, "Found {0} ", LEVELNUM+1);
+            else CA.SimpleText(0, 5, 180, "Found {0} levels.", LEVELNUM+1);
 
             if(Pad.Newpress.Up && selectedLevel > 0) selectedLevel--;
             if(Pad.Newpress.Down && selectedLevel < LEVELNUM) selectedLevel++;
@@ -97,8 +97,8 @@ public static partial class Rooms {
 
         cameraInit(0, (objects[0].x>>8) - 128, (objects[0].y>>8) - 96);
         cameraTarget(objects[0], currentWorld.level[currentLevel].width, currentWorld.level[currentLevel].height);
-        moveObjects();
         cameraScroll();
+        moveObjects();
         processObjects();
         PA.EasyBgScrollXY(MAINSCREEN, 1, camera.x>>8, camera.y>>8);
 	    PA.EasyBgScrollXY(MAINSCREEN, 2, (camera.x>>8)>>1, (camera.y>>8)>>1);
@@ -132,7 +132,7 @@ public static partial class Rooms {
                 while(Pad.Held.Select)
                 {
                     CA.SimpleText(0, 4, 4, "Music: 'Jumper' by Waterflame");
-                    CA.SimpleText(0, 4, 12, "Mario sprite by RangeTE");
+                    CA.SimpleText(0, 4, 12, "Ninja Frog sprite by Pixel Frog");
                     PA.WaitForVBL();
                     CA.Update16c();
                     yield return null;

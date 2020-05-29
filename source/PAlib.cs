@@ -60,13 +60,12 @@ static class PA {
     public class Screen {
         public Background[] Backgrounds = new Background[4];
         public Sprite[] Sprites = new Sprite[128];
-       public List<Text> Text = new List<Text>();
+        public List<Text> Text = new List<Text>();
+        public float Brightness { get; set; } = 1;
     }
 
     public static Screen TopScreen = new Screen();
     public static Screen BottomScreen = new Screen();
-
-    public static float Brightness { get; private set; }
 
     public static bool QueueClearText { get; set; } = false;
 
@@ -118,7 +117,7 @@ static class PA {
     }
 
 	public static void SetBrightness(byte screen, sbyte brightness) {
-        Brightness = 1 + ((float)brightness / 32f);
+        GetScreen(screen).Brightness = 1 + ((float)brightness / 32f);
     }
 
     public static void WaitForVBL() {

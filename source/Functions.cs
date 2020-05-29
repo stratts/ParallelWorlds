@@ -1,5 +1,5 @@
 using System;
-using System.Numerics;
+using System.Collections;
 
 using static Objects;
 using static Collisions;
@@ -14,7 +14,7 @@ static class Functions {
         }
     }
 
-    public static void displayError(string error_text)
+    public static IEnumerator displayError(string error_text)
     {
         //PA_ResetBgSys();
         //PA_ResetSpriteSys();
@@ -23,10 +23,11 @@ static class Functions {
         PA.Init16cBg(1, 3);
         var text = "Error:\n" + error_text;
         //PA16cTextAlign(ALIGN_CENTER);
-        PA._16cText(1, 0, 80, 255, 192, text, 1, 0, 100);
+        PA.SimpleText(1, 0, 0, error_text, true);
         while(true)
         {
             PA.WaitForVBL();
+            yield return null;
         }
     }
 
@@ -78,7 +79,7 @@ static class Functions {
         //struct mallinfo info = mallinfo();
 
         CA.SimpleText(screen, 4, 116, "- Hardware -");
-        CA.SimpleText(screen, 4, 124, "CPU usage: {0} percent", 0);
-        CA.SimpleText(screen, 4, 132, "Memory in use: {0} MB", 0);
+        CA.SimpleText(screen, 4, 124, "CPU usage: {0} percent", "?");
+        CA.SimpleText(screen, 4, 132, "Memory in use: {0} MB", GC.GetTotalMemory(false) / 1_000_000);
     }	
 }

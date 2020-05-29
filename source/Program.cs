@@ -62,8 +62,8 @@ namespace ParallelWorlds
             // Load textures, sounds, and so on in here...
             base.LoadContent();
 
-            _dark = new Texture2D(GraphicsDevice, _windowSize.X, _windowSize.Y);
-            var colors = new Color[_windowSize.X * _windowSize.Y];
+            _dark = new Texture2D(GraphicsDevice, _width, _height);
+            var colors = new Color[_width * _height];
             Array.Fill(colors, Color.Black);
             _dark.SetData(colors);
 
@@ -106,9 +106,6 @@ namespace ParallelWorlds
             _spriteBatch.Draw(_topScreen, topRect, Color.White); 
             _spriteBatch.Draw(_bottomScreen, bottomRect, Color.White);
 
-            if (PA.Brightness < 1) 
-                _spriteBatch.Draw(_dark, Vector2.Zero, new Color(Color.White, 1 - PA.Brightness));
-            
             _spriteBatch.End();
 
             if (PA.QueueClearText) PA.ClearText();
@@ -158,8 +155,27 @@ namespace ParallelWorlds
 
             // Render text
             foreach (var text in screen.Text) {
-                _spriteBatch.DrawString(_smallFont, text.Content, text.Pos, Color.White);
+                if (text.Centered) {
+                    Point box = _smallFont.MeasureString(text.Content).ToPoint();
+                    var lines = text.Content.Split("\n");
+                    Point start = new Point(_width / 2 - box.X / 2, _height / 2 - box.Y / 2);
+                    foreach (var line in lines) {
+                        Point size = _smallFont.MeasureString(line).ToPoint();
+                        int offset = box.X / 2 - size.X / 2;
+                        var pos = new Vector2(start.X + offset, start.Y);
+                        _spriteBatch.DrawString(_smallFont, line, pos, Color.White);
+                        start.Y += size.Y;
+                    }
+                    
+                }
+                else {
+                    _spriteBatch.DrawString(_smallFont, text.Content, text.Pos, Color.White);
+                }
             }
+
+            // Adjust brightness
+            if (screen.Brightness < 1) 
+                _spriteBatch.Draw(_dark, Vector2.Zero, new Color(Color.White, 1 - screen.Brightness));
            
             _spriteBatch.End();
         }
