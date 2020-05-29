@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using IniParser;
 
 using static Globals;
@@ -9,10 +10,17 @@ using static Classes;
 using static Camera;
 
 public static partial class Rooms {
-    public static IEnumerator CurrentRoom { get; set; } = mainMenu();
+    public static IEnumerator Current { get; set; } = mainMenu();
+    public static Stack<IEnumerator> Subroutines { get; set; } = new Stack<IEnumerator>();
 
     public static void Update() {
-        CurrentRoom.MoveNext();
+        var sub = Current;
+        if (!sub.MoveNext()) Current = Subroutines.Pop();
+        else if (sub.Current != null && sub.Current is IEnumerator s) {
+            Console.WriteLine($"Run subroutine {s}");
+            Current = s;
+            Subroutines.Push(sub);
+        }
     }
 
     public static IEnumerator mainMenu() {
@@ -55,13 +63,13 @@ public static partial class Rooms {
             break;
         }
 
-        CA.FadeOut(0); 
+        yield return CA.FadeOut(0); 
 
-        CurrentRoom = mainGame();
+        yield return mainGame();
     }
 
     public static IEnumerator mainGame() {
-        loadLevel(Jelli, selectedLevel);
+        yield return loadLevel(Jelli, selectedLevel);
 		
         //AS_MP3StreamPlay(rootf("music/jumper.mp3"));
         int i = 1;
@@ -96,7 +104,7 @@ public static partial class Rooms {
 	    PA.EasyBgScrollXY(MAINSCREEN, 2, (camera.x>>8)>>1, (camera.y>>8)>>1);
 	    PA.EasyBgScrollXY(MAINSCREEN, 3, (camera.x>>8)>>2, (camera.y>>8)>>2);
 
-        CA.FadeIn(0);
+        yield return CA.FadeIn(0);
 
         int midBgX = 0, backBgX = 0;
         int timer = 0;

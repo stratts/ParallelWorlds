@@ -18,18 +18,22 @@ namespace ParallelWorlds
         private int scale = 2;
         private int _width = 256;
         private int _height = 192;
+        private Point _windowSize;
         private SpriteBatch _spriteBatch;
         
         private RenderTarget2D _topScreen;
         private RenderTarget2D _bottomScreen;
+
+        private Texture2D _dark;
 
         private ParallelWorlds()
         {
             var gdm = new GraphicsDeviceManager(this);
 
             // Typically you would load a config here...
-            gdm.PreferredBackBufferWidth = _width * scale;
-            gdm.PreferredBackBufferHeight = _height * scale * 2;
+            _windowSize = new Point(_width * scale, _height * scale * 2); 
+            gdm.PreferredBackBufferWidth = _windowSize.X;
+            gdm.PreferredBackBufferHeight = _windowSize.Y;
             gdm.IsFullScreen = false;
             gdm.SynchronizeWithVerticalRetrace = true;
             IsFixedTimeStep = true;
@@ -55,6 +59,11 @@ namespace ParallelWorlds
         {
             // Load textures, sounds, and so on in here...
             base.LoadContent();
+
+            _dark = new Texture2D(GraphicsDevice, _windowSize.X, _windowSize.Y);
+            var colors = new Color[_windowSize.X * _windowSize.Y];
+            Array.Fill(colors, Color.Black);
+            _dark.SetData(colors);
         }
 
         protected override void UnloadContent()
@@ -89,8 +98,13 @@ namespace ParallelWorlds
             var bottomRect = new Rectangle(new Point(0, _height * scale), rectSize);
 
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+
             _spriteBatch.Draw(_topScreen, topRect, Color.White); 
             _spriteBatch.Draw(_bottomScreen, bottomRect, Color.White);
+
+            if (PA.Brightness < 1) 
+                _spriteBatch.Draw(_dark, Vector2.Zero, new Color(Color.White, 1 - PA.Brightness));
+            
             _spriteBatch.End();
 
             base.Draw(gameTime);
@@ -108,6 +122,7 @@ namespace ParallelWorlds
             for (int i = screen.Backgrounds.Length - 1; i >= 0; i--) {
                 var background = screen.Backgrounds[i];
                 if (background == null) continue;
+                if (!background.Visible) continue;
                 if (!background.Loaded) background.Load();
                 var sourceRect = new Rectangle(background.Pos.ToPoint(), new Point(_width, _height));
                 _spriteBatch.Draw(background.Texture, Vector2.Zero, sourceRect, Color.White);

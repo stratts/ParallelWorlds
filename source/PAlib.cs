@@ -59,6 +59,8 @@ static class PA {
     public static Screen TopScreen = new Screen();
     public static Screen BottomScreen = new Screen();
 
+    public static float Brightness { get; private set; }
+
     private static Screen GetScreen(byte screen) {
         if (screen == 0) return BottomScreen;
         else return TopScreen;
@@ -77,11 +79,13 @@ static class PA {
     }
 
     public static void HideBg(byte screen, byte layer) {
-        GetBackground(screen, layer).Visible = false;
+        var background = GetBackground(screen, layer);
+        if (background != null) background.Visible = false;
     }
 
     public static void ShowBg(byte screen, byte layer) {
-        GetBackground(screen, layer).Visible = true;
+        var background = GetBackground(screen, layer);
+        if (background != null) background.Visible = true;
     }
 
     public static void EasyBgScrollXY(byte screen, byte layer, 
@@ -93,6 +97,7 @@ static class PA {
     public static void EasyLoadBackground(byte screen, byte layer, string path) {
         Console.WriteLine($"Load background {path}");
         SetBackground(screen, layer, new Background(path));
+        GetBackground(screen, layer).Load();
     }
 
     public static bool EasyBgGetPixel(byte screen, byte layer, int x, int y) {
@@ -104,7 +109,7 @@ static class PA {
     }
 
 	public static void SetBrightness(byte screen, sbyte brightness) {
-
+        Brightness = 1 + ((float)brightness / 32f);
     }
 
     public static void WaitForVBL() {
@@ -120,6 +125,7 @@ static class PA {
         var s = new Sprite(path);
         s.Size = new Point(width, height);
         GetScreen(screen).Sprites[sprite] = s;
+        s.Load();
     }
 
     public static void SetSpriteXY(byte screen, int sprite, int x, int y) {
@@ -197,6 +203,9 @@ static class Pad {
         buttons.Right = func(Keys.Right);
         buttons.Up = func(Keys.Up);
         buttons.Down = func(Keys.Down);
+
+        buttons.A = func(Keys.Z);
+        buttons.B = func(Keys.X);
 
         buttons.Start = func(Keys.Enter);
         buttons.Select = func(Keys.Tab);

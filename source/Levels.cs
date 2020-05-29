@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Collections;
 using IniParser;
 
 using static Globals;
@@ -47,7 +48,7 @@ static class Levels {
         }
     }
 
-    public static void loadLevel(WorldInfo world, int levelNum)
+    public static IEnumerator loadLevel(WorldInfo world, int levelNum)
     {
         currentWorld = world;
         currentLevel = levelNum;
@@ -64,7 +65,7 @@ static class Levels {
         levelPath = String.Format("{0}/{1}/{2}.png", rootPath, world.level[levelNum].name, "StageBG");
 
         CA.Information(1, "Loading...");
-        CA.FadeIn(0);
+        yield return CA.FadeIn(0);
 
         if(!File.Exists(levelPath))
         {
@@ -105,7 +106,7 @@ static class Levels {
             displayError(String.Format("Could not load collision map for {0}.", world.level[levelNum].name));
         }
 
-        CA.FadeOut(0);
+        yield return CA.FadeOut(0);
         CA.Update16c();
 
         //PA_DeleteBg(1, 0);

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 
 public static class CA {
 
@@ -25,7 +26,7 @@ public static class CA {
 
     }
 
-    public static void FadeOut(byte type) {
+    public static IEnumerator FadeOut(byte type) {
         sbyte i;
 
         if (type == 1)
@@ -35,6 +36,7 @@ public static class CA {
                 PA.SetBrightness(0, i); 
                 PA.SetBrightness(1, i);
                 PA.WaitForVBL();
+                yield return null;
             }	
         }
         
@@ -45,11 +47,34 @@ public static class CA {
                 PA.SetBrightness(0, i); 
                 PA.SetBrightness(1, i);
                 PA.WaitForVBL();
+                yield return null;
             }	
         }   
     }
 
-    public static void FadeIn(byte type) {
+    public static IEnumerator FadeIn(byte type) {
+        sbyte i;
 
+        if (type == 1)
+            {	
+            for (i = 31; i >= 0; i--) 
+            {
+                PA.SetBrightness(0, i); 
+                PA.SetBrightness(1, i);
+                PA.WaitForVBL();
+                yield return null;
+            }	
+        }
+            
+            else if (type == 0)
+            {
+            for (i = -31; i <= 0; i++) 
+            {
+                //PA.SetBrightness(0, i); 
+                PA.SetBrightness(1, i);
+                PA.WaitForVBL();
+                yield return null;
+            }	
+        }   
     }
 }
