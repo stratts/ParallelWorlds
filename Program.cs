@@ -10,7 +10,7 @@ namespace ParallelWorlds
 {
     class ParallelWorlds : Game
     {
-        private int scale = 2;
+        private int _scale = 2;
         private int _width = 256;
         private int _height = 192;
         private Point _windowSize;
@@ -47,7 +47,7 @@ namespace ParallelWorlds
         {
             var gdm = new GraphicsDeviceManager(this);
 
-            _windowSize = new Point(_width * scale, _height * scale * 2); 
+            _windowSize = new Point(_width * _scale, _height * _scale * 2); 
             gdm.PreferredBackBufferWidth = _windowSize.X;
             gdm.PreferredBackBufferHeight = _windowSize.Y;
             gdm.IsFullScreen = false;
@@ -59,9 +59,6 @@ namespace ParallelWorlds
 
         protected override void Initialize()
         {
-            /* This is a nice place to start up the engine, after
-            * loading configuration stuff in the constructor
-            */
             base.Initialize();
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -73,7 +70,6 @@ namespace ParallelWorlds
 
         protected override void LoadContent()
         {
-            // Load textures, sounds, and so on in here...
             base.LoadContent();
 
             _dark = new Texture2D(GraphicsDevice, _width, _height);
@@ -86,13 +82,11 @@ namespace ParallelWorlds
 
         protected override void UnloadContent()
         {
-            // Clean up after yourself!
             base.UnloadContent();
         }
 
         protected override void Update(GameTime gameTime)
         {
-            // Run game logic in here. Do NOT render anything here!
             Pad.Update(Keyboard.GetState());
             UpdateSubroutines();
             base.Update(gameTime);
@@ -111,9 +105,10 @@ namespace ParallelWorlds
             DrawScreen(PA.BottomScreen, gameTime);
 
             GraphicsDevice.SetRenderTarget(null);
-            var rectSize = new Point(_width * scale, _height * scale);
+            
+            var rectSize = new Point(_width * _scale, _height * _scale);
             var topRect = new Rectangle(Point.Zero, rectSize);
-            var bottomRect = new Rectangle(new Point(0, _height * scale), rectSize);
+            var bottomRect = new Rectangle(new Point(0, _height * _scale), rectSize);
 
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
@@ -172,13 +167,13 @@ namespace ParallelWorlds
                 if (text.Centered) {
                     Point box = _smallFont.MeasureString(text.Content).ToPoint();
                     var lines = text.Content.Split("\n");
-                    Point start = new Point(_width / 2 - box.X / 2, _height / 2 - box.Y / 2);
+                    Point linePos = new Point(_width / 2 - box.X / 2, _height / 2 - box.Y / 2);
                     foreach (var line in lines) {
                         Point size = _smallFont.MeasureString(line).ToPoint();
                         int offset = box.X / 2 - size.X / 2;
-                        var pos = new Vector2(start.X + offset, start.Y);
+                        var pos = new Vector2(linePos.X + offset, linePos.Y);
                         _spriteBatch.DrawString(_smallFont, line, pos, Color.White);
-                        start.Y += size.Y;
+                        linePos.Y += size.Y;
                     }
                     
                 }

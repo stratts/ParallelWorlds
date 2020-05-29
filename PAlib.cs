@@ -8,8 +8,6 @@ using Microsoft.Xna.Framework.Media;
 
 static class PA {
 
-    public static Game Game { get; set; }
-
     public struct Text {
         public string Content { get; set; }
         public Vector2 Pos { get; set; }
@@ -64,8 +62,10 @@ static class PA {
         public float Brightness { get; set; } = 1;
     }
 
-    public static Screen TopScreen = new Screen();
-    public static Screen BottomScreen = new Screen();
+    public static Game Game { get; set; }
+
+    public static Screen TopScreen { get; }= new Screen();
+    public static Screen BottomScreen { get; }= new Screen();
 
     public static bool QueueClearText { get; set; } = false;
 
@@ -167,7 +167,7 @@ static class PA {
     }
 
     public static void DeleteSprite(byte screen, int sprite) {
-
+        throw new NotImplementedException();
     }
 
     public static int Distance(int x1, int y1, int x2, int y2) {
