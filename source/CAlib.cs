@@ -9,21 +9,21 @@ public static class CA {
         return filepath;
     }
 
-    public static void Information(uint screen, string text) {
-        
+    public static void Information(byte screen, string text) {
+        PA.SimpleText(screen, 0, 0, text, true);
     }
 
-    public static void SimpleText(uint screen, int x, int y, string text) {
-
+    public static void SimpleText(byte screen, int x, int y, string text) {
+        PA.SimpleText(screen, x, y, text);
     }
 
-    public static void SimpleText(uint screen, int x, int y, string format, params object[] args) {
+    public static void SimpleText(byte screen, int x, int y, string format, params object[] args) {
         if (args == null) SimpleText(screen, x, y, format);
         else SimpleText(screen, x, y, String.Format(format, args));
     }
 
     public static void Update16c() {
-
+        PA.QueueClearText = true;
     }
 
     public static IEnumerator FadeOut(byte type) {

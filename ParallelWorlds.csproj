@@ -5,7 +5,6 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
   
-  
   <ItemGroup>
     <PackageReference Include="ini-parser" Version="2.5.2" />
   </ItemGroup>
@@ -17,6 +16,10 @@
   <ItemGroup>
     <PackageReference Include="MonoGame.Content.Builder" Version="3.7.0.4" />
     <PackageReference Include="MonoGame.Framework.DesktopGL.Core" Version="3.7.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="$(ProjectDir)data\**" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

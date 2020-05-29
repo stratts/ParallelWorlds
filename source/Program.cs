@@ -24,19 +24,21 @@ namespace ParallelWorlds
         private RenderTarget2D _topScreen;
         private RenderTarget2D _bottomScreen;
 
+        private SpriteFont _smallFont;
         private Texture2D _dark;
 
         private ParallelWorlds()
         {
             var gdm = new GraphicsDeviceManager(this);
 
-            // Typically you would load a config here...
             _windowSize = new Point(_width * scale, _height * scale * 2); 
             gdm.PreferredBackBufferWidth = _windowSize.X;
             gdm.PreferredBackBufferHeight = _windowSize.Y;
             gdm.IsFullScreen = false;
             gdm.SynchronizeWithVerticalRetrace = true;
             IsFixedTimeStep = true;
+
+            Content.RootDirectory = "data/ParallelWorlds";
         }
 
         protected override void Initialize()
@@ -64,6 +66,8 @@ namespace ParallelWorlds
             var colors = new Color[_windowSize.X * _windowSize.Y];
             Array.Fill(colors, Color.Black);
             _dark.SetData(colors);
+
+            _smallFont = Content.Load<SpriteFont>("smallFont");
         }
 
         protected override void UnloadContent()
@@ -106,6 +110,8 @@ namespace ParallelWorlds
                 _spriteBatch.Draw(_dark, Vector2.Zero, new Color(Color.White, 1 - PA.Brightness));
             
             _spriteBatch.End();
+
+            if (PA.QueueClearText) PA.ClearText();
 
             base.Draw(gameTime);
         }
@@ -150,6 +156,11 @@ namespace ParallelWorlds
                     Vector2.Zero, 1, effects, 0);
             }
 
+            // Render text
+            foreach (var text in screen.Text) {
+                _spriteBatch.DrawString(_smallFont, text.Content, text.Pos, Color.White);
+            }
+           
             _spriteBatch.End();
         }
     }

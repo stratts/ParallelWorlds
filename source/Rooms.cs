@@ -8,6 +8,7 @@ using static Levels;
 using static Objects;
 using static Classes;
 using static Camera;
+using static Functions;
 
 public static partial class Rooms {
     public static IEnumerator Current { get; set; } = mainMenu();
@@ -60,7 +61,6 @@ public static partial class Rooms {
             PA.WaitForVBL();
             CA.Update16c();
             yield return null;
-            break;
         }
 
         yield return CA.FadeOut(0); 
@@ -156,7 +156,7 @@ public static partial class Rooms {
             PA.EasyBgScrollXY(MAINSCREEN, 2, ((camera.x+midBgX)>>8)>>1, (camera.y>>8)>>1);
             PA.EasyBgScrollXY(MAINSCREEN, 3, ((camera.x+backBgX)>>8)>>2, (camera.y>>8)>>2);
 
-            //displayDebug(0);
+            displayDebug(0);
 
             //CA_BoxText(0, 100, 48, 32, "Welcome to Alpha 2 of Parallel Worlds! The aim of this demo is to gather as many points as you can by jumping on the Mario streakers. Be quick though, as your points decrease over time!");
             

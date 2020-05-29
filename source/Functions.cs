@@ -1,6 +1,10 @@
 using System;
 using System.Numerics;
 
+using static Objects;
+using static Collisions;
+using static Camera;
+
 static class Functions {
     
     public static void PrintFields(Object obj) {
@@ -55,4 +59,26 @@ static class Functions {
 
         return place;	
     }
+
+    public static void displayDebug(byte screen)
+    {
+        CA.SimpleText(screen, 4, 6, "- Player/camera info -");
+        CA.SimpleText(screen, 4, 14, "Player position X: {0}", objects[0].x>>8);
+        CA.SimpleText(screen, 4, 22, "Player position Y: {0}", objects[0].y>>8);
+        CA.SimpleText(screen, 4, 30, "Camera position X: {0}", camera.x>>8);
+        CA.SimpleText(screen, 4, 38, "Camera position Y: {0}", camera.y>>8);
+
+        CA.SimpleText(screen, 4, 58, "- Collisions -");
+        CA.SimpleText(screen, 4, 66, "Left collision: {0}", leftCollision(0));
+        CA.SimpleText(screen, 4, 74, "Right collision: {0}", rightCollision(0));
+        CA.SimpleText(screen, 4, 82, "Up collision: {0}", upCollision(0));
+        CA.SimpleText(screen, 4, 90, "Down collision: {0}", downCollision(0));
+        CA.SimpleText(screen, 4, 98, "Touching ground: {0}", touchingGround(0));
+
+        //struct mallinfo info = mallinfo();
+
+        CA.SimpleText(screen, 4, 116, "- Hardware -");
+        CA.SimpleText(screen, 4, 124, "CPU usage: {0} percent", 0);
+        CA.SimpleText(screen, 4, 132, "Memory in use: {0} MB", 0);
+    }	
 }

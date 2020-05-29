@@ -10,6 +10,12 @@ static class PA {
 
     public static Game Game { get; set; }
 
+    public struct Text {
+        public string Content { get; set; }
+        public Vector2 Pos { get; set; }
+        public bool Centered { get; set; } 
+    }
+
     public class Sprite {
         public Vector2 Pos { get; set; }
         public Texture2D Texture { get; set; }
@@ -54,12 +60,15 @@ static class PA {
     public class Screen {
         public Background[] Backgrounds = new Background[4];
         public Sprite[] Sprites = new Sprite[128];
+       public List<Text> Text = new List<Text>();
     }
 
     public static Screen TopScreen = new Screen();
     public static Screen BottomScreen = new Screen();
 
     public static float Brightness { get; private set; }
+
+    public static bool QueueClearText { get; set; } = false;
 
     private static Screen GetScreen(byte screen) {
         if (screen == 0) return BottomScreen;
@@ -75,7 +84,7 @@ static class PA {
     }
 
     public static void Init16cBg(byte screen, byte layer) {
-
+        ClearText();
     }
 
     public static void HideBg(byte screen, byte layer) {
@@ -114,6 +123,20 @@ static class PA {
 
     public static void WaitForVBL() {
 
+    }
+
+    public static void ClearText() {
+        TopScreen.Text.Clear();
+        BottomScreen.Text.Clear();
+        QueueClearText = false;
+    }
+
+    public static void SimpleText(byte screen, int x, int y, string text, bool centered = false) {
+        var t = new Text();
+        t.Pos = new Vector2(x, y);
+        t.Content = text;
+        t.Centered = centered;
+        GetScreen(screen).Text.Add(t);
     }
 
     public static int _16cText(byte screen, int basex, int basey, 
