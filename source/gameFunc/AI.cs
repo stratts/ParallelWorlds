@@ -1,6 +1,6 @@
 using static Objects;
 using static Collisions;
-using static Globals;
+using static Defines;
 using static Functions;
 
 static class AI {

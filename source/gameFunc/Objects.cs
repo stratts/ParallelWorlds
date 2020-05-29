@@ -2,7 +2,7 @@ using System;
 
 using static Collisions;
 using static Functions;
-using static Globals;
+using static Defines;
 
 public class ObjectInfo {
     public int x, y;
@@ -70,8 +70,6 @@ static class Objects {
 
 		// Anything else to initalise
 		objects[MAXOBJECTS].vy = 0;
-
-        Console.WriteLine($"Create {objClass.name} at {x}, {y}");
 
 	// Load the object's sprite and palette
 	//------------------------------------------------------------------------

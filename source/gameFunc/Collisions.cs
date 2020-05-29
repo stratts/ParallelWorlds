@@ -1,6 +1,6 @@
 using static Objects;
 using static Levels;
-using static Globals;
+using static Defines;
 
 public static class Collisions {
     public static bool objectCollision(int object1,int object2){

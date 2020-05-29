@@ -7,13 +7,6 @@ using static Camera;
 
 static class Functions {
     
-    public static void PrintFields(Object obj) {
-        System.Console.WriteLine(obj.GetType().Name);
-        foreach (var f in  obj.GetType().GetFields()) {
-            System.Console.WriteLine($"{f.Name}: {f.GetValue(obj)}");
-        }
-    }
-
     public static IEnumerator displayError(string error_text)
     {
         //PA_ResetBgSys();

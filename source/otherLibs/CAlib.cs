@@ -4,7 +4,7 @@ using System.Collections;
 public static class CA {
 
     public static string rootf(string path) {
-        string filepath = Globals.ROOTPATH;
+        string filepath = Defines.ROOTPATH;
         filepath += path;
         return filepath;
     }

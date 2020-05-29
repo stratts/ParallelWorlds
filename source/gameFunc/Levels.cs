@@ -3,7 +3,7 @@ using System.IO;
 using System.Collections;
 using IniParser;
 
-using static Globals;
+using static Defines;
 using static Functions;
 
 struct LevelInfo {

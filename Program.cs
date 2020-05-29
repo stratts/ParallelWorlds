@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
@@ -7,14 +10,6 @@ namespace ParallelWorlds
 {
     class ParallelWorlds : Game
     {
-        static void Main(string[] args)
-        {
-            using (var g = new ParallelWorlds())
-            {
-                g.Run();
-            }
-        }
-
         private int scale = 2;
         private int _width = 256;
         private int _height = 192;
@@ -26,6 +21,27 @@ namespace ParallelWorlds
 
         private SpriteFont _smallFont;
         private Texture2D _dark;
+
+        private static IEnumerator _currentSub { get; set; } = Rooms.main();
+        private static Stack<IEnumerator> _subroutines { get; set; } = new Stack<IEnumerator>();
+
+        static void Main(string[] args)
+        {
+            using (var g = new ParallelWorlds())
+            {
+                g.Run();
+            }
+        }
+
+        private static void UpdateSubroutines() {
+            var sub = _currentSub;
+            if (!sub.MoveNext()) _currentSub = _subroutines.Pop();
+            else if (sub.Current != null && sub.Current is IEnumerator s) {
+                Console.WriteLine($"Run subroutine {s}");
+                _currentSub = s;
+                _subroutines.Push(sub);
+            }
+        }
 
         private ParallelWorlds()
         {
@@ -53,8 +69,6 @@ namespace ParallelWorlds
             _bottomScreen = CreateRenderTarget();
 
             PA.Game = this;
-            Classes.setClasses();
-            Levels.setLevels();
         }
 
         protected override void LoadContent()
@@ -80,7 +94,7 @@ namespace ParallelWorlds
         {
             // Run game logic in here. Do NOT render anything here!
             Pad.Update(Keyboard.GetState());
-            Rooms.Update();
+            UpdateSubroutines();
             base.Update(gameTime);
         }
 
