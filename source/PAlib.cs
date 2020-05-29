@@ -178,17 +178,31 @@ static class Pad {
     public static Buttons Held;
 
     private static KeyboardState _prev;
+    private static KeyboardState _current;
 
     public struct Buttons {
         public bool A, B, X, Y, Up, Down, Left, Right, Start, Select, L, R;
     }
 
     public static void Update(KeyboardState kstate) {
-        if (kstate.IsKeyDown(Keys.Left)) Held.Left = true;
-        else Held.Left = false;
-        if (kstate.IsKeyDown(Keys.Right)) Held.Right = true;
-        else Held.Right = false;
-        if (kstate.IsKeyDown(Keys.Up)) Newpress.Up = true;
-        else Newpress.Up = false;
+        _prev = _current;
+        _current = kstate;
+        
+        Set(ref Newpress, _Newpress);
+        Set(ref Held, _Held);
     }
+
+    private static void Set(ref Buttons buttons, Predicate<Keys> func) {
+        buttons.Left = func(Keys.Left);
+        buttons.Right = func(Keys.Right);
+        buttons.Up = func(Keys.Up);
+        buttons.Down = func(Keys.Down);
+
+        buttons.Start = func(Keys.Enter);
+        buttons.Select = func(Keys.Tab);
+    }
+
+    private static bool _Newpress(Keys key) => !_prev.IsKeyDown(key) && _current.IsKeyDown(key);
+
+    private static bool _Held(Keys key) => _prev.IsKeyDown(key) && _current.IsKeyDown(key);
 }
