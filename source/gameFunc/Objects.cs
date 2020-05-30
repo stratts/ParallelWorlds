@@ -3,6 +3,8 @@ using System;
 using static Collisions;
 using static Functions;
 using static Defines;
+using static Levels;
+using static Camera;
 
 public class ObjectInfo {
     public int x, y;
@@ -245,8 +247,6 @@ static class Objects {
     //----------------------------------------------------------------------------
     public static void objectAddGravity() {
     //----------------------------------------------------------------------------
-        var currentWorld = Levels.currentWorld;
-        var currentLevel = Levels.currentLevel;
         objects[currentObject].y += objects[currentObject].vy;
         if(!touchingGround(currentObject) && objects[currentObject].vy < currentWorld.level[currentLevel].gravity) objects[currentObject].vy += objects[currentObject].objClass.weight;
         else if(touchingGround(currentObject)) objects[currentObject].vy = 0;
@@ -255,8 +255,6 @@ static class Objects {
     //----------------------------------------------------------------------------
     public static bool inStageZone(int objectNum) {
     //----------------------------------------------------------------------------
-        var currentWorld = Levels.currentWorld;
-        var currentLevel = Levels.currentLevel;
         if (objects[objectNum].y>>8 > currentWorld.level[currentLevel].height + 256) return false;
         return true;
     }
@@ -264,7 +262,6 @@ static class Objects {
     //----------------------------------------------------------------------------
     public static bool objectInCanvas(int objectNum) {
     //----------------------------------------------------------------------------
-        var camera = Camera.camera;
         if ((objects[objectNum].x-camera.x)>>8 > 256 || (objects[objectNum].y-camera.y)>>8 > 192 || (objects[objectNum].x-camera.x)>>8 < -64 || (objects[objectNum].y-camera.y)>>8 < -64) return false;
         return true;
     }

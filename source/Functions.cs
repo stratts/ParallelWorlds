@@ -7,20 +7,19 @@ using static Camera;
 
 static class Functions {
     
-    public static IEnumerator displayError(string error_text)
+    public static void displayError(string error_text)
     {
         //PA_ResetBgSys();
         //PA_ResetSpriteSys();
         PA.SetBrightness(1, 0);
         PA.SetBrightness(0, 0);
         PA.Init16cBg(1, 3);
-        var text = "Error:\n" + error_text;
+        string buffer = "Error:\n" + error_text;
         //PA16cTextAlign(ALIGN_CENTER);
-        PA.SimpleText(1, 0, 0, error_text, true);
+        PA.SimpleText(1, 0, 0, buffer, true);
         while(true)
         {
             PA.WaitForVBL();
-            yield return null;
         }
     }
 
