@@ -1,5 +1,5 @@
 using System;
-using System.Collections;
+using System.Collections.Generic;
 
 using static Objects;
 using static Collisions;
@@ -30,21 +30,22 @@ static class Functions {
     }
 
 
-    public static int lowestXinObj(ObjectInfo[] ar, int size)
+    public static int lowestXinObj(List<ObjectInfo> ar, int size)
     {
         int i;
         int oldDistance = 10000000;
         int place = 0;
-        var currentObject = Objects.currentObject;
+        ObjectInfo current = ar[currentObject];
 
         if(size > 1)
         {
             for(i=0;i<size+1;i++)
             {
-                if(PA.Distance(ar[currentObject].x>>8, ar[currentObject].y>>8, ar[i].x>>8, ar[i].y>>8) < oldDistance && currentObject != i)
+                ObjectInfo obj = ar[i];
+                if(PA.Distance(current.x>>8, current.y>>8, obj.x>>8, obj.y>>8) < oldDistance && currentObject != i)
                 {
                     place = i;
-                    oldDistance = PA.Distance(ar[currentObject].x>>8, ar[currentObject].y>>8, ar[i].x>>8, ar[i].y>>8);
+                    oldDistance = PA.Distance(current.x>>8, current.y>>8, obj.x>>8, obj.y>>8);
                 }
 
             }

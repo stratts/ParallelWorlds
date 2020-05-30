@@ -8,7 +8,8 @@ static class AI {
 
     public static void generalCharacter()
     {   
-        objects[currentObject].oldposx = objects[currentObject].x;
+        ObjectInfo obj = objects[currentObject];
+        obj.oldposx = obj.x;
 
         if(Pad.Held.Left || Pad.Held.Right)
         {
@@ -19,14 +20,14 @@ static class AI {
             // Moving left
             if(Pad.Held.Left)
             {
-                PA.SetSpriteHflip(MAINSCREEN, objects[currentObject].sprite, 1);
+                PA.SetSpriteHflip(MAINSCREEN, obj.sprite, 1);
 
-                    objects[currentObject].x -= objects[currentObject].objClass.speed;
-                    if(objects[currentObject].action == 0)
+                    obj.x -= obj.objClass.speed;
+                    if(obj.action == 0)
                         animateObject(currentObject, 
-                                    objects[currentObject].objClass.walk.start, 
-                                    objects[currentObject].objClass.walk.end, 
-                                    objects[currentObject].objClass.animSpeed);
+                                    obj.objClass.walk.start, 
+                                    obj.objClass.walk.end, 
+                                    obj.objClass.animSpeed);
                 
 
             }
@@ -34,14 +35,14 @@ static class AI {
             // Moving right
             if(Pad.Held.Right)
             {
-                PA.SetSpriteHflip(MAINSCREEN, objects[currentObject].sprite, 0);
+                PA.SetSpriteHflip(MAINSCREEN, obj.sprite, 0);
 
-                    objects[currentObject].x += objects[currentObject].objClass.speed;
-                    if(objects[currentObject].action == 0)
+                    obj.x += obj.objClass.speed;
+                    if(obj.action == 0)
                         animateObject(currentObject, 
-                                        objects[currentObject].objClass.walk.start, 
-                                        objects[currentObject].objClass.walk.end, 
-                                        objects[currentObject].objClass.animSpeed);
+                                        obj.objClass.walk.start, 
+                                        obj.objClass.walk.end, 
+                                        obj.objClass.animSpeed);
 
             }
 
@@ -50,12 +51,12 @@ static class AI {
             // End movement code
         }
 
-        else if(objects[currentObject].action == 0)
+        else if(obj.action == 0)
         {
                 animateObject(currentObject, 
-                                    objects[currentObject].objClass.idle.start, 
-                                    objects[currentObject].objClass.idle.end, 
-                                    objects[currentObject].objClass.animSpeed);
+                                    obj.objClass.idle.start, 
+                                    obj.objClass.idle.end, 
+                                    obj.objClass.animSpeed);
         }
 
 
@@ -63,37 +64,37 @@ static class AI {
 
         if(touchingGround(currentObject)) 
         {
-            objects[currentObject].vy = 0;
-            objects[currentObject].action = 0;
-            objects[currentObject].jumping = false; 
+            obj.vy = 0;
+            obj.action = 0;
+            obj.jumping = false; 
         }
 
         if(Pad.Newpress.Up && touchingGround(currentObject)) 
         {
-            objects[currentObject].action = 1;
-            objects[currentObject].vy = -1800;
-            objects[currentObject].jumping = true;
+            obj.action = 1;
+            obj.vy = -1800;
+            obj.jumping = true;
         }
 
-        if(objects[currentObject].vy > 512) objects[currentObject].action = 2;
-        else if(objects[currentObject].jumping && objects[currentObject].vy > 0) objects[currentObject].action = 2;
+        if(obj.vy > 512) obj.action = 2;
+        else if(obj.jumping && obj.vy > 0) obj.action = 2;
 
-        if(objects[currentObject].action == 1) animateObject(currentObject, 
-                                                    objects[currentObject].objClass.jump.start, 
-                                                    objects[currentObject].objClass.jump.end, 
-                                                    objects[currentObject].objClass.animSpeed);
+        if(obj.action == 1) animateObject(currentObject, 
+                                                    obj.objClass.jump.start, 
+                                                    obj.objClass.jump.end, 
+                                                    obj.objClass.animSpeed);
                     
 
-        else if(objects[currentObject].action == 2)animateObject(currentObject, 
-                                                        objects[currentObject].objClass.fall.start, 
-                                                        objects[currentObject].objClass.fall.end, 
-                                                        objects[currentObject].objClass.animSpeed);
+        else if(obj.action == 2)animateObject(currentObject, 
+                                                        obj.objClass.fall.start, 
+                                                        obj.objClass.fall.end, 
+                                                        obj.objClass.animSpeed);
                     
 
 
-        objects[currentObject].newposx = objects[currentObject].x;
-        objects[currentObject].relspeedx = objects[currentObject].oldposx - objects[currentObject].newposx;
-        objects[currentObject].relspeedy = objects[currentObject].vy;
+        obj.newposx = obj.x;
+        obj.relspeedx = obj.oldposx - obj.newposx;
+        obj.relspeedy = obj.vy;
 
         objectCheckCollision();
 
@@ -101,93 +102,94 @@ static class AI {
         {
             Camera.camera.x = 0;
             Camera.camera.y = 0;
-            objects[currentObject].y = objects[currentObject].startY;
-            objects[currentObject].x = objects[currentObject].startX;
+            obj.y = obj.startY;
+            obj.x = obj.startX;
         }
 
-        setSpriteXY(MAINSCREEN, objects[currentObject].sprite, (objects[currentObject].x - Camera.camera.x)>>8, (objects[currentObject].y - Camera.camera.y)>>8);
+        setSpriteXY(MAINSCREEN, obj.sprite, (obj.x - Camera.camera.x)>>8, (obj.y - Camera.camera.y)>>8);
 
     }
 
     public static void generalCPU()
     {
-        objects[currentObject].oldposx = objects[currentObject].x;
+        ObjectInfo obj = objects[currentObject];
+        obj.oldposx = obj.x;
 
-        if((objects[lowestXinObj(objects, 3)].x - objects[currentObject].x)>>8 < -(objects[lowestXinObj(objects, 3)].objClass.width+2) || (objects[lowestXinObj(objects, 3)].x - objects[currentObject].x)>>8 > objects[lowestXinObj(objects, 3)].objClass.width+2)
+        if((objects[lowestXinObj(objects, 3)].x - obj.x)>>8 < -(objects[lowestXinObj(objects, 3)].objClass.width+2) || (objects[lowestXinObj(objects, 3)].x - obj.x)>>8 > objects[lowestXinObj(objects, 3)].objClass.width+2)
         {
-            if(objects[lowestXinObj(objects, 3)].x > objects[currentObject].x)
+            if(objects[lowestXinObj(objects, 3)].x > obj.x)
             {
-                PA.SetSpriteHflip(MAINSCREEN, objects[currentObject].sprite, 0);
-                if(!objects[currentObject].jumping) objects[currentObject].action = 1;
-                objects[currentObject].x += objects[currentObject].objClass.speed-PA.RandMax(128);
+                PA.SetSpriteHflip(MAINSCREEN, obj.sprite, 0);
+                if(!obj.jumping) obj.action = 1;
+                obj.x += obj.objClass.speed-PA.RandMax(128);
             }
 
-            else if(objects[lowestXinObj(objects, 3)].x < objects[currentObject].x)
+            else if(objects[lowestXinObj(objects, 3)].x < obj.x)
             {   
-                PA.SetSpriteHflip(MAINSCREEN, objects[currentObject].sprite, 1);
-                if(!objects[currentObject].jumping) objects[currentObject].action = 1;
-                objects[currentObject].x -= objects[currentObject].objClass.speed-PA.RandMax(128);
+                PA.SetSpriteHflip(MAINSCREEN, obj.sprite, 1);
+                if(!obj.jumping) obj.action = 1;
+                obj.x -= obj.objClass.speed-PA.RandMax(128);
             }
 
-            /*if(((objects[lowestXinObj(objects, 3)].x - objects[currentObject].x)>>8 < -80 || (objects[lowestXinObj(objects, 3)].x - objects[currentObject].x)>>8 > 80) && !objects[currentObject].jumping)
+            /*if(((objects[lowestXinObj(objects, 3)].x - obj.x)>>8 < -80 || (objects[lowestXinObj(objects, 3)].x - obj.x)>>8 > 80) && !obj.jumping)
             {
-                if((objects[currentObject].y - objects[lowestXinObj(objects, 3)].y) >> 8 > 48) 
+                if((obj.y - objects[lowestXinObj(objects, 3)].y) >> 8 > 48) 
                 {
-                    objects[currentObject].vy = -1200;
-                    objects[currentObject].jumping = true;
+                    obj.vy = -1200;
+                    obj.jumping = true;
                 }
             }*/
 
-            if((leftCollision(currentObject) || rightCollision(currentObject)) && (!rightCollisionLarge(currentObject) && !leftCollisionLarge(currentObject)) && !objects[currentObject].jumping) 
+            if((leftCollision(currentObject) || rightCollision(currentObject)) && (!rightCollisionLarge(currentObject) && !leftCollisionLarge(currentObject)) && !obj.jumping) 
             {
-                objects[currentObject].vy = -1400;
-                objects[currentObject].action = 2;
-                objects[currentObject].jumping = true;
+                obj.vy = -1400;
+                obj.action = 2;
+                obj.jumping = true;
             }
         }
 
-        else objects[currentObject].action = 0;
+        else obj.action = 0;
 
-        objects[currentObject].y += objects[currentObject].vy;
-        if(!touchingGround(currentObject) && objects[currentObject].vy < objects[currentObject].objClass.weight) objects[currentObject].vy += 80;
-        if(!touchingGround(currentObject) && objects[currentObject].vy > 512) objects[currentObject].action = 3;
+        obj.y += obj.vy;
+        if(!touchingGround(currentObject) && obj.vy < obj.objClass.weight) obj.vy += 80;
+        if(!touchingGround(currentObject) && obj.vy > 512) obj.action = 3;
 
         
 
         if(touchingGround(currentObject)) 
         {
-            objects[currentObject].vy = 0;
-            objects[currentObject].jumping = false; 
+            obj.vy = 0;
+            obj.jumping = false; 
         }
 
-        switch(objects[currentObject].action)
+        switch(obj.action)
         {
             case 0:
                 animateObject(currentObject, 
-                        objects[currentObject].objClass.idle.start, 
-                        objects[currentObject].objClass.idle.end, 
-                        objects[currentObject].objClass.animSpeed); break;
+                        obj.objClass.idle.start, 
+                        obj.objClass.idle.end, 
+                        obj.objClass.animSpeed); break;
             case 1:
                 animateObject(currentObject, 
-                        objects[currentObject].objClass.walk.start, 
-                        objects[currentObject].objClass.walk.end, 
-                        objects[currentObject].objClass.animSpeed); break;
+                        obj.objClass.walk.start, 
+                        obj.objClass.walk.end, 
+                        obj.objClass.animSpeed); break;
 
             case 2:
                 animateObject(currentObject, 
-                        objects[currentObject].objClass.jump.start, 
-                        objects[currentObject].objClass.jump.end, 
-                        objects[currentObject].objClass.animSpeed); break;
+                        obj.objClass.jump.start, 
+                        obj.objClass.jump.end, 
+                        obj.objClass.animSpeed); break;
             case 3:
                 animateObject(currentObject, 
-                        objects[currentObject].objClass.fall.start, 
-                        objects[currentObject].objClass.fall.end, 
-                        objects[currentObject].objClass.animSpeed); break;
+                        obj.objClass.fall.start, 
+                        obj.objClass.fall.end, 
+                        obj.objClass.animSpeed); break;
         }
 
-        objects[currentObject].newposx = objects[currentObject].x;
-        objects[currentObject].relspeedx = objects[currentObject].oldposx - objects[currentObject].newposx;
-        objects[currentObject].relspeedy = objects[currentObject].vy;
+        obj.newposx = obj.x;
+        obj.relspeedx = obj.oldposx - obj.newposx;
+        obj.relspeedy = obj.vy;
 
         objectCheckCollision();
 
@@ -196,99 +198,100 @@ static class AI {
             Camera.camera.x = 0;
             Camera.camera.y = 0;
 
-            objects[currentObject].y = objects[currentObject].startY;
-            objects[currentObject].x = objects[currentObject].startX;
+            obj.y = obj.startY;
+            obj.x = obj.startX;
         }
 
 
-        setSpriteXY(MAINSCREEN, objects[currentObject].sprite, (objects[currentObject].x - Camera.camera.x)>>8, (objects[currentObject].y - Camera.camera.y)>>8);
+        setSpriteXY(MAINSCREEN, obj.sprite, (obj.x - Camera.camera.x)>>8, (obj.y - Camera.camera.y)>>8);
 
     }
 
     public static void aiGenericGround()
     {
+        ObjectInfo obj = objects[currentObject];
         // Only activate the AI when the object is visible
-        if(objectInCanvas(currentObject)) objects[currentObject].activated = true;
+        if(objectInCanvas(currentObject)) obj.activated = true;
 
         // AI code
-        if(objects[currentObject].activated && objects[currentObject].alive)
+        if(obj.activated && obj.alive)
         {
-            objects[currentObject].x += objects[currentObject].objClass.speed*objects[currentObject].moveDirection;
+            obj.x += obj.objClass.speed*obj.moveDirection;
             
 
-            if(leftCollision(currentObject) || rightCollision(currentObject)) objects[currentObject].i++;
-            else objects[currentObject].i = 0; 
+            if(leftCollision(currentObject) || rightCollision(currentObject)) obj.i++;
+            else obj.i = 0; 
 
-            if(objects[currentObject].i > 80)
+            if(obj.i > 80)
             { 
-                objects[currentObject].i = 0; 
+                obj.i = 0; 
 
-                if(leftCollision(currentObject)) objects[currentObject].moveDirection = 1;
-                else if(rightCollision(currentObject)) objects[currentObject].moveDirection = -1; 
+                if(leftCollision(currentObject)) obj.moveDirection = 1;
+                else if(rightCollision(currentObject)) obj.moveDirection = -1; 
             }
 
-            else if(objects[currentObject].i > 5)
+            else if(obj.i > 5)
             { 
-                objects[currentObject].action = 0;
+                obj.action = 0;
 
-                if(objects[currentObject].i > 40)
+                if(obj.i > 40)
                 {
-                    if(leftCollision(currentObject)) PA.SetSpriteHflip(MAINSCREEN, objects[currentObject].sprite, 0);
-                    else if(rightCollision(currentObject)) PA.SetSpriteHflip(MAINSCREEN, objects[currentObject].sprite, 1);
+                    if(leftCollision(currentObject)) PA.SetSpriteHflip(MAINSCREEN, obj.sprite, 0);
+                    else if(rightCollision(currentObject)) PA.SetSpriteHflip(MAINSCREEN, obj.sprite, 1);
                 }
             }
 
             else 
             {
-                objects[currentObject].action = 1;
-                if(objects[currentObject].moveDirection == -1) PA.SetSpriteHflip(MAINSCREEN, objects[currentObject].sprite, 1);
-                else PA.SetSpriteHflip(MAINSCREEN, objects[currentObject].sprite, 0);
+                obj.action = 1;
+                if(obj.moveDirection == -1) PA.SetSpriteHflip(MAINSCREEN, obj.sprite, 1);
+                else PA.SetSpriteHflip(MAINSCREEN, obj.sprite, 0);
             }
 
             
 
-            switch(objects[currentObject].action)
+            switch(obj.action)
             {
                 case 1:
                     animateObject(currentObject,
-                        objects[currentObject].objClass.walk.start,
-                        objects[currentObject].objClass.walk.end,
-                        objects[currentObject].objClass.animSpeed); break;
+                        obj.objClass.walk.start,
+                        obj.objClass.walk.end,
+                        obj.objClass.animSpeed); break;
 
                 default:
                     animateObject(currentObject,
-                        objects[currentObject].objClass.idle.start,
-                        objects[currentObject].objClass.idle.end,
-                        objects[currentObject].objClass.animSpeed); break;
+                        obj.objClass.idle.start,
+                        obj.objClass.idle.end,
+                        obj.objClass.animSpeed); break;
             }
 
-            if(objectCollisionTop(0, currentObject) && objects[0].vy>0 && objects[currentObject].alive) 
+            if(objectCollisionTop(0, currentObject) && objects[0].vy>0 && obj.alive) 
             {
-                objects[currentObject].alive = false;
+                obj.alive = false;
                 if(objects[0].relspeedx >= 0) playerPoints += (objects[0].vy<<2)*(objects[0].relspeedx+1);
                 else playerPoints += objects[0].vy*-(objects[0].relspeedx+1);
-                if(!objects[currentObject].jumping)
+                if(!obj.jumping)
                 {
-                    objects[currentObject].vy = -500;
+                    obj.vy = -500;
                     objects[0].vy = -1200;
-                    objects[currentObject].jumping = true;
+                    obj.jumping = true;
                 }
             }
 
-            if(!inStageZone(currentObject)) objects[currentObject].alive = false;
+            if(!inStageZone(currentObject)) obj.alive = false;
 
         }
 
-        else if (!objects[currentObject].alive) 
+        else if (!obj.alive) 
         {
 
             if(!inStageZone(currentObject)) deleteObject(currentObject);
                 
-            //objects[currentObject].rotation -= objects[currentObject].moveDirection*5;
+            //obj.rotation -= obj.moveDirection*5;
         }
 
         // Collisions and gravity
-        if(objects[currentObject].alive) objectCheckCollision();
+        if(obj.alive) objectCheckCollision();
 
         objectAddGravity();
     }
@@ -300,32 +303,33 @@ static class AI {
 
     public static void aiDummy()
     {
-        objects[currentObject].oldposx = objects[currentObject].x;
-        objects[currentObject].oldposy = objects[currentObject].y;
+        ObjectInfo obj = objects[currentObject];
+        obj.oldposx = obj.x;
+        obj.oldposy = obj.y;
 
         animateObject(currentObject, 
-                                    objects[currentObject].objClass.idle.start, 
-                                    objects[currentObject].objClass.idle.end, 
-                                    objects[currentObject].objClass.animSpeed);
+                                    obj.objClass.idle.start, 
+                                    obj.objClass.idle.end, 
+                                    obj.objClass.animSpeed);
 
-        objects[currentObject].y += objects[currentObject].vy;
-        if(!touchingGround(currentObject)) objects[currentObject].vy += 80;
+        obj.y += obj.vy;
+        if(!touchingGround(currentObject)) obj.vy += 80;
 
-        if(touchingGround(currentObject)) objects[currentObject].vy = 0;
+        if(touchingGround(currentObject)) obj.vy = 0;
 
-        objects[currentObject].newposx = objects[currentObject].x;
-        objects[currentObject].newposy = objects[currentObject].y;
-        objects[currentObject].relspeedx = objects[currentObject].oldposx - objects[currentObject].newposx;
-        objects[currentObject].relspeedy = objects[currentObject].vy;
+        obj.newposx = obj.x;
+        obj.newposy = obj.y;
+        obj.relspeedx = obj.oldposx - obj.newposx;
+        obj.relspeedy = obj.vy;
         objectCheckCollision();
 
-        if (objects[currentObject].y>>8 > currentWorld.level[currentLevel].height + 256)
+        if (obj.y>>8 > currentWorld.level[currentLevel].height + 256)
         {
             Camera.camera.x = 1<<8;
             Camera.camera.y = 1<<8;
-            objects[currentObject].y = objects[currentObject].startY;
-            objects[currentObject].x = objects[currentObject].startX;
-            objects[currentObject].vy = 0;
+            obj.y = obj.startY;
+            obj.x = obj.startX;
+            obj.vy = 0;
         }
 
     }

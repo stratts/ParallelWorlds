@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 using static Collisions;
 using static Functions;
@@ -32,7 +33,7 @@ public class ObjectInfo {
 static class Objects {
     public static int MAXOBJECTS = -1;      // Object count, starts at nil (-1)
 
-    public static ObjectInfo[] objects = new ObjectInfo[96];
+    public static List<ObjectInfo> objects = new List<ObjectInfo>();
 
     public static int currentObject;
     public static int[] sprite = new int[96];
@@ -42,72 +43,43 @@ static class Objects {
 
         // Initialise and set our struct + variables
         //------------------------------------------------------------------------
-        objects[MAXOBJECTS] = new ObjectInfo();
+        var obj = new ObjectInfo();
+        objects.Add(obj);
 
         // Starting positions, can be used to reset the object
-        objects[MAXOBJECTS].startX = x << 8;        
-        objects[MAXOBJECTS].startY = y << 8;
+        obj.startX = x << 8;        
+        obj.startY = y << 8;
         
         // Object class: defines the attributes and AI, unless otherwise specified
-        objects[MAXOBJECTS].objClass = objClass;
+        obj.objClass = objClass;
 
         // Coordinates, X and Y
-        objects[MAXOBJECTS].x = x << 8;
-        objects[MAXOBJECTS].y = y << 8;
+        obj.x = x << 8;
+        obj.y = y << 8;
 
         // Center positions, very useful for small sprites in a large canvas
-        objects[MAXOBJECTS].cx = (x + 32) << 8;
-        objects[MAXOBJECTS].cy = (objects[currentObject].y + (64<<8)) - (objects[MAXOBJECTS].objClass.height << 8);
+        obj.cx = (x + 32) << 8;
+        obj.cy = (obj.y + (64<<8)) - (obj.objClass.height << 8);
 
         // Sprite number and rotation slot
-        objects[MAXOBJECTS].sprite = getSprite();
-        //objects[MAXOBJECTS].rotsetSlot = getRotsetSlot();
+        obj.sprite = getSprite();
+        //obj.rotsetSlot = getRotsetSlot();
 
         // Misc. stuff
-        objects[MAXOBJECTS].cpuStopPos = new Random().Next(15, 196);
-        objects[MAXOBJECTS].moveDirection = -1;
-        objects[MAXOBJECTS].activated = false;
-        objects[MAXOBJECTS].loaded = true;
-        if(type > 0) objects[MAXOBJECTS].typeOverride = type;
+        obj.cpuStopPos = new Random().Next(15, 196);
+        obj.moveDirection = -1;
+        obj.activated = false;
+        obj.loaded = true;
+        if(type > 0) obj.typeOverride = type;
 
         // Anything else to initalise
-        objects[MAXOBJECTS].vy = 0;
+        obj.vy = 0;
 
     // Load the object's sprite and palette
     //------------------------------------------------------------------------
-
-        /*// Get a number for the palette if it hasn't already been loaded 
-        if(objects[MAXOBJECTS].objClass.palTaken == 0)
-        {
-            objects[MAXOBJECTS].objClass.palTaken = 1;
-            objects[MAXOBJECTS].objClass.palNum = getPal();
-        }   
-
-        // Buffers and path strings
-        char sprite_[1024];
-        char palette_[1024];
-
-        // Set the path of the data and load it into the buffer
-        if(!objects[MAXOBJECTS].objClass.spritebuf)
-        {
-            sprintf(sprite_, "%s%s", objects[MAXOBJECTS].objClass.sprite, "_Sprite.bin");
-            sprintf(palette_, "%s%s", objects[MAXOBJECTS].objClass.sprite, "_Pal.bin");
-            objects[MAXOBJECTS].objClass.spritebuf = (u16*) FAT_LoadData(sprite_, NULL);
-            objects[MAXOBJECTS].objClass.palbuf = (u16*) FAT_LoadData(palette_, NULL);
-        }
-
-        // Flush the cache: else there would be glitches
-        DC_FlushAll();*/
-
-    // Create the object
-    //------------------------------------------------------------------------  
-        /*PA_LoadSpritePal(MAINSCREEN, objects[MAXOBJECTS].objClass.palNum, (void*)objects[MAXOBJECTS].objClass.palbuf);
-        PA_CreateSprite(MAINSCREEN, objects[MAXOBJECTS].sprite, objects[MAXOBJECTS].objClass.spritebuf, OBJ_SIZE_64X64, 1, objects[MAXOBJECTS].objClass.palNum, x - (camera.x>>8), y - (camera.y>>8));
-        PA_SetSpritePrio(MAINSCREEN, objects[MAXOBJECTS].sprite, 1);*/  
-        
-        PA.CreateSprite(MAINSCREEN, objects[MAXOBJECTS].sprite, 32, 32, objClass.sprite);
-        setSpriteXY(MAINSCREEN, objects[MAXOBJECTS].sprite, x-(Camera.camera.x>>8), y - (Camera.camera.y>>8));
-        objects[MAXOBJECTS].alive = true;
+        PA.CreateSprite(MAINSCREEN, obj.sprite, 32, 32, objClass.sprite);
+        setSpriteXY(MAINSCREEN, obj.sprite, x-(Camera.camera.x>>8), y - (Camera.camera.y>>8));
+        obj.alive = true;
     }
 
     public static int getSprite() {
@@ -130,12 +102,13 @@ static class Objects {
         for(i = 0; i < MAXOBJECTS+1; i++)
         {
             currentObject = i;
-            objects[currentObject].cx = objects[currentObject].x + (32 << 8);
-            objects[currentObject].cy = (objects[currentObject].y + (64<<8)) - (objects[currentObject].objClass.height << 8);
+            ObjectInfo obj = objects[currentObject];
+            obj.cx = obj.x + (32 << 8);
+            obj.cy = (obj.y + (64<<8)) - (obj.objClass.height << 8);
 
             /*if(object[currentObject].loaded)*/ 
-            setSpriteXY(MAINSCREEN, objects[currentObject].sprite, 
-                (objects[currentObject].x-Camera.camera.x)>>8, (objects[currentObject].y-Camera.camera.y)>>8);
+            setSpriteXY(MAINSCREEN, obj.sprite, 
+                (obj.x-Camera.camera.x)>>8, (obj.y-Camera.camera.y)>>8);
             
         }
     }
@@ -149,8 +122,9 @@ static class Objects {
         for(i = 0; i < MAXOBJECTS+1; i++)
         {
             currentObject = i;
-            objects[currentObject].cx = objects[currentObject].x + (32 << 8);
-            objects[currentObject].cy = (objects[currentObject].y + (64<<8)) - (objects[currentObject].objClass.height << 8);
+            ObjectInfo obj = objects[currentObject];
+            obj.cx = obj.x + (32 << 8);
+            obj.cy = (obj.y + (64<<8)) - (obj.objClass.height << 8);
 
             //if(object[currentObject].rotation < 0) object[currentObject].rotation = 511;
             //if(object[currentObject].rotation > 511) object[currentObject].rotation = 0;
@@ -159,7 +133,7 @@ static class Objects {
             //PA_SetSpriteRotDisable(MAINSCREEN, object[currentObject].sprite);
             //PA_SetSpriteHflip(MAINSCREEN, object[currentObject].sprite, 1);
 
-            if(objects[currentObject].loaded) objects[currentObject].objClass.ai();
+            if(obj.loaded) obj.objClass.ai();
         }
 
     }
@@ -167,102 +141,106 @@ static class Objects {
     //----------------------------------------------------------------------------
     public static void animateObject(int objectNum, int startFrame, int endFrame, int frameSpeed) {
     //----------------------------------------------------------------------------
-
-        objects[objectNum].frameCount++;
-        if (objects[objectNum].frameCount >= frameSpeed)
+        ObjectInfo obj = objects[objectNum];
+        obj.frameCount++;
+        if (obj.frameCount >= frameSpeed)
         {
-            objects[objectNum].frameCount = -1;
-            objects[objectNum].currentFrame++;
+            obj.frameCount = -1;
+            obj.currentFrame++;
         }
 
-        if (objects[objectNum].currentFrame < startFrame) objects[objectNum].currentFrame = startFrame;
-        if (objects[objectNum].currentFrame > endFrame) objects[objectNum].currentFrame = startFrame;
+        if (obj.currentFrame < startFrame) obj.currentFrame = startFrame;
+        if (obj.currentFrame > endFrame) obj.currentFrame = startFrame;
 
-        PA.SetSpriteAnim(MAINSCREEN, objects[objectNum].sprite, objects[objectNum].currentFrame);
+        PA.SetSpriteAnim(MAINSCREEN, obj.sprite, obj.currentFrame);
     }
 
     //----------------------------------------------------------------------------
     public static void killObject(int objectNum) {
     //----------------------------------------------------------------------------
-
-        objects[objectNum].alive = false;
-        PA.SetSpriteXY(MAINSCREEN, objects[objectNum].sprite, 256, 192);
+        ObjectInfo obj = objects[objectNum];
+        obj.alive = false;
+        PA.SetSpriteXY(MAINSCREEN, obj.sprite, 256, 192);
     }
 
     //----------------------------------------------------------------------------
     public static void reviveObject(int objectNum) {
     //----------------------------------------------------------------------------
-
-        objects[objectNum].alive = true;
-        PA.SetSpriteXY(MAINSCREEN, objects[objectNum].sprite, objects[objectNum].x, objects[objectNum].y);
+        ObjectInfo obj = objects[objectNum];
+        obj.alive = true;
+        PA.SetSpriteXY(MAINSCREEN, obj.sprite, obj.x, obj.y);
     }
 
     //----------------------------------------------------------------------------
     public static void deleteObject(int objectNum) {
     //----------------------------------------------------------------------------
-
-        sprite[objects[objectNum].sprite] = 0;
-        objects[objectNum].alive = false;
-        objects[objectNum].loaded = false;
-        PA.DeleteSprite(MAINSCREEN, objects[objectNum].sprite);
+        ObjectInfo obj = objects[objectNum];
+        sprite[obj.sprite] = 0;
+        obj.alive = false;
+        obj.loaded = false;
+        PA.DeleteSprite(MAINSCREEN, obj.sprite);
     }
 
     //----------------------------------------------------------------------------
     public static void objectCheckCollision() {
     //----------------------------------------------------------------------------
+        ObjectInfo obj = objects[currentObject];
 
         if(rightCollision(currentObject)) 
         {
-            if(objects[currentObject].relspeedx <= -256) objects[currentObject].x += objects[currentObject].relspeedx;
-            else objects[currentObject].x -= 256;
+            if(obj.relspeedx <= -256) obj.x += obj.relspeedx;
+            else obj.x -= 256;
         }
 
         if(leftCollision(currentObject))
         {
-            if(objects[currentObject].relspeedx >= 256) objects[currentObject].x += objects[currentObject].relspeedx;
-            else objects[currentObject].x += 256;
+            if(obj.relspeedx >= 256) obj.x += obj.relspeedx;
+            else obj.x += 256;
         }
 
         if(upCollision(currentObject)) 
         {
-            if(objects[currentObject].relspeedy <= -256) objects[currentObject].y -= objects[currentObject].relspeedy;
-            else objects[currentObject].y += 256;
-            objects[currentObject].vy = 0;
+            if(obj.relspeedy <= -256) obj.y -= obj.relspeedy;
+            else obj.y += 256;
+            obj.vy = 0;
         }
 
         if(downCollision(currentObject))
         {
-            if(objects[currentObject].relspeedy >= 256) objects[currentObject].y -= objects[currentObject].relspeedy;
-            else objects[currentObject].y -= 512;
-            objects[currentObject].action = 0;
+            if(obj.relspeedy >= 256) obj.y -= obj.relspeedy;
+            else obj.y -= 512;
+            obj.action = 0;
         }
 
 
 
 
-        //if(touchingGround(currentObject)) objects[currentObject].vy = 0;
+        //if(touchingGround(currentObject)) obj.vy = 0;
 
     }
 
     //----------------------------------------------------------------------------
     public static void objectAddGravity() {
     //----------------------------------------------------------------------------
-        objects[currentObject].y += objects[currentObject].vy;
-        if(!touchingGround(currentObject) && objects[currentObject].vy < currentWorld.level[currentLevel].gravity) objects[currentObject].vy += objects[currentObject].objClass.weight;
-        else if(touchingGround(currentObject)) objects[currentObject].vy = 0;
+        ObjectInfo obj = objects[currentObject];
+        obj.y += obj.vy;
+        if(!touchingGround(currentObject) && obj.vy < currentWorld.level[currentLevel].gravity) obj.vy += obj.objClass.weight;
+        else if(touchingGround(currentObject)) obj.vy = 0;
     }
 
     //----------------------------------------------------------------------------
     public static bool inStageZone(int objectNum) {
     //----------------------------------------------------------------------------
-        if (objects[objectNum].y>>8 > currentWorld.level[currentLevel].height + 256) return false;
+        ObjectInfo obj = objects[objectNum];
+        if (obj.y>>8 > currentWorld.level[currentLevel].height + 256) return false;
         return true;
     }
 
     //----------------------------------------------------------------------------
     public static bool objectInCanvas(int objectNum) {
     //----------------------------------------------------------------------------
-        if ((objects[objectNum].x-camera.x)>>8 > 256 || (objects[objectNum].y-camera.y)>>8 > 192 || (objects[objectNum].x-camera.x)>>8 < -64 || (objects[objectNum].y-camera.y)>>8 < -64) return false;
+        ObjectInfo obj = objects[objectNum];
+        if ((obj.x-camera.x)>>8 > 256 || (obj.y-camera.y)>>8 > 192 || (obj.x-camera.x)>>8 < -64 || (obj.y-camera.y)>>8 < -64) return false;
         return true;
     }
 }
