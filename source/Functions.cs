@@ -51,7 +51,7 @@ static class Functions {
             }
         }
 
-        return place;	
+        return place;   
     }
 
     public static void displayDebug(byte screen)
@@ -74,5 +74,5 @@ static class Functions {
         CA.SimpleText(screen, 4, 116, "- Hardware -");
         CA.SimpleText(screen, 4, 124, "CPU usage: {0} percent", "?");
         CA.SimpleText(screen, 4, 132, "Memory in use: {0} MB", GC.GetTotalMemory(false) / 1_000_000);
-    }	
+    }   
 }

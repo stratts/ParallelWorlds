@@ -65,7 +65,7 @@ static class AI {
         {
             objects[currentObject].vy = 0;
             objects[currentObject].action = 0;
-            objects[currentObject].jumping = false;	
+            objects[currentObject].jumping = false; 
         }
 
         if(Pad.Newpress.Up && touchingGround(currentObject)) 
@@ -123,7 +123,7 @@ static class AI {
             }
 
             else if(objects[lowestXinObj(objects, 3)].x < objects[currentObject].x)
-            {	
+            {   
                 PA.SetSpriteHflip(MAINSCREEN, objects[currentObject].sprite, 1);
                 if(!objects[currentObject].jumping) objects[currentObject].action = 1;
                 objects[currentObject].x -= objects[currentObject].objClass.speed-PA.RandMax(128);
@@ -157,7 +157,7 @@ static class AI {
         if(touchingGround(currentObject)) 
         {
             objects[currentObject].vy = 0;
-            objects[currentObject].jumping = false;	
+            objects[currentObject].jumping = false; 
         }
 
         switch(objects[currentObject].action)

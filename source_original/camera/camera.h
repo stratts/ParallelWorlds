@@ -6,12 +6,12 @@
 // Main camera struct
 typedef struct
 {
-	int x, y; // Camera's postion
-	int xscroll, yscroll; // Current velocity
-	int* targetx, * targety, *targetspeed, *targetvy; // 'Target' X and Y, used to adjust the camera
-	bool set; // Function specific variable - not used (?)
-	bool type; // Camera mode
-	int limitl, limith; // Scroll limits
+    int x, y; // Camera's postion
+    int xscroll, yscroll; // Current velocity
+    int* targetx, * targety, *targetspeed, *targetvy; // 'Target' X and Y, used to adjust the camera
+    bool set; // Function specific variable - not used (?)
+    bool type; // Camera mode
+    int limitl, limith; // Scroll limits
 } cameraInfo;
 
 extern cameraInfo camera;

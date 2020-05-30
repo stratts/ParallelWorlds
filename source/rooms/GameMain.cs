@@ -11,7 +11,7 @@ using static Functions;
 public static partial class Rooms {
     public static void mainGame() {
         loadLevel(Jelli, selectedLevel);
-		
+        
         //AS_MP3StreamPlay(rootf("music/jumper.mp3"));
         int i = 1;
 
@@ -42,8 +42,8 @@ public static partial class Rooms {
         moveObjects();
         processObjects();
         PA.EasyBgScrollXY(MAINSCREEN, 1, camera.x>>8, camera.y>>8);
-	    PA.EasyBgScrollXY(MAINSCREEN, 2, (camera.x>>8)>>1, (camera.y>>8)>>1);
-	    PA.EasyBgScrollXY(MAINSCREEN, 3, (camera.x>>8)>>2, (camera.y>>8)>>2);
+        PA.EasyBgScrollXY(MAINSCREEN, 2, (camera.x>>8)>>1, (camera.y>>8)>>1);
+        PA.EasyBgScrollXY(MAINSCREEN, 3, (camera.x>>8)>>2, (camera.y>>8)>>2);
 
         CA.FadeIn(0);
 

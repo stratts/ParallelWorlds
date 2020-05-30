@@ -27,9 +27,9 @@ void CA_ChangeRoom(s8 new_room, bool fade_type);
 void CA_OutputText(bool screen, s32 boxx, s32 boxy, char *text, s32 limit, s32 boxwidth, s32 boxheight, char *orientation);
 void CA_Information(bool screen, char *text);
 char* rootf(char *path);
-#define CA_SimpleText(screen, x, y, format...)	({ char __str[1000]; sprintf(__str , ##format); CA_OutputText(screen, x, y, __str, 1024, 256-x, 192-y, "Justified"); })
-#define CA_BoxTextEx(screen, x, y, width, format...)	({ char __str[1000]; sprintf(__str , ##format); CA_OutputText(screen, x, y, __str, 1024, x+width, 192-y, "Justified"); })
-#define CA_BoxText(screen, x, y, width, text)	({ CA_OutputText(screen, x, y, text, 2048, x+width, 192-y, "Justified"); })
+#define CA_SimpleText(screen, x, y, format...)  ({ char __str[1000]; sprintf(__str , ##format); CA_OutputText(screen, x, y, __str, 1024, 256-x, 192-y, "Justified"); })
+#define CA_BoxTextEx(screen, x, y, width, format...)    ({ char __str[1000]; sprintf(__str , ##format); CA_OutputText(screen, x, y, __str, 1024, x+width, 192-y, "Justified"); })
+#define CA_BoxText(screen, x, y, width, text)   ({ CA_OutputText(screen, x, y, text, 2048, x+width, 192-y, "Justified"); })
 //--------------------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------------------

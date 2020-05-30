@@ -11,26 +11,26 @@ int currentObject;
 
 typedef struct
 {
-	int x, y;
-	int cx, cy;
-	int vy, vx;
-	objectClass* class;
+    int x, y;
+    int cx, cy;
+    int vy, vx;
+    objectClass* class;
     int sprite;
-	int currentFrame, frameCount;
-	bool alive;
-	int oldposx, newposx, relspeedx;
-	int oldposy, newposy, relspeedy;
-	int startX, startY;
-	int moveDirection;
-	bool jumping;
-	int action;
-	int cpuStopPos;
-	int typeOverride;
-	int i;
-	bool activated;
-	int rotation;
-	int rotsetSlot;
-	bool loaded;
+    int currentFrame, frameCount;
+    bool alive;
+    int oldposx, newposx, relspeedx;
+    int oldposy, newposy, relspeedy;
+    int startX, startY;
+    int moveDirection;
+    bool jumping;
+    int action;
+    int cpuStopPos;
+    int typeOverride;
+    int i;
+    bool activated;
+    int rotation;
+    int rotsetSlot;
+    bool loaded;
 } objectInfo;
 
 
@@ -40,7 +40,7 @@ u16 gfx[96];
 u16 nsprites;
 
 u16 *spritebuf;
-		u16 *palbuf;
+        u16 *palbuf;
 
 void createObject(objectClass* class, int x, int y, int type);
 

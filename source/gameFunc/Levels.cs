@@ -8,16 +8,16 @@ using static Functions;
 
 struct LevelInfo {
     public string name;
-	public string music;
-	public string stagebg, midbg, backbg;
-	public string collision;
-	public int width, height, friction, gravity;
-	public int midscroll, backscroll;
+    public string music;
+    public string stagebg, midbg, backbg;
+    public string collision;
+    public int width, height, friction, gravity;
+    public int midscroll, backscroll;
 }
 
 class WorldInfo {
     public string name;
-	public LevelInfo[] level = new LevelInfo[128];
+    public LevelInfo[] level = new LevelInfo[128];
 }
 
 static class Levels {
@@ -61,7 +61,7 @@ static class Levels {
 
         bool midLoaded, backLoaded;
 
-        rootPath = CA.rootf("/levels");	
+        rootPath = CA.rootf("/levels"); 
         levelPath = String.Format("{0}/{1}/{2}.png", rootPath, world.level[levelNum].name, "StageBG");
 
         CA.Information(1, "Loading...");
@@ -121,7 +121,7 @@ static class Levels {
         {
             string music = CA.rootf("/music/") + world.level[levelNum].music;
             PA.PlayOgg(music);
-        }	
+        }   
     }
 
     public static bool getCollisionPix(byte screen, byte bglayer, int x, int y) {

@@ -16,7 +16,7 @@ bool objectCollision(int object1,int object2){
   int y2 = object[object2].cy>>8;
   
   if(object1 != object2) 
-	  return (((x2 >= x1 - ((w1 + w2)>>1)) && (x2 <= x1 + ((w1 + w2)>>1)) && (y2 >= y1 - ((h1 + h2)>>1)) && (y2 <= y1 + ((h1 + h2)>>1))));
+      return (((x2 >= x1 - ((w1 + w2)>>1)) && (x2 <= x1 + ((w1 + w2)>>1)) && (y2 >= y1 - ((h1 + h2)>>1)) && (y2 <= y1 + ((h1 + h2)>>1))));
   return 0;
 }
 
@@ -33,7 +33,7 @@ bool objectCollisionTop(int object1,int object2){
   int y2 = object[object2].cy>>8;
 
   if(object1 != object2 && (y1+(h1>>1))-h1 < y2 - (h2))
-	  return (((x2 >= x1 - ((w1 + w2)>>1)) && (x2 <= x1 + ((w1 + w2)>>1)) && (y2 >= y1 - ((h1 + h2)>>1)) && (y2 <= y1 + ((h1 + h2)>>1))));
+      return (((x2 >= x1 - ((w1 + w2)>>1)) && (x2 <= x1 + ((w1 + w2)>>1)) && (y2 >= y1 - ((h1 + h2)>>1)) && (y2 <= y1 + ((h1 + h2)>>1))));
 
   return 0;
 }
@@ -41,116 +41,116 @@ bool objectCollisionTop(int object1,int object2){
 
 bool upCollision(int objectNum)
 {
-	if(!object[objectNum].alive) return 0;
+    if(!object[objectNum].alive) return 0;
 
-	s8 playerheight=object[objectNum].class->height;
-	s8 playerwidth=object[objectNum].class->width;
-	int playerx = object[objectNum].cx>>8;
-	int playery = (object[objectNum].y>>8) + 62;
+    s8 playerheight=object[objectNum].class->height;
+    s8 playerwidth=object[objectNum].class->width;
+    int playerx = object[objectNum].cx>>8;
+    int playery = (object[objectNum].y>>8) + 62;
 
-	if(getCollisionPix(MISCSCREEN,3,playerx,playery-playerheight))return 1;
-	if(getCollisionPix(MISCSCREEN,3,(playerx-(playerwidth>>1))+COLLISION_BORDER,playery-playerheight))return 1;
-	if(getCollisionPix(MISCSCREEN,3,(playerx+(playerwidth>>1))-COLLISION_BORDER,playery-playerheight))return 1;
-	return 0;
+    if(getCollisionPix(MISCSCREEN,3,playerx,playery-playerheight))return 1;
+    if(getCollisionPix(MISCSCREEN,3,(playerx-(playerwidth>>1))+COLLISION_BORDER,playery-playerheight))return 1;
+    if(getCollisionPix(MISCSCREEN,3,(playerx+(playerwidth>>1))-COLLISION_BORDER,playery-playerheight))return 1;
+    return 0;
 
 
 }
 
 bool downCollision(int objectNum)
 {
-	if(!object[objectNum].alive) return 0;
+    if(!object[objectNum].alive) return 0;
 
-	s8 playerheight=object[objectNum].class->height;
-	s8 playerwidth=object[objectNum].class->width;
-	int playerx = object[objectNum].cx>>8;
-	int playery = (object[objectNum].y>>8) + 62;
+    s8 playerheight=object[objectNum].class->height;
+    s8 playerwidth=object[objectNum].class->width;
+    int playerx = object[objectNum].cx>>8;
+    int playery = (object[objectNum].y>>8) + 62;
 
-	
-	if(getCollisionPix(MISCSCREEN,3,playerx,playery))return 1;
-	if(getCollisionPix(MISCSCREEN,3,(playerx-(playerwidth>>1))+COLLISION_BORDER,playery))return 1;
-	if(getCollisionPix(MISCSCREEN,3,(playerx+(playerwidth>>1))-COLLISION_BORDER,playery))return 1;
-	return 0;
+    
+    if(getCollisionPix(MISCSCREEN,3,playerx,playery))return 1;
+    if(getCollisionPix(MISCSCREEN,3,(playerx-(playerwidth>>1))+COLLISION_BORDER,playery))return 1;
+    if(getCollisionPix(MISCSCREEN,3,(playerx+(playerwidth>>1))-COLLISION_BORDER,playery))return 1;
+    return 0;
 }
 
 bool touchingGround(int objectNum)
 {
-	if(!object[objectNum].alive) return 0;
+    if(!object[objectNum].alive) return 0;
 
-	s8 playerheight=object[objectNum].class->height;
-	s8 playerwidth=object[objectNum].class->width;
-	int playerx = object[objectNum].cx>>8;
-	int playery = (object[objectNum].y>>8) + 63;
+    s8 playerheight=object[objectNum].class->height;
+    s8 playerwidth=object[objectNum].class->width;
+    int playerx = object[objectNum].cx>>8;
+    int playery = (object[objectNum].y>>8) + 63;
 
-	if(getCollisionPix(MISCSCREEN,3,playerx,playery))return 1;
-	if(getCollisionPix(MISCSCREEN,3,(playerx-(playerwidth>>1))+COLLISION_BORDER,playery))return 1;
-	if(getCollisionPix(MISCSCREEN,3,(playerx+(playerwidth>>1))-COLLISION_BORDER,playery))return 1;
-	return 0;
+    if(getCollisionPix(MISCSCREEN,3,playerx,playery))return 1;
+    if(getCollisionPix(MISCSCREEN,3,(playerx-(playerwidth>>1))+COLLISION_BORDER,playery))return 1;
+    if(getCollisionPix(MISCSCREEN,3,(playerx+(playerwidth>>1))-COLLISION_BORDER,playery))return 1;
+    return 0;
 }
 
 bool leftCollision(int objectNum)
 {
-	if(!object[objectNum].alive) return 0;
+    if(!object[objectNum].alive) return 0;
 
-	s8 playerheight=object[objectNum].class->height;
-	s8 playerwidth=object[objectNum].class->width;
-	int playerx = object[objectNum].cx>>8;
-	int playery = (object[objectNum].y>>8) + 62;
+    s8 playerheight=object[objectNum].class->height;
+    s8 playerwidth=object[objectNum].class->width;
+    int playerx = object[objectNum].cx>>8;
+    int playery = (object[objectNum].y>>8) + 62;
 
-	if(getCollisionPix(MISCSCREEN,3,playerx-(playerwidth>>1),playery-COLLISION_BORDER))return 1;
-	if(getCollisionPix(MISCSCREEN,3,playerx-(playerwidth>>1),playery-(playerheight>>1)))return 1;
-	if(getCollisionPix(MISCSCREEN,3,playerx-(playerwidth>>1),playery-(playerheight>>2)))return 1;
-	if(getCollisionPix(MISCSCREEN,3,playerx-(playerwidth>>1),(playery-playerheight)+COLLISION_BORDER))return 1;
-	if(getCollisionPix(MISCSCREEN,3,playerx-(playerwidth>>1),(playery-playerheight)+(playerheight>>2)+(playerheight>>3)))return 1;
-	if(getCollisionPix(MISCSCREEN,3,playerx-(playerwidth>>1),(playery-playerheight)+(playerheight>>3)))return 1;
-	return 0;
+    if(getCollisionPix(MISCSCREEN,3,playerx-(playerwidth>>1),playery-COLLISION_BORDER))return 1;
+    if(getCollisionPix(MISCSCREEN,3,playerx-(playerwidth>>1),playery-(playerheight>>1)))return 1;
+    if(getCollisionPix(MISCSCREEN,3,playerx-(playerwidth>>1),playery-(playerheight>>2)))return 1;
+    if(getCollisionPix(MISCSCREEN,3,playerx-(playerwidth>>1),(playery-playerheight)+COLLISION_BORDER))return 1;
+    if(getCollisionPix(MISCSCREEN,3,playerx-(playerwidth>>1),(playery-playerheight)+(playerheight>>2)+(playerheight>>3)))return 1;
+    if(getCollisionPix(MISCSCREEN,3,playerx-(playerwidth>>1),(playery-playerheight)+(playerheight>>3)))return 1;
+    return 0;
 }
 
 bool rightCollision(int objectNum)
 {
-	if(!object[objectNum].alive) return 0;
+    if(!object[objectNum].alive) return 0;
 
-	s8 playerheight=object[objectNum].class->height;
-	s8 playerwidth=object[objectNum].class->width;
-	int playerx = object[objectNum].cx>>8;
-	int playery = (object[objectNum].y>>8) + 62;
+    s8 playerheight=object[objectNum].class->height;
+    s8 playerwidth=object[objectNum].class->width;
+    int playerx = object[objectNum].cx>>8;
+    int playery = (object[objectNum].y>>8) + 62;
 
 
-	if(getCollisionPix(MISCSCREEN,3,playerx+(playerwidth>>1),playery-COLLISION_BORDER))return 1;
-	if(getCollisionPix(MISCSCREEN,3,playerx+(playerwidth>>1),playery-(playerheight>>1)))return 1;
-	if(getCollisionPix(MISCSCREEN,3,playerx+(playerwidth>>1),playery-(playerheight>>2)))return 1;
-	if(getCollisionPix(MISCSCREEN,3,playerx+(playerwidth>>1),(playery-playerheight)+COLLISION_BORDER))return 1;
-	if(getCollisionPix(MISCSCREEN,3,playerx+(playerwidth>>1),(playery-playerheight)+(playerheight>>2)+(playerheight>>3)))return 1;
-	if(getCollisionPix(MISCSCREEN,3,playerx+(playerwidth>>1),(playery-playerheight)+(playerheight>>3)))return 1;
-	return 0;
+    if(getCollisionPix(MISCSCREEN,3,playerx+(playerwidth>>1),playery-COLLISION_BORDER))return 1;
+    if(getCollisionPix(MISCSCREEN,3,playerx+(playerwidth>>1),playery-(playerheight>>1)))return 1;
+    if(getCollisionPix(MISCSCREEN,3,playerx+(playerwidth>>1),playery-(playerheight>>2)))return 1;
+    if(getCollisionPix(MISCSCREEN,3,playerx+(playerwidth>>1),(playery-playerheight)+COLLISION_BORDER))return 1;
+    if(getCollisionPix(MISCSCREEN,3,playerx+(playerwidth>>1),(playery-playerheight)+(playerheight>>2)+(playerheight>>3)))return 1;
+    if(getCollisionPix(MISCSCREEN,3,playerx+(playerwidth>>1),(playery-playerheight)+(playerheight>>3)))return 1;
+    return 0;
 }
 
 bool leftCollisionLarge(int objectNum)
 {
-	if(!object[objectNum].alive) return 0;
+    if(!object[objectNum].alive) return 0;
 
-	s8 playerheight=object[objectNum].class->height;
-	s8 playerwidth=object[objectNum].class->width;
-	int playerx = object[objectNum].cx>>8;
-	int playery = (object[objectNum].y>>8) + 24;
+    s8 playerheight=object[objectNum].class->height;
+    s8 playerwidth=object[objectNum].class->width;
+    int playerx = object[objectNum].cx>>8;
+    int playery = (object[objectNum].y>>8) + 24;
 
-	if(getCollisionPix(MISCSCREEN,3,playerx-(playerwidth>>1),playery-COLLISION_BORDER))return 1;
-	if(getCollisionPix(MISCSCREEN,3,playerx-(playerwidth>>1),playery-(playerheight>>1)))return 1;
-	if(getCollisionPix(MISCSCREEN,3,playerx-(playerwidth>>1),(playery-playerheight)+COLLISION_BORDER))return 1;
-	return 0;
+    if(getCollisionPix(MISCSCREEN,3,playerx-(playerwidth>>1),playery-COLLISION_BORDER))return 1;
+    if(getCollisionPix(MISCSCREEN,3,playerx-(playerwidth>>1),playery-(playerheight>>1)))return 1;
+    if(getCollisionPix(MISCSCREEN,3,playerx-(playerwidth>>1),(playery-playerheight)+COLLISION_BORDER))return 1;
+    return 0;
 }
 
 bool rightCollisionLarge(int objectNum)
 {
-	if(!object[objectNum].alive) return 0;
+    if(!object[objectNum].alive) return 0;
 
-	s8 playerheight=object[objectNum].class->height;
-	s8 playerwidth=object[objectNum].class->width;
-	int playerx = object[objectNum].cx>>8;
-	int playery = (object[objectNum].y>>8) + 32;
+    s8 playerheight=object[objectNum].class->height;
+    s8 playerwidth=object[objectNum].class->width;
+    int playerx = object[objectNum].cx>>8;
+    int playery = (object[objectNum].y>>8) + 32;
 
 
-	if(getCollisionPix(MISCSCREEN,3,playerx+(playerwidth>>1),playery-COLLISION_BORDER))return 1;
-	if(getCollisionPix(MISCSCREEN,3,playerx+(playerwidth>>1),playery-(playerheight>>1)))return 1;
-	if(getCollisionPix(MISCSCREEN,3,playerx+(playerwidth>>1),(playery-playerheight)+COLLISION_BORDER))return 1;
-	return 0;
+    if(getCollisionPix(MISCSCREEN,3,playerx+(playerwidth>>1),playery-COLLISION_BORDER))return 1;
+    if(getCollisionPix(MISCSCREEN,3,playerx+(playerwidth>>1),playery-(playerheight>>1)))return 1;
+    if(getCollisionPix(MISCSCREEN,3,playerx+(playerwidth>>1),(playery-playerheight)+COLLISION_BORDER))return 1;
+    return 0;
 }

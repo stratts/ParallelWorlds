@@ -5,7 +5,7 @@
 
 static objectClass* character[] = 
 {
-	&MARIO
+    &MARIO
 };
 
 #endif

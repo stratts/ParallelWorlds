@@ -8,28 +8,28 @@
 void CA_Init16c() {
 //--------------------------------------------------------------------------------------------------
 
-   PA_Init16cBg(0, 0); 	
-	PA_Init16cBg(1, 0);
-	PA_16cCustomFont(5, smallfont);
-}	
+   PA_Init16cBg(0, 0);  
+    PA_Init16cBg(1, 0);
+    PA_16cCustomFont(5, smallfont);
+}   
 
 //--------------------------------------------------------------------------------------------------
 void CA_OutputRTC(bool screen, s32 x, s32 y, char* prefix) {
 //--------------------------------------------------------------------------------------------------
 
-   char buffer[512];	
+   char buffer[512];    
 
-	sprintf(buffer, "%s%02d:%02d", prefix, PA_RTC.Hour, PA_RTC.Minutes);
-	PA_16cText(screen, x, y, 256, y+10, buffer, 1, 0, 25); 
-	PA_UpdateRTC();
-}	
+    sprintf(buffer, "%s%02d:%02d", prefix, PA_RTC.Hour, PA_RTC.Minutes);
+    PA_16cText(screen, x, y, 256, y+10, buffer, 1, 0, 25); 
+    PA_UpdateRTC();
+}   
 
 
 //--------------------------------------------------------------------------------------------------  
 void CA_DisplayInfo(bool screen, u8 info[512], s32 x, s32 y, char* prefix, char* suffix) {
 //--------------------------------------------------------------------------------------------------
 
-   char buffer[512];	
+   char buffer[512];    
 
    sprintf(buffer, "%s%s%s", prefix, info, suffix);
    PA_16cText(screen, x, y, 256, y+10, buffer, 1, 0, 50); 
@@ -51,50 +51,50 @@ void CA_FadeOut(bool type) {
    s8 i;
 
    if (type == 1)
-	{	
+    {   
       for (i = 0; i <= 31; i++) 
       {
-	      PA_SetBrightness(0, i); 
-	      PA_SetBrightness(1, i);
-	      PA_WaitForVBL();
-      }	
+          PA_SetBrightness(0, i); 
+          PA_SetBrightness(1, i);
+          PA_WaitForVBL();
+      } 
    }
    
    else if (type == 0)
-	{
-	   for (i = 0; i >= -31; i--) 
+    {
+       for (i = 0; i >= -31; i--) 
       {
-	      PA_SetBrightness(0, i); 
-	      PA_SetBrightness(1, i);
-	     PA_WaitForVBL();
-      }	
+          PA_SetBrightness(0, i); 
+          PA_SetBrightness(1, i);
+         PA_WaitForVBL();
+      } 
    }   
 }
 
 //--------------------------------------------------------------------------------------------------
 void CA_FadeIn(bool type) { 
-//--------------------------------------------------------------------------------------------------	
+//--------------------------------------------------------------------------------------------------    
 
    s8 i;
 
    if (type == 1)
-	{	
+    {   
       for (i = 31; i >= 0; i--) 
       {
-	      PA_SetBrightness(0, i); 
-	      PA_SetBrightness(1, i);
-	      PA_WaitForVBL();
-      }	
+          PA_SetBrightness(0, i); 
+          PA_SetBrightness(1, i);
+          PA_WaitForVBL();
+      } 
    }
-	
-	else if (type == 0)
-	{
-	   for (i = -31; i <= 0; i++) 
+    
+    else if (type == 0)
+    {
+       for (i = -31; i <= 0; i++) 
       {
-	      PA_SetBrightness(0, i); 
-	      PA_SetBrightness(1, i);
-	      PA_WaitForVBL();
-      }	
+          PA_SetBrightness(0, i); 
+          PA_SetBrightness(1, i);
+          PA_WaitForVBL();
+      } 
    }   
 }   
 
@@ -159,8 +159,8 @@ void CA_OutputText(bool screen, s32 boxx, s32 boxy, char *text, s32 limit, s32 b
 void CA_Information(bool screen, char *text) {
 //--------------------------------------------------------------------------------------------------
 
-	PA_16cTextAlign(ALIGN_CENTER);
-	PA_16cText(screen, 0, 96-16, 255, 192, text, 1, 5, 255);
+    PA_16cTextAlign(ALIGN_CENTER);
+    PA_16cText(screen, 0, 96-16, 255, 192, text, 1, 5, 255);
 }
 
 char* rootf(char *path)
@@ -173,13 +173,13 @@ char* rootf(char *path)
    strncpy(msg, filepath, sizeof(filepath));
 
 #ifdef USE_FAT
-	return msg;
+    return msg;
 #endif
 
 #ifdef USE_EFS
-	return path;
+    return path;
 #endif
-}	
+}   
 
 //--------------------------------------------------------------------------------------------------
 // Misc Stuff

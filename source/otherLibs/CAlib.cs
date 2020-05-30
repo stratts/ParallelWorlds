@@ -30,13 +30,13 @@ public static class CA {
         sbyte i;
 
         if (type == 1)
-        {	
+        {   
             for (i = 0; i <= 31; i++) 
             {
                 PA.SetBrightness(0, i); 
                 PA.SetBrightness(1, i);
                 PA.WaitForVBL();
-            }	
+            }   
         }
         
         else if (type == 0)
@@ -46,7 +46,7 @@ public static class CA {
                 PA.SetBrightness(0, i); 
                 PA.SetBrightness(1, i);
                 PA.WaitForVBL();
-            }	
+            }   
         }   
     }
 
@@ -54,13 +54,13 @@ public static class CA {
         sbyte i;
 
         if (type == 1)
-            {	
+            {   
             for (i = 31; i >= 0; i--) 
             {
                 PA.SetBrightness(0, i); 
                 PA.SetBrightness(1, i);
                 PA.WaitForVBL();
-            }	
+            }   
         }
             
             else if (type == 0)
@@ -70,7 +70,7 @@ public static class CA {
                 PA.SetBrightness(0, i); 
                 PA.SetBrightness(1, i);
                 PA.WaitForVBL();
-            }	
+            }   
         }   
     }
 }

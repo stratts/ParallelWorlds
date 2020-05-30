@@ -13,18 +13,18 @@
 
 typedef struct
 {
-	char name[512];
-	char music[512];
-	char stagebg[512], midbg[512], backbg[512];
-	char collision[512];
-	int width, height, friction, gravity;
-	int midscroll, backscroll;
+    char name[512];
+    char music[512];
+    char stagebg[512], midbg[512], backbg[512];
+    char collision[512];
+    int width, height, friction, gravity;
+    int midscroll, backscroll;
 } levelinfo;
 
 typedef struct
 {
-	char name[512];
-	levelinfo level[128];
+    char name[512];
+    levelinfo level[128];
 } worldinfo;
 
 worldinfo world[128];

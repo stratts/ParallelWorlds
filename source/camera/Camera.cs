@@ -2,12 +2,12 @@
 // Main camera struct
 struct CameraInfo {
     public int x, y; // Camera's postion
-	public int xscroll, yscroll; // Current velocity
+    public int xscroll, yscroll; // Current velocity
     public ObjectInfo target;
-	//int* targetx, * targety, *targetspeed, *targetvy; // 'Target' X and Y, used to adjust the camera
-	public bool set; // Function specific variable - not used (?)
-	public int type; // Camera mode
-	public int limitl, limith; // Scroll limits
+    //int* targetx, * targety, *targetspeed, *targetvy; // 'Target' X and Y, used to adjust the camera
+    public bool set; // Function specific variable - not used (?)
+    public int type; // Camera mode
+    public int limitl, limith; // Scroll limits
 }
 
 static class Camera {
@@ -24,7 +24,7 @@ static class Camera {
     public static void cameraTarget(ObjectInfo obj, int limitl, int limith) {
         camera.target = obj;
         camera.limitl = limitl;
-	    camera.limith = limith;
+        camera.limith = limith;
     }
 
     // Move the camera to a different place on the screen, using angles.
@@ -84,7 +84,7 @@ static class Camera {
         int x = (camera.target.cx) >> 8;
         int y = (camera.target.cy) >> 8;
         int speed = (camera.target.objClass.speed);
-        int fall = (camera.target.vy);	
+        int fall = (camera.target.vy);  
         int camerax = (camera.x) >> 8;
         int cameray = (camera.y) >> 8;
         int vy_speed = 5; // Fixed point division... the smaller the number, the faster the speed
@@ -105,8 +105,8 @@ static class Camera {
         
         // Special conditions
         if(!(camera.target.objClass.speed < 0 || camera.target.objClass.speed > 0)) speed = 1024;
-        if (speed < 0) speed = -speed;	
-        if(!(camera.target.vy < 0 || camera.target.vy > 0)) fall = 1024;	
+        if (speed < 0) speed = -speed;  
+        if(!(camera.target.vy < 0 || camera.target.vy > 0)) fall = 1024;    
         if(fall < 0) fall = -fall;
         
         // Start main camera code

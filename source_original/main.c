@@ -18,94 +18,94 @@
 #include "cacaoLib.h"
 
 #ifdef USE_FAT
-	#include <fat.h>
+    #include <fat.h>
 #endif
 
 #ifdef USE_EFS
-	#include "efs_lib.h"
+    #include "efs_lib.h"
 #endif
 
 #ifdef USE_NITRO
-	#include "filesystem.h"
+    #include "filesystem.h"
 #endif
 
 
 int main()
 {
-		//defaultExceptionHandler();
+        //defaultExceptionHandler();
 
-	PA_Init();    // Initializes PA_Lib
-	PA_InitVBL(); // Initializes a standard VBL
-
-
-	//Initialization of µlibrary
-	//ulInit(UL_INIT_ALL);
-	//ulInitGfx();
-	//ulInitText();
-
-	//ulSetMainLcd(0);
-
-	PA_VBLFunctionInit(AS_SoundVBL);
-	AS_Init(AS_MODE_MP3 | AS_MODE_SURROUND | AS_MODE_16CH);
-	AS_SetDefaultSettings(AS_PCM_8BIT, 11025, AS_SURROUND);
-
-	PA_16cCustomFont(5, smallfont);
-
-	PA_SetBrightness(0, -31);
-	PA_SetBrightness(1, -31);
-
-	PA_Init16cBg(0, 2);
-	PA_Init16cBg(1, 2);
-
-	//- Filesystem initialisation ------------------------------------------
-	CA_Information(1, "Initialising filesystem");
-	CA_FadeIn(0);
+    PA_Init();    // Initializes PA_Lib
+    PA_InitVBL(); // Initializes a standard VBL
 
 
-	#ifdef USE_EFS
+    //Initialization of µlibrary
+    //ulInit(UL_INIT_ALL);
+    //ulInitGfx();
+    //ulInitText();
 
-		if(!EFS_Init(EFS_AND_FAT | EFS_DEFAULT_DEVICE, NULL))
-		{
-			displayError("EFS initialisation failed.");
-		}
+    //ulSetMainLcd(0);
 
-	#endif
+    PA_VBLFunctionInit(AS_SoundVBL);
+    AS_Init(AS_MODE_MP3 | AS_MODE_SURROUND | AS_MODE_16CH);
+    AS_SetDefaultSettings(AS_PCM_8BIT, 11025, AS_SURROUND);
 
-	#ifdef USE_NITRO
+    PA_16cCustomFont(5, smallfont);
 
-		if(!nitroFSInit())
-		{
-			displayError("NitroFS initialisation failed.");
-		}
+    PA_SetBrightness(0, -31);
+    PA_SetBrightness(1, -31);
 
-		chdir("efs:/");
+    PA_Init16cBg(0, 2);
+    PA_Init16cBg(1, 2);
 
-	#endif
+    //- Filesystem initialisation ------------------------------------------
+    CA_Information(1, "Initialising filesystem");
+    CA_FadeIn(0);
 
-	#ifdef USE_FAT
-		if(!fatInitDefault())
-		{
-			displayError("FAT initialisation failed.");
-		}
-	#endif	
 
-	//- Set the variables for the levels and objects -----------------------
+    #ifdef USE_EFS
 
-	setObjects();
-	setLevels();
-	
+        if(!EFS_Init(EFS_AND_FAT | EFS_DEFAULT_DEVICE, NULL))
+        {
+            displayError("EFS initialisation failed.");
+        }
 
-	//mmInitDefault("soundbank.bin"); // Specify our music file
-	//mmSelectMode(MM_MODE_C);
+    #endif
 
-		CA_FadeOut(0);
-		CA_Update16c();
-		PA_ResetBgSys();
-	
+    #ifdef USE_NITRO
 
-	//- Start the game -----------------------------------------------------
-	rm_mainMenu();
+        if(!nitroFSInit())
+        {
+            displayError("NitroFS initialisation failed.");
+        }
 
-	return 0;
+        chdir("efs:/");
+
+    #endif
+
+    #ifdef USE_FAT
+        if(!fatInitDefault())
+        {
+            displayError("FAT initialisation failed.");
+        }
+    #endif  
+
+    //- Set the variables for the levels and objects -----------------------
+
+    setObjects();
+    setLevels();
+    
+
+    //mmInitDefault("soundbank.bin"); // Specify our music file
+    //mmSelectMode(MM_MODE_C);
+
+        CA_FadeOut(0);
+        CA_Update16c();
+        PA_ResetBgSys();
+    
+
+    //- Start the game -----------------------------------------------------
+    rm_mainMenu();
+
+    return 0;
 }
 

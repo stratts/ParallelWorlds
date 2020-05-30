@@ -2,18 +2,18 @@ using System;
 
 public struct ObjectClass {
     public string name;
-	public string sprite;
-	public int speed, weight, jumpPower, width, height;
-	public (int start, int end) idle;
-	public (int start, int end) walk, run, hurt, jump, fall;
-	public int animSpeed;
-	public int type;
-	//void (*ai)();
+    public string sprite;
+    public int speed, weight, jumpPower, width, height;
+    public (int start, int end) idle;
+    public (int start, int end) walk, run, hurt, jump, fall;
+    public int animSpeed;
+    public int type;
+    //void (*ai)();
     public Action ai;
-	public int palTaken, palNum;
-	public bool created;
-	public int createdSprite;
-	//u16 *spritebuf, *palbuf;
+    public int palTaken, palNum;
+    public bool created;
+    public int createdSprite;
+    //u16 *spritebuf, *palbuf;
 }
 
 public static class Classes {

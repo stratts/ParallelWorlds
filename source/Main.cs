@@ -20,10 +20,10 @@ public static partial class Rooms {
         setClasses();
         setLevels();
 
-		CA.FadeOut(0);
-		CA.Update16c();
-	
-	    //- Start the game -----------------------------------------------------
-	    mainMenu();
+        CA.FadeOut(0);
+        CA.Update16c();
+    
+        //- Start the game -----------------------------------------------------
+        mainMenu();
     }
 }
