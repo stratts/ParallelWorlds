@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -62,12 +63,16 @@ static class PA {
         public float Brightness { get; set; } = 1;
     }
 
-    public static Game Game { get; set; }
+    public static ParallelWorlds.ParallelWorlds Game { get; set; }
 
     public static Screen TopScreen { get; }= new Screen();
     public static Screen BottomScreen { get; }= new Screen();
 
     public static bool QueueClearText { get; set; } = false;
+
+    private static bool _firstVBLWait = true;
+    public static AutoResetEvent TriggerUpdate = new AutoResetEvent(false);
+    public static AutoResetEvent Updated = new AutoResetEvent(false);
 
     private static Screen GetScreen(byte screen) {
         if (screen == 0) return BottomScreen;
@@ -103,9 +108,8 @@ static class PA {
     }
 
     public static void EasyLoadBackground(byte screen, byte layer, string path) {
-        Console.WriteLine($"Load background {path}");
         SetBackground(screen, layer, new Background(path));
-        GetBackground(screen, layer).Load();
+        Game.LoadQueue.Enqueue(GetBackground(screen, layer).Load);
     }
 
     public static bool EasyBgGetPixel(byte screen, byte layer, int x, int y) {
@@ -121,7 +125,9 @@ static class PA {
     }
 
     public static void WaitForVBL() {
-
+        if (_firstVBLWait) _firstVBLWait = false;
+        else Updated.Set();
+        TriggerUpdate.WaitOne(); 
     }
 
     public static void ClearText() {
@@ -147,7 +153,7 @@ static class PA {
         var s = new Sprite(path);
         s.Size = new Point(width, height);
         GetScreen(screen).Sprites[sprite] = s;
-        s.Load();
+        Game.LoadQueue.Enqueue(s.Load);
     }
 
     public static void SetSpriteXY(byte screen, int sprite, int x, int y) {

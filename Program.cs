@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -22,24 +23,15 @@ namespace ParallelWorlds
         private SpriteFont _smallFont;
         private Texture2D _dark;
 
-        private static IEnumerator _currentSub { get; set; } = Rooms.main();
-        private static Stack<IEnumerator> _subroutines { get; set; } = new Stack<IEnumerator>();
+        private Thread _gameThread = new Thread(new ThreadStart(Rooms.main));
+
+        public Queue<Action> LoadQueue = new Queue<Action>();
 
         static void Main(string[] args)
         {
             using (var g = new ParallelWorlds())
             {
                 g.Run();
-            }
-        }
-
-        private static void UpdateSubroutines() {
-            var sub = _currentSub;
-            if (!sub.MoveNext()) _currentSub = _subroutines.Pop();
-            else if (sub.Current != null && sub.Current is IEnumerator s) {
-                Console.WriteLine($"Run subroutine {s}");
-                _currentSub = s;
-                _subroutines.Push(sub);
             }
         }
 
@@ -66,6 +58,7 @@ namespace ParallelWorlds
             _bottomScreen = CreateRenderTarget();
 
             PA.Game = this;
+            _gameThread.Start();
         }
 
         protected override void LoadContent()
@@ -83,18 +76,23 @@ namespace ParallelWorlds
         protected override void UnloadContent()
         {
             base.UnloadContent();
+
+            _gameThread.Interrupt();
         }
 
         protected override void Update(GameTime gameTime)
-        {
+        {       
+            while (LoadQueue.Count > 0) {
+                LoadQueue.Dequeue().Invoke();
+            }
             Pad.Update(Keyboard.GetState());
-            UpdateSubroutines();
+            WaitHandle.SignalAndWait(PA.TriggerUpdate, PA.Updated);
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.CornflowerBlue);     
 
             GraphicsDevice.SetRenderTarget(_topScreen);
             GraphicsDevice.Clear(Color.Black);

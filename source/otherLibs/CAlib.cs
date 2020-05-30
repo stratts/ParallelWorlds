@@ -26,7 +26,7 @@ public static class CA {
         PA.QueueClearText = true;
     }
 
-    public static IEnumerator FadeOut(byte type) {
+    public static void FadeOut(byte type) {
         sbyte i;
 
         if (type == 1)
@@ -36,7 +36,6 @@ public static class CA {
                 PA.SetBrightness(0, i); 
                 PA.SetBrightness(1, i);
                 PA.WaitForVBL();
-                yield return null;
             }	
         }
         
@@ -47,12 +46,11 @@ public static class CA {
                 PA.SetBrightness(0, i); 
                 PA.SetBrightness(1, i);
                 PA.WaitForVBL();
-                yield return null;
             }	
         }   
     }
 
-    public static IEnumerator FadeIn(byte type) {
+    public static void FadeIn(byte type) {
         sbyte i;
 
         if (type == 1)
@@ -62,7 +60,6 @@ public static class CA {
                 PA.SetBrightness(0, i); 
                 PA.SetBrightness(1, i);
                 PA.WaitForVBL();
-                yield return null;
             }	
         }
             
@@ -73,7 +70,6 @@ public static class CA {
                 PA.SetBrightness(0, i); 
                 PA.SetBrightness(1, i);
                 PA.WaitForVBL();
-                yield return null;
             }	
         }   
     }

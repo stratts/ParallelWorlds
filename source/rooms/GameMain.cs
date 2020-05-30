@@ -9,8 +9,8 @@ using static Camera;
 using static Functions;
 
 public static partial class Rooms {
-    public static IEnumerator mainGame() {
-        yield return loadLevel(Jelli, selectedLevel);
+    public static void mainGame() {
+        loadLevel(Jelli, selectedLevel);
 		
         //AS_MP3StreamPlay(rootf("music/jumper.mp3"));
         int i = 1;
@@ -45,7 +45,7 @@ public static partial class Rooms {
 	    PA.EasyBgScrollXY(MAINSCREEN, 2, (camera.x>>8)>>1, (camera.y>>8)>>1);
 	    PA.EasyBgScrollXY(MAINSCREEN, 3, (camera.x>>8)>>2, (camera.y>>8)>>2);
 
-        yield return CA.FadeIn(0);
+        CA.FadeIn(0);
 
         int midBgX = 0, backBgX = 0;
         int timer = 0;
@@ -76,13 +76,11 @@ public static partial class Rooms {
                     CA.SimpleText(0, 4, 12, "Ninja Frog sprite by Pixel Frog");
                     PA.WaitForVBL();
                     CA.Update16c();
-                    yield return null;
                 }
                 CA.Information(0, "\n- Paused -\nPress START to unpause the game\nHold SELECT for credits");
                 CA.SimpleText(0, 4, 180, "Hint: your movement affects the points you gain...");
                 PA.WaitForVBL();
                 CA.Update16c();
-                yield return null;
             }
             if(Pad.Newpress.Start) { paused = true; }
   
@@ -106,7 +104,6 @@ public static partial class Rooms {
             
             PA.WaitForVBL();
             CA.Update16c();    
-            yield return null;
         }
         
     }

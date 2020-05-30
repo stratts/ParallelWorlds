@@ -4,7 +4,7 @@ using static Defines;
 using static Levels;
 
 public static partial class Rooms {
-    public static IEnumerator mainMenu() {
+    public static void mainMenu() {
         selectedLevel = 0;
         selectedCharacter = 0;
         selectedItem = 0;
@@ -40,11 +40,10 @@ public static partial class Rooms {
 
             PA.WaitForVBL();
             CA.Update16c();
-            yield return null;
         }
 
-        yield return CA.FadeOut(0); 
+        CA.FadeOut(0); 
 
-        yield return mainGame();
+        mainGame();
     }
 }

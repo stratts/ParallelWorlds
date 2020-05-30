@@ -48,7 +48,7 @@ static class Levels {
         }
     }
 
-    public static IEnumerator loadLevel(WorldInfo world, int levelNum)
+    public static void loadLevel(WorldInfo world, int levelNum)
     {
         currentWorld = world;
         currentLevel = levelNum;
@@ -65,11 +65,11 @@ static class Levels {
         levelPath = String.Format("{0}/{1}/{2}.png", rootPath, world.level[levelNum].name, "StageBG");
 
         CA.Information(1, "Loading...");
-        yield return CA.FadeIn(0);
+        CA.FadeIn(0);
 
         if(!File.Exists(levelPath))
         {
-            yield return displayError(String.Format("Could not load stage for {0}.", world.level[levelNum].name));
+            displayError(String.Format("Could not load stage for {0}.", world.level[levelNum].name));
         }
         else 
         {
@@ -103,10 +103,10 @@ static class Levels {
         }
         else
         {
-            yield return displayError(String.Format("Could not load collision map for {0}.", world.level[levelNum].name));
+            displayError(String.Format("Could not load collision map for {0}.", world.level[levelNum].name));
         }
 
-        yield return CA.FadeOut(0);
+        CA.FadeOut(0);
         CA.Update16c();
 
         //PA_DeleteBg(1, 0);
