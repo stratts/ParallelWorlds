@@ -76,15 +76,23 @@ static class Camera {
     // Main camera scrolling function
     public static void cameraScroll() 
     { 
-        // Constants, to eliminate magic numbers
-        const int v_border = 60;
+        const int screenWidth = 256;
+        const int screenHeight = 192;
+        const int padding = 10;
         const int h_border = 80;
+        const int v_border = 60;
+
+        // Constants, to eliminate magic numbers
+        const int top_border = v_border;
+        const int left_border = h_border;
+        const int right_border = screenWidth - h_border;
+        const int bottom_border = screenHeight - v_border;
 
         // Just to make the code easier to read
         int x = (camera.target.cx) >> 8;
         int y = (camera.target.cy) >> 8;
-        int speed = (camera.target.objClass.speed);
-        int fall = (camera.target.vy);  
+        int maxspeedx = (camera.target.objClass.speed);
+        int maxspeedy = (camera.target.vy);  
         int camerax = (camera.x) >> 8;
         int cameray = (camera.y) >> 8;
         int vy_speed = 5; // Fixed point division... the smaller the number, the faster the speed
@@ -104,63 +112,72 @@ static class Camera {
         }
         
         // Special conditions
-        if(!(camera.target.objClass.speed < 0 || camera.target.objClass.speed > 0)) speed = 1024;
-        if (speed < 0) speed = -speed;  
-        if(!(camera.target.vy < 0 || camera.target.vy > 0)) fall = 1024;    
-        if(fall < 0) fall = -fall;
+        if(camera.target.objClass.speed == 0) maxspeedx = 1024;
+        if (maxspeedx < 0) maxspeedx = -maxspeedx;  
+        if(camera.target.vy == 0) maxspeedy = 1024;    
+        if(maxspeedy < 0) maxspeedy = -maxspeedy;
         
         // Start main camera code
-        if((x - camerax > 256 - (h_border-10) && camera.xscroll < speed + (speed >> 2)) ||
-            (x - camerax < (h_border-10) && camera.xscroll > -(speed + (speed >> 2))))
+        int overtakingspeedx = maxspeedx + (maxspeedx >> 2);
+        int overtakingspeedy = maxspeedy + (maxspeedy >> 2);
+
+        int accelerationx = maxspeedx >> vx_speed;
+        int accelerationy = maxspeedy >> vy_speed;
+
+        int canvasx = x - camerax;
+        int canvasy = y - cameray;
+
+        if((canvasx > right_border + padding && camera.xscroll < overtakingspeedx) ||
+            (canvasx < left_border - padding && camera.xscroll > -overtakingspeedx))
         {
-            if(x - camerax > 256 - (h_border-10) && camera.xscroll < speed + (speed >> 2)) camera.xscroll += speed >> vx_speed;
-            if(x - camerax < (h_border-10) && camera.xscroll > -(speed + (speed >> 2))) camera.xscroll -= speed >> vx_speed;
+            if(canvasx > right_border + padding && camera.xscroll < overtakingspeedx) camera.xscroll += accelerationx;
+            if(canvasx < left_border - padding && camera.xscroll > -overtakingspeedx) camera.xscroll -= accelerationx;
         }
 
-        else if ((x - camerax > 256 - h_border && camera.xscroll < speed)||
-                (x - camerax < h_border && camera.xscroll > -(speed)))
+        else if ((canvasx > right_border && camera.xscroll < maxspeedx)||
+                (canvasx < left_border && camera.xscroll > -(maxspeedx)))
         {
-            if(x - camerax > 256 - h_border && camera.xscroll < speed) camera.xscroll += speed >> vx_speed;
-            if(x - camerax < h_border && camera.xscroll > -(speed)) camera.xscroll -= speed >> vx_speed;
+            if(canvasx > right_border && camera.xscroll < maxspeedx) camera.xscroll += accelerationx;
+            if(canvasx < left_border && camera.xscroll > -(maxspeedx)) camera.xscroll -= accelerationx;
         }
 
         else if (camera.xscroll > 0 || camera.xscroll < 0)
         {
-            if (camera.xscroll > 0) camera.xscroll -= speed >> vx_speed;
-            if (camera.xscroll < 0) camera.xscroll += speed >> vx_speed;
+            if (camera.xscroll > 0) camera.xscroll -= accelerationx;
+            if (camera.xscroll < 0) camera.xscroll += accelerationx;
         }
 
-        if (camera.xscroll > -(speed >> vx_speed) && camera.xscroll < speed >> vx_speed) camera.xscroll = 0;
+        if (camera.xscroll > -accelerationx && camera.xscroll < accelerationx) camera.xscroll = 0;
 
-        if((y - cameray > 192 - (v_border-10) && camera.yscroll < fall + (fall >> 2)) ||
-            (y - cameray < (v_border-10) && camera.yscroll > -(fall + (fall >> 2))))
+        if((canvasy > bottom_border + padding && camera.yscroll < overtakingspeedy) ||
+            (canvasy < top_border - padding && camera.yscroll > -overtakingspeedy))
         {
-            if(y - cameray > 192 - (v_border-10) && camera.yscroll < fall + (fall >> 2)) camera.yscroll += fall >> vy_speed;
-            if(y - cameray < (v_border-10) && camera.yscroll > -(fall + (fall >> 2))) camera.yscroll -= fall >> vy_speed;
+            if(canvasy > bottom_border + padding && camera.yscroll < overtakingspeedy) camera.yscroll += accelerationy;
+            if(canvasy < top_border - padding && camera.yscroll > -overtakingspeedy) camera.yscroll -= accelerationy;
         }
 
-        else if ((y - cameray > 192 - v_border && camera.yscroll < fall)||
-                (y - cameray < v_border && camera.yscroll > -(fall)))
+        else if ((canvasy > bottom_border && camera.yscroll < maxspeedy)||
+                (canvasy < top_border && camera.yscroll > -maxspeedy))
         {
-            if(y - cameray > 192 - v_border && camera.yscroll < fall) camera.yscroll += fall >> vy_speed;
-            if(y - cameray < v_border && camera.yscroll > -(fall)) camera.yscroll -= fall >> vy_speed;
+            if(canvasy > bottom_border && camera.yscroll < maxspeedy) camera.yscroll += accelerationy;
+            if(canvasy < top_border && camera.yscroll > -maxspeedy) camera.yscroll -= accelerationy;
         }
 
         else if (camera.yscroll > 0 || camera.yscroll < 0)
         {
-            if (camera.yscroll > 0) camera.yscroll -= fall >> vy_speed;
-            if (camera.yscroll < 0) camera.yscroll += fall >> vy_speed;
+            if (camera.yscroll > 0) camera.yscroll -= accelerationy;
+            if (camera.yscroll < 0) camera.yscroll += accelerationy;
         }
 
-        if (camera.yscroll > -(fall >> vy_speed) && camera.yscroll < fall >> vy_speed) camera.yscroll = 0;
+        if (camera.yscroll > -accelerationy && camera.yscroll < accelerationy) camera.yscroll = 0;
 
         camera.x += camera.xscroll; 
         camera.y += camera.yscroll;
         
         // Camera limits
-        if(camera.x > (camera.limitl-256)<<8)
+        if(camera.x > (camera.limitl - screenWidth)<<8)
         {
-            camera.x = (camera.limitl-256)<<8;
+            camera.x = (camera.limitl - screenWidth)<<8;
             //camera.xscroll = -(camera.xscroll>>1);
         }
 
@@ -170,9 +187,9 @@ static class Camera {
             //camera.xscroll = -(camera.xscroll>>1);
         }
 
-        if(camera.y > (camera.limith-192)<<8)
+        if(camera.y > (camera.limith - screenHeight)<<8)
         {
-            camera.y = (camera.limith-192)<<8;
+            camera.y = (camera.limith - screenHeight)<<8;
             //camera.yscroll = -(camera.yscroll>>1);
         }
 
