@@ -6,9 +6,8 @@ using static Levels;
 
 static class AI {
 
-    public static void generalCharacter()
+    public static void generalCharacter(ObjectInfo obj)
     {   
-        ObjectInfo obj = objects[currentObject];
         obj.oldposx = obj.x;
 
         if(Pad.Held.Left || Pad.Held.Right)
@@ -24,7 +23,7 @@ static class AI {
 
                     obj.x -= obj.objClass.speed;
                     if(obj.action == 0)
-                        animateObject(currentObject, 
+                        animateObject(obj, 
                                     obj.objClass.walk.start, 
                                     obj.objClass.walk.end, 
                                     obj.objClass.animSpeed);
@@ -39,7 +38,7 @@ static class AI {
 
                     obj.x += obj.objClass.speed;
                     if(obj.action == 0)
-                        animateObject(currentObject, 
+                        animateObject(obj, 
                                         obj.objClass.walk.start, 
                                         obj.objClass.walk.end, 
                                         obj.objClass.animSpeed);
@@ -53,14 +52,14 @@ static class AI {
 
         else if(obj.action == 0)
         {
-                animateObject(currentObject, 
+                animateObject(obj, 
                                     obj.objClass.idle.start, 
                                     obj.objClass.idle.end, 
                                     obj.objClass.animSpeed);
         }
 
 
-        objectAddGravity();
+        objectAddGravity(obj);
 
         if(touchingGround(currentObject)) 
         {
@@ -79,13 +78,13 @@ static class AI {
         if(obj.vy > 512) obj.action = 2;
         else if(obj.jumping && obj.vy > 0) obj.action = 2;
 
-        if(obj.action == 1) animateObject(currentObject, 
+        if(obj.action == 1) animateObject(obj, 
                                                     obj.objClass.jump.start, 
                                                     obj.objClass.jump.end, 
                                                     obj.objClass.animSpeed);
                     
 
-        else if(obj.action == 2)animateObject(currentObject, 
+        else if(obj.action == 2)animateObject(obj,
                                                         obj.objClass.fall.start, 
                                                         obj.objClass.fall.end, 
                                                         obj.objClass.animSpeed);
@@ -96,9 +95,9 @@ static class AI {
         obj.relspeedx = obj.oldposx - obj.newposx;
         obj.relspeedy = obj.vy;
 
-        objectCheckCollision();
+        objectCheckCollision(obj);
 
-        if (!inStageZone(currentObject))
+        if (!inStageZone(obj))
         {
             Camera.camera.x = 0;
             Camera.camera.y = 0;
@@ -110,9 +109,8 @@ static class AI {
 
     }
 
-    public static void generalCPU()
+    public static void generalCPU(ObjectInfo obj)
     {
-        ObjectInfo obj = objects[currentObject];
         obj.oldposx = obj.x;
 
         if((objects[lowestXinObj(objects, 3)].x - obj.x)>>8 < -(objects[lowestXinObj(objects, 3)].objClass.width+2) || (objects[lowestXinObj(objects, 3)].x - obj.x)>>8 > objects[lowestXinObj(objects, 3)].objClass.width+2)
@@ -165,23 +163,23 @@ static class AI {
         switch(obj.action)
         {
             case 0:
-                animateObject(currentObject, 
+                animateObject(obj, 
                         obj.objClass.idle.start, 
                         obj.objClass.idle.end, 
                         obj.objClass.animSpeed); break;
             case 1:
-                animateObject(currentObject, 
+                animateObject(obj, 
                         obj.objClass.walk.start, 
                         obj.objClass.walk.end, 
                         obj.objClass.animSpeed); break;
 
             case 2:
-                animateObject(currentObject, 
+                animateObject(obj, 
                         obj.objClass.jump.start, 
                         obj.objClass.jump.end, 
                         obj.objClass.animSpeed); break;
             case 3:
-                animateObject(currentObject, 
+                animateObject(obj, 
                         obj.objClass.fall.start, 
                         obj.objClass.fall.end, 
                         obj.objClass.animSpeed); break;
@@ -191,9 +189,9 @@ static class AI {
         obj.relspeedx = obj.oldposx - obj.newposx;
         obj.relspeedy = obj.vy;
 
-        objectCheckCollision();
+        objectCheckCollision(obj);
 
-        if (!inStageZone(currentObject))
+        if (!inStageZone(obj))
         {
             Camera.camera.x = 0;
             Camera.camera.y = 0;
@@ -207,11 +205,10 @@ static class AI {
 
     }
 
-    public static void aiGenericGround()
+    public static void aiGenericGround(ObjectInfo obj)
     {
-        ObjectInfo obj = objects[currentObject];
         // Only activate the AI when the object is visible
-        if(objectInCanvas(currentObject)) obj.activated = true;
+        if(objectInCanvas(obj)) obj.activated = true;
 
         // AI code
         if(obj.activated && obj.alive)
@@ -253,13 +250,13 @@ static class AI {
             switch(obj.action)
             {
                 case 1:
-                    animateObject(currentObject,
+                    animateObject(obj,
                         obj.objClass.walk.start,
                         obj.objClass.walk.end,
                         obj.objClass.animSpeed); break;
 
                 default:
-                    animateObject(currentObject,
+                    animateObject(obj,
                         obj.objClass.idle.start,
                         obj.objClass.idle.end,
                         obj.objClass.animSpeed); break;
@@ -278,36 +275,35 @@ static class AI {
                 }
             }
 
-            if(!inStageZone(currentObject)) obj.alive = false;
+            if(!inStageZone(obj)) obj.alive = false;
 
         }
 
         else if (!obj.alive) 
         {
 
-            if(!inStageZone(currentObject)) deleteObject(currentObject);
+            if(!inStageZone(obj)) deleteObject(obj);
                 
             //obj.rotation -= obj.moveDirection*5;
         }
 
         // Collisions and gravity
-        if(obj.alive) objectCheckCollision();
+        if(obj.alive) objectCheckCollision(obj);
 
-        objectAddGravity();
+        objectAddGravity(obj);
     }
 
-    public static void aiGenericNone()
+    public static void aiGenericNone(ObjectInfo obj)
     {
 
     }
 
-    public static void aiDummy()
+    public static void aiDummy(ObjectInfo obj)
     {
-        ObjectInfo obj = objects[currentObject];
         obj.oldposx = obj.x;
         obj.oldposy = obj.y;
 
-        animateObject(currentObject, 
+        animateObject(obj, 
                                     obj.objClass.idle.start, 
                                     obj.objClass.idle.end, 
                                     obj.objClass.animSpeed);
@@ -321,7 +317,7 @@ static class AI {
         obj.newposy = obj.y;
         obj.relspeedx = obj.oldposx - obj.newposx;
         obj.relspeedy = obj.vy;
-        objectCheckCollision();
+        objectCheckCollision(obj);
 
         if (obj.y>>8 > currentWorld.level[currentLevel].height + 256)
         {

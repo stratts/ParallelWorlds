@@ -9,7 +9,7 @@ public struct ObjectClass {
     public int animSpeed;
     public int type;
     //void (*ai)();
-    public Action ai;
+    public Action<ObjectInfo> ai;
     public int palTaken, palNum;
     public bool created;
     public int createdSprite;

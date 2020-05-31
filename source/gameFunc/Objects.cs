@@ -133,15 +133,14 @@ static class Objects {
             //PA_SetSpriteRotDisable(MAINSCREEN, object[currentObject].sprite);
             //PA_SetSpriteHflip(MAINSCREEN, object[currentObject].sprite, 1);
 
-            if(obj.loaded) obj.objClass.ai();
+            if(obj.loaded) obj.objClass.ai(obj);
         }
 
     }
 
     //----------------------------------------------------------------------------
-    public static void animateObject(int objectNum, int startFrame, int endFrame, int frameSpeed) {
+    public static void animateObject(ObjectInfo obj, int startFrame, int endFrame, int frameSpeed) {
     //----------------------------------------------------------------------------
-        ObjectInfo obj = objects[objectNum];
         obj.frameCount++;
         if (obj.frameCount >= frameSpeed)
         {
@@ -156,25 +155,22 @@ static class Objects {
     }
 
     //----------------------------------------------------------------------------
-    public static void killObject(int objectNum) {
+    public static void killObject(ObjectInfo obj) {
     //----------------------------------------------------------------------------
-        ObjectInfo obj = objects[objectNum];
         obj.alive = false;
         PA.SetSpriteXY(MAINSCREEN, obj.sprite, 256, 192);
     }
 
     //----------------------------------------------------------------------------
-    public static void reviveObject(int objectNum) {
+    public static void reviveObject(ObjectInfo obj) {
     //----------------------------------------------------------------------------
-        ObjectInfo obj = objects[objectNum];
         obj.alive = true;
         PA.SetSpriteXY(MAINSCREEN, obj.sprite, obj.x, obj.y);
     }
 
     //----------------------------------------------------------------------------
-    public static void deleteObject(int objectNum) {
+    public static void deleteObject(ObjectInfo obj) {
     //----------------------------------------------------------------------------
-        ObjectInfo obj = objects[objectNum];
         sprite[obj.sprite] = 0;
         obj.alive = false;
         obj.loaded = false;
@@ -182,10 +178,8 @@ static class Objects {
     }
 
     //----------------------------------------------------------------------------
-    public static void objectCheckCollision() {
+    public static void objectCheckCollision(ObjectInfo obj) {
     //----------------------------------------------------------------------------
-        ObjectInfo obj = objects[currentObject];
-
         if(rightCollision(currentObject)) 
         {
             if(obj.relspeedx <= -256) obj.x += obj.relspeedx;
@@ -220,26 +214,23 @@ static class Objects {
     }
 
     //----------------------------------------------------------------------------
-    public static void objectAddGravity() {
+    public static void objectAddGravity(ObjectInfo obj) {
     //----------------------------------------------------------------------------
-        ObjectInfo obj = objects[currentObject];
         obj.y += obj.vy;
         if(!touchingGround(currentObject) && obj.vy < currentWorld.level[currentLevel].gravity) obj.vy += obj.objClass.weight;
         else if(touchingGround(currentObject)) obj.vy = 0;
     }
 
     //----------------------------------------------------------------------------
-    public static bool inStageZone(int objectNum) {
+    public static bool inStageZone(ObjectInfo obj) {
     //----------------------------------------------------------------------------
-        ObjectInfo obj = objects[objectNum];
         if (obj.y>>8 > currentWorld.level[currentLevel].height + 256) return false;
         return true;
     }
 
     //----------------------------------------------------------------------------
-    public static bool objectInCanvas(int objectNum) {
+    public static bool objectInCanvas(ObjectInfo obj) {
     //----------------------------------------------------------------------------
-        ObjectInfo obj = objects[objectNum];
         if ((obj.x-camera.x)>>8 > 256 || (obj.y-camera.y)>>8 > 192 || (obj.x-camera.x)>>8 < -64 || (obj.y-camera.y)>>8 < -64) return false;
         return true;
     }
