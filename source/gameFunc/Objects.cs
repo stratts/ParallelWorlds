@@ -180,26 +180,26 @@ static class Objects {
     //----------------------------------------------------------------------------
     public static void objectCheckCollision(ObjectInfo obj) {
     //----------------------------------------------------------------------------
-        if(rightCollision(currentObject)) 
+        if(rightCollision(obj)) 
         {
             if(obj.relspeedx <= -256) obj.x += obj.relspeedx;
             else obj.x -= 256;
         }
 
-        if(leftCollision(currentObject))
+        if(leftCollision(obj))
         {
             if(obj.relspeedx >= 256) obj.x += obj.relspeedx;
             else obj.x += 256;
         }
 
-        if(upCollision(currentObject)) 
+        if(upCollision(obj)) 
         {
             if(obj.relspeedy <= -256) obj.y -= obj.relspeedy;
             else obj.y += 256;
             obj.vy = 0;
         }
 
-        if(downCollision(currentObject))
+        if(downCollision(obj))
         {
             if(obj.relspeedy >= 256) obj.y -= obj.relspeedy;
             else obj.y -= 512;
@@ -217,8 +217,8 @@ static class Objects {
     public static void objectAddGravity(ObjectInfo obj) {
     //----------------------------------------------------------------------------
         obj.y += obj.vy;
-        if(!touchingGround(currentObject) && obj.vy < currentWorld.level[currentLevel].gravity) obj.vy += obj.objClass.weight;
-        else if(touchingGround(currentObject)) obj.vy = 0;
+        if(!touchingGround(obj) && obj.vy < currentWorld.level[currentLevel].gravity) obj.vy += obj.objClass.weight;
+        else if(touchingGround(obj)) obj.vy = 0;
     }
 
     //----------------------------------------------------------------------------

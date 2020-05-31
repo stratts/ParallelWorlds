@@ -61,14 +61,14 @@ static class AI {
 
         objectAddGravity(obj);
 
-        if(touchingGround(currentObject)) 
+        if(touchingGround(obj)) 
         {
             obj.vy = 0;
             obj.action = 0;
             obj.jumping = false; 
         }
 
-        if(Pad.Newpress.Up && touchingGround(currentObject)) 
+        if(Pad.Newpress.Up && touchingGround(obj)) 
         {
             obj.action = 1;
             obj.vy = -1800;
@@ -138,7 +138,7 @@ static class AI {
                 }
             }*/
 
-            if((leftCollision(currentObject) || rightCollision(currentObject)) && (!rightCollisionLarge(currentObject) && !leftCollisionLarge(currentObject)) && !obj.jumping) 
+            if((leftCollision(obj) || rightCollision(obj)) && (!rightCollisionLarge(obj) && !leftCollisionLarge(obj)) && !obj.jumping) 
             {
                 obj.vy = -1400;
                 obj.action = 2;
@@ -149,12 +149,12 @@ static class AI {
         else obj.action = 0;
 
         obj.y += obj.vy;
-        if(!touchingGround(currentObject) && obj.vy < obj.objClass.weight) obj.vy += 80;
-        if(!touchingGround(currentObject) && obj.vy > 512) obj.action = 3;
+        if(!touchingGround(obj) && obj.vy < obj.objClass.weight) obj.vy += 80;
+        if(!touchingGround(obj) && obj.vy > 512) obj.action = 3;
 
         
 
-        if(touchingGround(currentObject)) 
+        if(touchingGround(obj)) 
         {
             obj.vy = 0;
             obj.jumping = false; 
@@ -216,15 +216,15 @@ static class AI {
             obj.x += obj.objClass.speed*obj.moveDirection;
             
 
-            if(leftCollision(currentObject) || rightCollision(currentObject)) obj.i++;
+            if(leftCollision(obj) || rightCollision(obj)) obj.i++;
             else obj.i = 0; 
 
             if(obj.i > 80)
             { 
                 obj.i = 0; 
 
-                if(leftCollision(currentObject)) obj.moveDirection = 1;
-                else if(rightCollision(currentObject)) obj.moveDirection = -1; 
+                if(leftCollision(obj)) obj.moveDirection = 1;
+                else if(rightCollision(obj)) obj.moveDirection = -1; 
             }
 
             else if(obj.i > 5)
@@ -233,8 +233,8 @@ static class AI {
 
                 if(obj.i > 40)
                 {
-                    if(leftCollision(currentObject)) PA.SetSpriteHflip(MAINSCREEN, obj.sprite, 0);
-                    else if(rightCollision(currentObject)) PA.SetSpriteHflip(MAINSCREEN, obj.sprite, 1);
+                    if(leftCollision(obj)) PA.SetSpriteHflip(MAINSCREEN, obj.sprite, 0);
+                    else if(rightCollision(obj)) PA.SetSpriteHflip(MAINSCREEN, obj.sprite, 1);
                 }
             }
 
@@ -262,7 +262,7 @@ static class AI {
                         obj.objClass.animSpeed); break;
             }
 
-            if(objectCollisionTop(0, currentObject) && objects[0].vy>0 && obj.alive) 
+            if(objectCollisionTop(objects[0], obj) && objects[0].vy>0 && obj.alive) 
             {
                 obj.alive = false;
                 if(objects[0].relspeedx >= 0) playerPoints += (objects[0].vy<<2)*(objects[0].relspeedx+1);
@@ -309,9 +309,9 @@ static class AI {
                                     obj.objClass.animSpeed);
 
         obj.y += obj.vy;
-        if(!touchingGround(currentObject)) obj.vy += 80;
+        if(!touchingGround(obj)) obj.vy += 80;
 
-        if(touchingGround(currentObject)) obj.vy = 0;
+        if(touchingGround(obj)) obj.vy = 0;
 
         obj.newposx = obj.x;
         obj.newposy = obj.y;

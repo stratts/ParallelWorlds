@@ -3,10 +3,7 @@ using static Levels;
 using static Defines;
 
 public static class Collisions {
-    public static bool objectCollision(int object1,int object2){
-        ObjectInfo obj1 = objects[object1];
-        ObjectInfo obj2 = objects[object2];
-
+    public static bool objectCollision(ObjectInfo obj1, ObjectInfo obj2){
         //grab sprite demensions (center positions and length and width)
         int w1 = obj1.objClass.width;
         int h1 = obj1.objClass.height;
@@ -18,15 +15,12 @@ public static class Collisions {
         int x2 = obj2.cx>>8;
         int y2 = obj2.cy>>8;
         
-        if(object1 != object2) 
+        if(obj1 != obj2) 
             return (((x2 >= x1 - ((w1 + w2)>>1)) && (x2 <= x1 + ((w1 + w2)>>1)) && (y2 >= y1 - ((h1 + h2)>>1)) && (y2 <= y1 + ((h1 + h2)>>1))));
         return false;
     }
 
-    public static bool objectCollisionTop(int object1,int object2) {
-        ObjectInfo obj1 = objects[object1];
-        ObjectInfo obj2 = objects[object2];
-
+    public static bool objectCollisionTop(ObjectInfo obj1, ObjectInfo obj2) {
         //grab sprite demensions (center positions and length and width)
         int w1 = obj1.objClass.width;
         int h1 = obj1.objClass.height;
@@ -38,17 +32,15 @@ public static class Collisions {
         int x2 = obj2.cx>>8;
         int y2 = obj2.cy>>8;
 
-        if(object1 != object2 && (y1+(h1>>1))-h1 < y2 - (h2))
+        if(obj1 != obj2 && (y1+(h1>>1))-h1 < y2 - (h2))
             return (((x2 >= x1 - ((w1 + w2)>>1)) && (x2 <= x1 + ((w1 + w2)>>1)) && (y2 >= y1 - ((h1 + h2)>>1)) && (y2 <= y1 + ((h1 + h2)>>1))));
 
         return false;
     }
 
 
-    public static bool upCollision(int objectNum)
+    public static bool upCollision(ObjectInfo obj)
     {
-        ObjectInfo obj = objects[objectNum];
-
         if(!obj.alive) return false;
 
         int playerheight=obj.objClass.height;
@@ -64,9 +56,8 @@ public static class Collisions {
 
     }
 
-    public static bool downCollision(int objectNum)
+    public static bool downCollision(ObjectInfo obj)
     {
-        ObjectInfo obj = objects[objectNum];
         if(!obj.alive) return false;
 
         int playerheight=obj.objClass.height;
@@ -81,9 +72,8 @@ public static class Collisions {
         return false;
     }
 
-    public static bool touchingGround(int objectNum)
+    public static bool touchingGround(ObjectInfo obj)
     {
-        ObjectInfo obj = objects[objectNum];
         if(!obj.alive) return false;
 
         int playerheight=obj.objClass.height;
@@ -97,9 +87,8 @@ public static class Collisions {
         return false;
     }
 
-    public static bool leftCollision(int objectNum)
+    public static bool leftCollision(ObjectInfo obj)
     {
-        ObjectInfo obj = objects[objectNum];
         if(!obj.alive) return false;
 
         int playerheight=obj.objClass.height;
@@ -116,9 +105,8 @@ public static class Collisions {
         return false;
     }
 
-    public static bool rightCollision(int objectNum)
+    public static bool rightCollision(ObjectInfo obj)
     {
-        ObjectInfo obj = objects[objectNum];
         if(!obj.alive) return false;
 
         int playerheight=obj.objClass.height;
@@ -136,9 +124,8 @@ public static class Collisions {
         return false;
     }
 
-    public static bool leftCollisionLarge(int objectNum)
+    public static bool leftCollisionLarge(ObjectInfo obj)
     {
-        ObjectInfo obj = objects[objectNum];
         if(!obj.alive) return false;
 
         int playerheight=obj.objClass.height;
@@ -152,9 +139,8 @@ public static class Collisions {
         return false;
     }
 
-    public static bool rightCollisionLarge(int objectNum)
+    public static bool rightCollisionLarge(ObjectInfo obj)
     {
-        ObjectInfo obj = objects[objectNum];
         if(!obj.alive) return false;
 
         int playerheight=obj.objClass.height;

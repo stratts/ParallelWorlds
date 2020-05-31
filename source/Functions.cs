@@ -56,6 +56,8 @@ static class Functions {
 
     public static void displayDebug(byte screen)
     {
+        var player = objects[0];
+
         CA.SimpleText(screen, 4, 6, "- Player/camera info -");
         CA.SimpleText(screen, 4, 14, "Player position X: {0}", objects[0].x>>8);
         CA.SimpleText(screen, 4, 22, "Player position Y: {0}", objects[0].y>>8);
@@ -63,11 +65,11 @@ static class Functions {
         CA.SimpleText(screen, 4, 38, "Camera position Y: {0}", camera.y>>8);
 
         CA.SimpleText(screen, 4, 58, "- Collisions -");
-        CA.SimpleText(screen, 4, 66, "Left collision: {0}", leftCollision(0));
-        CA.SimpleText(screen, 4, 74, "Right collision: {0}", rightCollision(0));
-        CA.SimpleText(screen, 4, 82, "Up collision: {0}", upCollision(0));
-        CA.SimpleText(screen, 4, 90, "Down collision: {0}", downCollision(0));
-        CA.SimpleText(screen, 4, 98, "Touching ground: {0}", touchingGround(0));
+        CA.SimpleText(screen, 4, 66, "Left collision: {0}", leftCollision(player));
+        CA.SimpleText(screen, 4, 74, "Right collision: {0}", rightCollision(player));
+        CA.SimpleText(screen, 4, 82, "Up collision: {0}", upCollision(player));
+        CA.SimpleText(screen, 4, 90, "Down collision: {0}", downCollision(player));
+        CA.SimpleText(screen, 4, 98, "Touching ground: {0}", touchingGround(player));
 
         //struct mallinfo info = mallinfo();
 
