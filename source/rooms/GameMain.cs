@@ -39,8 +39,8 @@ public static partial class Rooms {
         cameraInit(0, (objects[0].x>>8) - 128, (objects[0].y>>8) - 96);
         cameraTarget(objects[0], currentWorld.level[currentLevel].width, currentWorld.level[currentLevel].height);
         cameraScroll();
-        moveObjects();
         processObjects();
+        MoveSprites();
         PA.EasyBgScrollXY(MAINSCREEN, 1, camera.x>>8, camera.y>>8);
         PA.EasyBgScrollXY(MAINSCREEN, 2, (camera.x>>8)>>1, (camera.y>>8)>>1);
         PA.EasyBgScrollXY(MAINSCREEN, 3, (camera.x>>8)>>2, (camera.y>>8)>>2);
@@ -90,7 +90,7 @@ public static partial class Rooms {
 
             processObjects();
             cameraScroll();
-            moveObjects();
+            MoveSprites();
             PA.EasyBgScrollXY(MAINSCREEN, 1, camera.x>>8, camera.y>>8);
             PA.EasyBgScrollXY(MAINSCREEN, 2, ((camera.x+midBgX)>>8)>>1, (camera.y>>8)>>1);
             PA.EasyBgScrollXY(MAINSCREEN, 3, ((camera.x+backBgX)>>8)>>2, (camera.y>>8)>>2);

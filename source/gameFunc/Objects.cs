@@ -28,6 +28,94 @@ public class ObjectInfo {
     public int rotation;
     public int rotsetSlot;
     public bool loaded;
+
+    //public int cx => x + (32 << 8);
+    //public int cy => (y + (64<<8)) - (objClass.height << 8);
+
+    public void Update() {
+        UpdateCentre();
+        if(loaded) objClass.ai(this);
+    }
+
+    public void UpdateCentre() {
+        cx = x + (32 << 8);
+        cy = (y + (64<<8)) - (objClass.height << 8);
+    }
+
+    public void Kill() {
+        alive = false;
+        PA.SetSpriteXY(MAINSCREEN, sprite, 256, 192);
+    }
+
+    public void Revive() {
+        alive = true;
+        PA.SetSpriteXY(MAINSCREEN, sprite, x, y);
+    }
+
+    public void Delete() {
+        Objects.sprite[this.sprite] = 0;
+        alive = false;
+        loaded = false;
+        PA.DeleteSprite(MAINSCREEN, sprite);
+    }
+
+    public void Animate(int startFrame, int endFrame, int frameSpeed) {
+        frameCount++;
+        if (frameCount >= frameSpeed)
+        {
+            frameCount = -1;
+            currentFrame++;
+        }
+
+        if (currentFrame < startFrame) currentFrame = startFrame;
+        if (currentFrame > endFrame) currentFrame = startFrame;
+
+        PA.SetSpriteAnim(MAINSCREEN, sprite, currentFrame);
+    }
+
+    public void CheckCollision() {
+        if(rightCollision(this)) 
+        {
+            if(relspeedx <= -256) x += relspeedx;
+            else x -= 256;
+        }
+
+        if(leftCollision(this))
+        {
+            if(relspeedx >= 256) x += relspeedx;
+            else x += 256;
+        }
+
+        if(upCollision(this)) 
+        {
+            if(relspeedy <= -256) y -= relspeedy;
+            else y += 256;
+            vy = 0;
+        }
+
+        if(downCollision(this))
+        {
+            if(relspeedy >= 256) y -= relspeedy;
+            else y -= 512;
+            action = 0;
+        }
+    }
+
+    public void AddGravity() {
+        y += vy;
+        if(!touchingGround(this) && vy < currentWorld.level[currentLevel].gravity) vy += objClass.weight;
+        else if(touchingGround(this)) vy = 0;
+    }
+
+    public bool InStageZone() {
+        if (y>>8 > currentWorld.level[currentLevel].height + 256) return false;
+        return true;
+    }
+
+    public bool InCanvas() {
+        if ((x-camera.x)>>8 > 256 || (y-camera.y)>>8 > 192 || (x-camera.x)>>8 < -64 || (y-camera.y)>>8 < -64) return false;
+        return true;
+    }
 }
 
 static class Objects {
@@ -58,8 +146,7 @@ static class Objects {
         obj.y = y << 8;
 
         // Center positions, very useful for small sprites in a large canvas
-        obj.cx = (x + 32) << 8;
-        obj.cy = (obj.y + (64<<8)) - (obj.objClass.height << 8);
+        obj.UpdateCentre();
 
         // Sprite number and rotation slot
         obj.sprite = getSprite();
@@ -94,144 +181,25 @@ static class Objects {
     }
 
     //----------------------------------------------------------------------------
-    public static void moveObjects() {
-    //----------------------------------------------------------------------------
-
-        int i;
-
-        for(i = 0; i < MAXOBJECTS+1; i++)
-        {
-            currentObject = i;
-            ObjectInfo obj = objects[currentObject];
-            obj.cx = obj.x + (32 << 8);
-            obj.cy = (obj.y + (64<<8)) - (obj.objClass.height << 8);
-
-            /*if(object[currentObject].loaded)*/ 
-            setSpriteXY(MAINSCREEN, obj.sprite, 
-                (obj.x-Camera.camera.x)>>8, (obj.y-Camera.camera.y)>>8);
-            
-        }
-    }
-
-    //----------------------------------------------------------------------------
     public static void processObjects() {
     //----------------------------------------------------------------------------
-
-        int i;
-
-        for(i = 0; i < MAXOBJECTS+1; i++)
+        for(int i = 0; i < MAXOBJECTS+1; i++)
         {
             currentObject = i;
             ObjectInfo obj = objects[currentObject];
-            obj.cx = obj.x + (32 << 8);
-            obj.cy = (obj.y + (64<<8)) - (obj.objClass.height << 8);
-
-            //if(object[currentObject].rotation < 0) object[currentObject].rotation = 511;
-            //if(object[currentObject].rotation > 511) object[currentObject].rotation = 0;
-            //PA_SetRotsetNoZoom(MAINSCREEN, object[currentObject].rotsetSlot, 300);
-
-            //PA_SetSpriteRotDisable(MAINSCREEN, object[currentObject].sprite);
-            //PA_SetSpriteHflip(MAINSCREEN, object[currentObject].sprite, 1);
-
-            if(obj.loaded) obj.objClass.ai(obj);
+            obj.UpdateCentre();
+            obj.Update();
         }
-
     }
 
-    //----------------------------------------------------------------------------
-    public static void animateObject(ObjectInfo obj, int startFrame, int endFrame, int frameSpeed) {
-    //----------------------------------------------------------------------------
-        obj.frameCount++;
-        if (obj.frameCount >= frameSpeed)
+    public static void MoveSprites() {
+        for(int i = 0; i < MAXOBJECTS+1; i++)
         {
-            obj.frameCount = -1;
-            obj.currentFrame++;
+            currentObject = i;
+            ObjectInfo obj = objects[currentObject];
+            obj.UpdateCentre();
+            setSpriteXY(MAINSCREEN, obj.sprite, (obj.x-Camera.camera.x)>>8, (obj.y-Camera.camera.y)>>8);
         }
-
-        if (obj.currentFrame < startFrame) obj.currentFrame = startFrame;
-        if (obj.currentFrame > endFrame) obj.currentFrame = startFrame;
-
-        PA.SetSpriteAnim(MAINSCREEN, obj.sprite, obj.currentFrame);
-    }
-
-    //----------------------------------------------------------------------------
-    public static void killObject(ObjectInfo obj) {
-    //----------------------------------------------------------------------------
-        obj.alive = false;
-        PA.SetSpriteXY(MAINSCREEN, obj.sprite, 256, 192);
-    }
-
-    //----------------------------------------------------------------------------
-    public static void reviveObject(ObjectInfo obj) {
-    //----------------------------------------------------------------------------
-        obj.alive = true;
-        PA.SetSpriteXY(MAINSCREEN, obj.sprite, obj.x, obj.y);
-    }
-
-    //----------------------------------------------------------------------------
-    public static void deleteObject(ObjectInfo obj) {
-    //----------------------------------------------------------------------------
-        sprite[obj.sprite] = 0;
-        obj.alive = false;
-        obj.loaded = false;
-        PA.DeleteSprite(MAINSCREEN, obj.sprite);
-    }
-
-    //----------------------------------------------------------------------------
-    public static void objectCheckCollision(ObjectInfo obj) {
-    //----------------------------------------------------------------------------
-        if(rightCollision(obj)) 
-        {
-            if(obj.relspeedx <= -256) obj.x += obj.relspeedx;
-            else obj.x -= 256;
-        }
-
-        if(leftCollision(obj))
-        {
-            if(obj.relspeedx >= 256) obj.x += obj.relspeedx;
-            else obj.x += 256;
-        }
-
-        if(upCollision(obj)) 
-        {
-            if(obj.relspeedy <= -256) obj.y -= obj.relspeedy;
-            else obj.y += 256;
-            obj.vy = 0;
-        }
-
-        if(downCollision(obj))
-        {
-            if(obj.relspeedy >= 256) obj.y -= obj.relspeedy;
-            else obj.y -= 512;
-            obj.action = 0;
-        }
-
-
-
-
-        //if(touchingGround(currentObject)) obj.vy = 0;
-
-    }
-
-    //----------------------------------------------------------------------------
-    public static void objectAddGravity(ObjectInfo obj) {
-    //----------------------------------------------------------------------------
-        obj.y += obj.vy;
-        if(!touchingGround(obj) && obj.vy < currentWorld.level[currentLevel].gravity) obj.vy += obj.objClass.weight;
-        else if(touchingGround(obj)) obj.vy = 0;
-    }
-
-    //----------------------------------------------------------------------------
-    public static bool inStageZone(ObjectInfo obj) {
-    //----------------------------------------------------------------------------
-        if (obj.y>>8 > currentWorld.level[currentLevel].height + 256) return false;
-        return true;
-    }
-
-    //----------------------------------------------------------------------------
-    public static bool objectInCanvas(ObjectInfo obj) {
-    //----------------------------------------------------------------------------
-        if ((obj.x-camera.x)>>8 > 256 || (obj.y-camera.y)>>8 > 192 || (obj.x-camera.x)>>8 < -64 || (obj.y-camera.y)>>8 < -64) return false;
-        return true;
+        
     }
 }
