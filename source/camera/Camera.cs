@@ -1,3 +1,4 @@
+using System;
 
 // Main camera struct
 class Camera {
@@ -16,8 +17,8 @@ class Camera {
      // Intitialises the type (and sets the position) of the camera
     public void SetPos(int type, int x, int y) {
         this.type = type;
-        x = x<<8;
-        y = y<<8;
+        this.x = x<<8;
+        this.y = y<<8;
     }
   
     // Set the camera's target (to follow)
@@ -93,8 +94,8 @@ class Camera {
         int y = (target.cy) >> 8;
         int maxspeedx = (target.objClass.speed);
         int maxspeedy = (target.vy);  
-        int camerax = (x) >> 8;
-        int cameray = (y) >> 8;
+        int camerax = (this.x) >> 8;
+        int cameray = (this.y) >> 8;
         int vy_speed = 5; // Fixed point division... the smaller the number, the faster the speed
         int vx_speed = 5; // See above ^^
 
@@ -171,37 +172,37 @@ class Camera {
 
         if (yscroll > -accelerationy && yscroll < accelerationy) yscroll = 0;
 
-        x += xscroll; 
-        y += yscroll;
+        this.x += xscroll; 
+        this.y += yscroll;
         
         // Camera limits
-        if(x > (limitl - screenWidth)<<8)
+        if(this.x > (limitl - screenWidth)<<8)
         {
-            x = (limitl - screenWidth)<<8;
+            this.x = (limitl - screenWidth)<<8;
             //xscroll = -(xscroll>>1);
         }
 
-        if (x>>8 < 0)
+        if (this.x>>8 < 0)
         {
-            x = 0;
+            this.x = 0;
             //xscroll = -(xscroll>>1);
         }
 
-        if(y > (limith - screenHeight)<<8)
+        if(this.y > (limith - screenHeight)<<8)
         {
-            y = (limith - screenHeight)<<8;
+            this.y = (limith - screenHeight)<<8;
             //yscroll = -(yscroll>>1);
         }
 
-        if (y>>8 < 0)
+        if (this.y>>8 < 0)
         {
-            y = 0;
+            this.y = 0;
             //yscroll = -(yscroll>>1);
         }
     }
 }
 
 static class GlobalCamera {
-    public static Camera camera;
+    public static Camera camera = new Camera();
 
 }

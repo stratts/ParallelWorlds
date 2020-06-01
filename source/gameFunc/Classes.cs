@@ -51,7 +51,7 @@ public static class Classes {
         DUMMY.sprite = CA.rootf("/characters/Frog/frog.png");
         DUMMY.speed = 256;
         DUMMY.weight = 80;
-        DUMMY.ai = AI.aiGenericGround;
+        DUMMY.ai = AI.generalCPU;
         DUMMY.width = 24;
         DUMMY.height = 28;
         DUMMY.animSpeed = 3;

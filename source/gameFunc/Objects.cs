@@ -119,16 +119,11 @@ public class ObjectInfo {
 }
 
 static class Objects {
-    public static int MAXOBJECTS = -1;      // Object count, starts at nil (-1)
-
     public static List<ObjectInfo> objects = new List<ObjectInfo>();
 
-    public static int currentObject;
     public static int[] sprite = new int[96];
     
     public static void createObject(ObjectClass objClass, int x, int y, int type) {
-        MAXOBJECTS++;           // Increase object count
-
         // Initialise and set our struct + variables
         //------------------------------------------------------------------------
         var obj = new ObjectInfo();
@@ -183,23 +178,17 @@ static class Objects {
     //----------------------------------------------------------------------------
     public static void processObjects() {
     //----------------------------------------------------------------------------
-        for(int i = 0; i < MAXOBJECTS+1; i++)
-        {
-            currentObject = i;
-            ObjectInfo obj = objects[currentObject];
+        foreach (var obj in objects) {
             obj.UpdateCentre();
             obj.Update();
         }
     }
 
     public static void MoveSprites() {
-        for(int i = 0; i < MAXOBJECTS+1; i++)
+        foreach (var obj in objects)
         {
-            currentObject = i;
-            ObjectInfo obj = objects[currentObject];
             obj.UpdateCentre();
             setSpriteXY(MAINSCREEN, obj.sprite, (obj.x-GlobalCamera.camera.x)>>8, (obj.y-GlobalCamera.camera.y)>>8);
-        }
-        
+        }     
     }
 }

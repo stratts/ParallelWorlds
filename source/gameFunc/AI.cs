@@ -113,16 +113,16 @@ static class AI {
     {
         obj.oldposx = obj.x;
 
-        if((objects[lowestXinObj(objects, 3)].x - obj.x)>>8 < -(objects[lowestXinObj(objects, 3)].objClass.width+2) || (objects[lowestXinObj(objects, 3)].x - obj.x)>>8 > objects[lowestXinObj(objects, 3)].objClass.width+2)
+        if((objects[lowestXinObj(obj, objects, 3)].x - obj.x)>>8 < -(objects[lowestXinObj(obj, objects, 3)].objClass.width+2) || (objects[lowestXinObj(obj, objects, 3)].x - obj.x)>>8 > objects[lowestXinObj(obj, objects, 3)].objClass.width+2)
         {
-            if(objects[lowestXinObj(objects, 3)].x > obj.x)
+            if(objects[lowestXinObj(obj, objects, 3)].x > obj.x)
             {
                 PA.SetSpriteHflip(MAINSCREEN, obj.sprite, 0);
                 if(!obj.jumping) obj.action = 1;
                 obj.x += obj.objClass.speed-PA.RandMax(128);
             }
 
-            else if(objects[lowestXinObj(objects, 3)].x < obj.x)
+            else if(objects[lowestXinObj(obj, objects, 3)].x < obj.x)
             {   
                 PA.SetSpriteHflip(MAINSCREEN, obj.sprite, 1);
                 if(!obj.jumping) obj.action = 1;
@@ -148,8 +148,7 @@ static class AI {
 
         else obj.action = 0;
 
-        obj.y += obj.vy;
-        if(!touchingGround(obj) && obj.vy < obj.objClass.weight) obj.vy += 80;
+        obj.AddGravity();
         if(!touchingGround(obj) && obj.vy > 512) obj.action = 3;
 
         
@@ -193,9 +192,6 @@ static class AI {
 
         if (!obj.InStageZone())
         {
-            GlobalCamera.camera.x = 0;
-            GlobalCamera.camera.y = 0;
-
             obj.y = obj.startY;
             obj.x = obj.startX;
         }

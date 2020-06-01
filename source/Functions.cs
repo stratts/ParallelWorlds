@@ -30,19 +30,19 @@ static class Functions {
     }
 
 
-    public static int lowestXinObj(List<ObjectInfo> ar, int size)
+    public static int lowestXinObj(ObjectInfo current, List<ObjectInfo> ar, int size)
     {
         int i;
         int oldDistance = 10000000;
         int place = 0;
-        ObjectInfo current = ar[currentObject];
 
         if(size > 1)
         {
             for(i=0;i<size+1;i++)
             {
+                if (i >= ar.Count) break;
                 ObjectInfo obj = ar[i];
-                if(PA.Distance(current.x>>8, current.y>>8, obj.x>>8, obj.y>>8) < oldDistance && currentObject != i)
+                if(PA.Distance(current.x>>8, current.y>>8, obj.x>>8, obj.y>>8) < oldDistance && current != obj)
                 {
                     place = i;
                     oldDistance = PA.Distance(current.x>>8, current.y>>8, obj.x>>8, obj.y>>8);
