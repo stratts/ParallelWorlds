@@ -5,7 +5,7 @@ using static Defines;
 using static Levels;
 using static Objects;
 using static Classes;
-using static Camera;
+using static GlobalCamera;
 using static Functions;
 
 public static partial class Rooms {
@@ -36,9 +36,9 @@ public static partial class Rooms {
             i++;
         }
 
-        cameraInit(0, (objects[0].x>>8) - 128, (objects[0].y>>8) - 96);
-        cameraTarget(objects[0], currentWorld.level[currentLevel].width, currentWorld.level[currentLevel].height);
-        cameraScroll();
+        camera.SetPos(0, (objects[0].x>>8) - 128, (objects[0].y>>8) - 96);
+        camera.Target(objects[0], currentWorld.level[currentLevel].width, currentWorld.level[currentLevel].height);
+        camera.Scroll();
         processObjects();
         MoveSprites();
         PA.EasyBgScrollXY(MAINSCREEN, 1, camera.x>>8, camera.y>>8);
@@ -89,7 +89,7 @@ public static partial class Rooms {
             }
 
             processObjects();
-            cameraScroll();
+            camera.Scroll();
             MoveSprites();
             PA.EasyBgScrollXY(MAINSCREEN, 1, camera.x>>8, camera.y>>8);
             PA.EasyBgScrollXY(MAINSCREEN, 2, ((camera.x+midBgX)>>8)>>1, (camera.y>>8)>>1);

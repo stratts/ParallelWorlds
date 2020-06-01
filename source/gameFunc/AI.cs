@@ -99,13 +99,13 @@ static class AI {
 
         if (!obj.InStageZone())
         {
-            Camera.camera.x = 0;
-            Camera.camera.y = 0;
+            GlobalCamera.camera.x = 0;
+            GlobalCamera.camera.y = 0;
             obj.y = obj.startY;
             obj.x = obj.startX;
         }
 
-        setSpriteXY(MAINSCREEN, obj.sprite, (obj.x - Camera.camera.x)>>8, (obj.y - Camera.camera.y)>>8);
+        setSpriteXY(MAINSCREEN, obj.sprite, (obj.x - GlobalCamera.camera.x)>>8, (obj.y - GlobalCamera.camera.y)>>8);
 
     }
 
@@ -193,15 +193,15 @@ static class AI {
 
         if (!obj.InStageZone())
         {
-            Camera.camera.x = 0;
-            Camera.camera.y = 0;
+            GlobalCamera.camera.x = 0;
+            GlobalCamera.camera.y = 0;
 
             obj.y = obj.startY;
             obj.x = obj.startX;
         }
 
 
-        setSpriteXY(MAINSCREEN, obj.sprite, (obj.x - Camera.camera.x)>>8, (obj.y - Camera.camera.y)>>8);
+        setSpriteXY(MAINSCREEN, obj.sprite, (obj.x - GlobalCamera.camera.x)>>8, (obj.y - GlobalCamera.camera.y)>>8);
 
     }
 
@@ -321,8 +321,8 @@ static class AI {
 
         if (obj.y>>8 > currentWorld.level[currentLevel].height + 256)
         {
-            Camera.camera.x = 1<<8;
-            Camera.camera.y = 1<<8;
+            GlobalCamera.camera.x = 1<<8;
+            GlobalCamera.camera.y = 1<<8;
             obj.y = obj.startY;
             obj.x = obj.startX;
             obj.vy = 0;

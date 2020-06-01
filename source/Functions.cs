@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using static Objects;
 using static Collisions;
-using static Camera;
+using static GlobalCamera;
 
 static class Functions {
     

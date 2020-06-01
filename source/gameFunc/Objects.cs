@@ -5,7 +5,7 @@ using static Collisions;
 using static Functions;
 using static Defines;
 using static Levels;
-using static Camera;
+using static GlobalCamera;
 
 public class ObjectInfo {
     public int x, y;
@@ -165,7 +165,7 @@ static class Objects {
     // Load the object's sprite and palette
     //------------------------------------------------------------------------
         PA.CreateSprite(MAINSCREEN, obj.sprite, 32, 32, objClass.sprite);
-        setSpriteXY(MAINSCREEN, obj.sprite, x-(Camera.camera.x>>8), y - (Camera.camera.y>>8));
+        setSpriteXY(MAINSCREEN, obj.sprite, x-(GlobalCamera.camera.x>>8), y - (GlobalCamera.camera.y>>8));
         obj.alive = true;
     }
 
@@ -198,7 +198,7 @@ static class Objects {
             currentObject = i;
             ObjectInfo obj = objects[currentObject];
             obj.UpdateCentre();
-            setSpriteXY(MAINSCREEN, obj.sprite, (obj.x-Camera.camera.x)>>8, (obj.y-Camera.camera.y)>>8);
+            setSpriteXY(MAINSCREEN, obj.sprite, (obj.x-GlobalCamera.camera.x)>>8, (obj.y-GlobalCamera.camera.y)>>8);
         }
         
     }
