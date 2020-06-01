@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-using static Objects;
 using static Collisions;
-using static GlobalCamera;
 
 static class Functions {
     
@@ -54,15 +52,15 @@ static class Functions {
         return place;   
     }
 
-    public static void displayDebug(byte screen)
+    public static void displayDebug(byte screen, Scene scene)
     {
-        var player = objects[0];
+        var player = scene.Objects[0];
 
         CA.SimpleText(screen, 4, 6, "- Player/camera info -");
-        CA.SimpleText(screen, 4, 14, "Player position X: {0}", objects[0].x>>8);
-        CA.SimpleText(screen, 4, 22, "Player position Y: {0}", objects[0].y>>8);
-        CA.SimpleText(screen, 4, 30, "Camera position X: {0}", camera.x>>8);
-        CA.SimpleText(screen, 4, 38, "Camera position Y: {0}", camera.y>>8);
+        CA.SimpleText(screen, 4, 14, "Player position X: {0}", scene.Objects[0].x>>8);
+        CA.SimpleText(screen, 4, 22, "Player position Y: {0}", scene.Objects[0].y>>8);
+        CA.SimpleText(screen, 4, 30, "Camera position X: {0}", scene.Camera.x>>8);
+        CA.SimpleText(screen, 4, 38, "Camera position Y: {0}", scene.Camera.y>>8);
 
         CA.SimpleText(screen, 4, 58, "- Collisions -");
         CA.SimpleText(screen, 4, 66, "Left collision: {0}", leftCollision(player));

@@ -3,9 +3,7 @@ using IniParser;
 
 using static Defines;
 using static Levels;
-using static Objects;
 using static Classes;
-using static GlobalCamera;
 using static Functions;
 
 public static partial class Rooms {
@@ -17,37 +15,37 @@ public static partial class Rooms {
 
         var path = CA.rootf("/levels") + $"/{Jelli.level[currentLevel].name}/config.ini";
         var data = new FileIniDataParser().ReadFile(path);
+
+        var scene = new Scene(Jelli.level[currentLevel]);
         
         while(true)
         {
             string key = $"Object{i}";
             if(data.Sections.ContainsSection(key))
             {
-                AddObject(new ObjectInfo(classes[int.Parse(data[key]["class"])],
+                scene.AddObject(new ObjectInfo(classes[int.Parse(data[key]["class"])],
                                     int.Parse(data[key]["x"]),
                                      int.Parse(data[key]["y"]),
                                     0
                 ));
                 int flip = -1;
                 if (data[key].ContainsKey("flip")) flip = int.Parse(data[key]["flip"]);
-                objects[i-1].moveDirection = flip;
+                scene.Objects[i-1].moveDirection = flip;
             }
             else break;
             i++;
         }
 
-        camera.SetPos(0, (objects[0].x>>8) - 128, (objects[0].y>>8) - 96);
-        camera.Target(objects[0], currentWorld.level[currentLevel].width, currentWorld.level[currentLevel].height);
-        camera.Scroll();
-        processObjects();
-        MoveSprites();
-        PA.EasyBgScrollXY(MAINSCREEN, 1, camera.x>>8, camera.y>>8);
-        PA.EasyBgScrollXY(MAINSCREEN, 2, (camera.x>>8)>>1, (camera.y>>8)>>1);
-        PA.EasyBgScrollXY(MAINSCREEN, 3, (camera.x>>8)>>2, (camera.y>>8)>>2);
+        var player = scene.Objects[0];
+        var camera = scene.Camera;
+
+        camera.SetPos(0, (player.x>>8) - 128, (player.y>>8) - 96);
+        camera.Target(player, currentWorld.level[currentLevel].width, currentWorld.level[currentLevel].height);
+        
+        scene.Update();
 
         CA.FadeIn(0);
 
-        int midBgX = 0, backBgX = 0;
         int timer = 0;
         bool paused = false;
 
@@ -55,8 +53,6 @@ public static partial class Rooms {
         while (true)
         {
             //start_test();
-            midBgX -= Jelli.level[currentLevel].midscroll;
-            backBgX -= Jelli.level[currentLevel].backscroll;
             i++;
 
             if(i >= 60) { i = 0; timer++; }
@@ -85,17 +81,12 @@ public static partial class Rooms {
             if(Pad.Newpress.Start) { paused = true; }
   
             if(Pad.Newpress.B && Pad.Newpress.L && Pad.Newpress.R) { 
-                AddObject(new ObjectInfo(DUMMY, objects[0].x>>8, objects[0].y>>8, 0)); 
+                scene.AddObject(new ObjectInfo(DUMMY, player.x>>8, player.y>>8, 0)); 
             }
 
-            processObjects();
-            camera.Scroll();
-            MoveSprites();
-            PA.EasyBgScrollXY(MAINSCREEN, 1, camera.x>>8, camera.y>>8);
-            PA.EasyBgScrollXY(MAINSCREEN, 2, ((camera.x+midBgX)>>8)>>1, (camera.y>>8)>>1);
-            PA.EasyBgScrollXY(MAINSCREEN, 3, ((camera.x+backBgX)>>8)>>2, (camera.y>>8)>>2);
+            scene.Update();
 
-            displayDebug(0);
+            displayDebug(0, scene);
 
             //CA_BoxText(0, 100, 48, 32, "Welcome to Alpha 2 of Parallel Worlds! The aim of this demo is to gather as many points as you can by jumping on the Mario streakers. Be quick though, as your points decrease over time!");
             
@@ -104,7 +95,6 @@ public static partial class Rooms {
             
             PA.WaitForVBL();
             CA.Update16c();    
-        }
-        
+        }     
     }
 }

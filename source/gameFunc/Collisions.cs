@@ -1,8 +1,7 @@
-using static Objects;
 using static Levels;
 using static Defines;
 
-public static class Collisions {
+static class Collisions {
     public static bool objectCollision(ObjectInfo obj1, ObjectInfo obj2){
         //grab sprite demensions (center positions and length and width)
         int w1 = obj1.objClass.width;

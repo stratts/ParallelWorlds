@@ -1,6 +1,6 @@
 using System;
 
-public struct ObjectClass {
+struct ObjectClass {
     public string name;
     public string sprite;
     public int speed, weight, jumpPower, width, height;
@@ -9,14 +9,14 @@ public struct ObjectClass {
     public int animSpeed;
     public int type;
     //void (*ai)();
-    public Action<ObjectInfo> ai;
+    public Action<ObjectInfo, Scene> ai;
     public int palTaken, palNum;
     public bool created;
     public int createdSprite;
     //u16 *spritebuf, *palbuf;
 }
 
-public static class Classes {
+static class Classes {
     //--------------------------------------------------------------
     // Start defining characters
     //--------------------------------------------------------------

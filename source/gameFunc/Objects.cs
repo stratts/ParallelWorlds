@@ -5,9 +5,8 @@ using static Collisions;
 using static Functions;
 using static Defines;
 using static Levels;
-using static GlobalCamera;
 
-public class ObjectInfo {
+class ObjectInfo {
     public int x, y;
     public int cx, cy;
     public int vy, vx;
@@ -29,6 +28,19 @@ public class ObjectInfo {
     public int rotsetSlot;
     public bool loaded;
 
+    public static int[] sprites = new int[96]; 
+
+    public static int getSprite() {
+        int i;
+        for(i=32;i<128;i++){
+            if(sprites[i] == 0){
+                sprites[i] = 1;
+                return i;
+            }           
+        }
+        return -1;
+    }
+
     public ObjectInfo(ObjectClass objClass, int x, int y, int type) {
         // Initialise and set our struct + variables
         //------------------------------------------------------------------------
@@ -48,7 +60,7 @@ public class ObjectInfo {
         UpdateCentre();
 
         // Sprite number and rotation slot
-        sprite = Objects.getSprite();
+        sprite = getSprite();
         //rotsetSlot = getRotsetSlot();
 
         // Misc. stuff
@@ -64,14 +76,13 @@ public class ObjectInfo {
     // Load the object's sprite and palette
     //------------------------------------------------------------------------
         PA.CreateSprite(MAINSCREEN, sprite, 32, 32, objClass.sprite);
-        setSpriteXY(MAINSCREEN, sprite, x-(GlobalCamera.camera.x>>8), y - (GlobalCamera.camera.y>>8));
         alive = true;
     }
 
 
-    public void Update() {
+    public void Update(Scene scene) {
         UpdateCentre();
-        if(loaded) objClass.ai(this);
+        if(loaded) objClass.ai(this, scene);
     }
 
     public void UpdateCentre() {
@@ -90,7 +101,7 @@ public class ObjectInfo {
     }
 
     public void Delete() {
-        Objects.sprite[this.sprite] = 0;
+        sprites[this.sprite] = 0;
         alive = false;
         loaded = false;
         PA.DeleteSprite(MAINSCREEN, sprite);
@@ -147,48 +158,5 @@ public class ObjectInfo {
     public bool InStageZone() {
         if (y>>8 > currentWorld.level[currentLevel].height + 256) return false;
         return true;
-    }
-
-    public bool InCanvas() {
-        if ((x-camera.x)>>8 > 256 || (y-camera.y)>>8 > 192 || (x-camera.x)>>8 < -64 || (y-camera.y)>>8 < -64) return false;
-        return true;
-    }
-}
-
-static class Objects {
-    public static List<ObjectInfo> objects = new List<ObjectInfo>();
-
-    public static int[] sprite = new int[96];
-    
-    public static void AddObject(ObjectInfo obj) {
-        objects.Add(obj);
-    }
-
-    public static int getSprite() {
-        int i;
-        for(i=32;i<128;i++){
-            if(sprite[i] == 0){
-                sprite[i] = 1;
-                return i;
-            }           
-        }
-        return -1;
-    }
-
-    //----------------------------------------------------------------------------
-    public static void processObjects() {
-    //----------------------------------------------------------------------------
-        foreach (var obj in objects) {
-            obj.UpdateCentre();
-            obj.Update();
-        }
-    }
-
-    public static void MoveSprites() {
-        foreach (var obj in objects)
-        {
-            obj.UpdateCentre();
-            setSpriteXY(MAINSCREEN, obj.sprite, (obj.x-GlobalCamera.camera.x)>>8, (obj.y-GlobalCamera.camera.y)>>8);
-        }     
     }
 }

@@ -201,8 +201,3 @@ class Camera {
         }
     }
 }
-
-static class GlobalCamera {
-    public static Camera camera = new Camera();
-
-}

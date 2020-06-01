@@ -1,4 +1,3 @@
-using static Objects;
 using static Collisions;
 using static Defines;
 using static Functions;
@@ -6,7 +5,7 @@ using static Levels;
 
 static class AI {
 
-    public static void generalCharacter(ObjectInfo obj)
+    public static void generalCharacter(ObjectInfo obj, Scene scene)
     {   
         obj.oldposx = obj.x;
 
@@ -99,19 +98,17 @@ static class AI {
 
         if (!obj.InStageZone())
         {
-            GlobalCamera.camera.x = 0;
-            GlobalCamera.camera.y = 0;
+            scene.Camera.x = 0;
+            scene.Camera.y = 0;
             obj.y = obj.startY;
             obj.x = obj.startX;
         }
-
-        setSpriteXY(MAINSCREEN, obj.sprite, (obj.x - GlobalCamera.camera.x)>>8, (obj.y - GlobalCamera.camera.y)>>8);
-
     }
 
-    public static void generalCPU(ObjectInfo obj)
+    public static void generalCPU(ObjectInfo obj, Scene scene)
     {
         obj.oldposx = obj.x;
+        var objects = scene.Objects;
 
         if((objects[lowestXinObj(obj, objects, 3)].x - obj.x)>>8 < -(objects[lowestXinObj(obj, objects, 3)].objClass.width+2) || (objects[lowestXinObj(obj, objects, 3)].x - obj.x)>>8 > objects[lowestXinObj(obj, objects, 3)].objClass.width+2)
         {
@@ -195,16 +192,13 @@ static class AI {
             obj.y = obj.startY;
             obj.x = obj.startX;
         }
-
-
-        setSpriteXY(MAINSCREEN, obj.sprite, (obj.x - GlobalCamera.camera.x)>>8, (obj.y - GlobalCamera.camera.y)>>8);
-
     }
 
-    public static void aiGenericGround(ObjectInfo obj)
+    public static void aiGenericGround(ObjectInfo obj, Scene scene)
     {
+        var objects = scene.Objects;
         // Only activate the AI when the object is visible
-        if(obj.InCanvas()) obj.activated = true;
+        if(scene.InCanvas(obj)) obj.activated = true;
 
         // AI code
         if(obj.activated && obj.alive)
@@ -289,12 +283,12 @@ static class AI {
         obj.AddGravity();
     }
 
-    public static void aiGenericNone(ObjectInfo obj)
+    public static void aiGenericNone(ObjectInfo obj, Scene scene)
     {
 
     }
 
-    public static void aiDummy(ObjectInfo obj)
+    public static void aiDummy(ObjectInfo obj, Scene scene)
     {
         obj.oldposx = obj.x;
         obj.oldposy = obj.y;
@@ -317,8 +311,6 @@ static class AI {
 
         if (obj.y>>8 > currentWorld.level[currentLevel].height + 256)
         {
-            GlobalCamera.camera.x = 1<<8;
-            GlobalCamera.camera.y = 1<<8;
             obj.y = obj.startY;
             obj.x = obj.startX;
             obj.vy = 0;
