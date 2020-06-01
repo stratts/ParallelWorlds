@@ -23,11 +23,11 @@ public static partial class Rooms {
             string key = $"Object{i}";
             if(data.Sections.ContainsSection(key))
             {
-                createObject(classes[int.Parse(data[key]["class"])],
+                AddObject(new ObjectInfo(classes[int.Parse(data[key]["class"])],
                                     int.Parse(data[key]["x"]),
                                      int.Parse(data[key]["y"]),
                                     0
-                );
+                ));
                 int flip = -1;
                 if (data[key].ContainsKey("flip")) flip = int.Parse(data[key]["flip"]);
                 objects[i-1].moveDirection = flip;
@@ -85,7 +85,7 @@ public static partial class Rooms {
             if(Pad.Newpress.Start) { paused = true; }
   
             if(Pad.Newpress.B && Pad.Newpress.L && Pad.Newpress.R) { 
-                createObject(DUMMY, objects[0].x>>8, objects[0].y>>8, 0); 
+                AddObject(new ObjectInfo(DUMMY, objects[0].x>>8, objects[0].y>>8, 0)); 
             }
 
             processObjects();

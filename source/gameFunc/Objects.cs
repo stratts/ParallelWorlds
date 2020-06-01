@@ -29,8 +29,45 @@ public class ObjectInfo {
     public int rotsetSlot;
     public bool loaded;
 
-    //public int cx => x + (32 << 8);
-    //public int cy => (y + (64<<8)) - (objClass.height << 8);
+    public ObjectInfo(ObjectClass objClass, int x, int y, int type) {
+        // Initialise and set our struct + variables
+        //------------------------------------------------------------------------
+
+        // Starting positions, can be used to reset the object
+        startX = x << 8;        
+        startY = y << 8;
+        
+        // Object class: defines the attributes and AI, unless otherwise specified
+        this.objClass = objClass;
+
+        // Coordinates, X and Y
+        this.x = x << 8;
+        this.y = y << 8;
+
+        // Center positions, very useful for small sprites in a large canvas
+        UpdateCentre();
+
+        // Sprite number and rotation slot
+        sprite = Objects.getSprite();
+        //rotsetSlot = getRotsetSlot();
+
+        // Misc. stuff
+        cpuStopPos = new Random().Next(15, 196);
+        moveDirection = -1;
+        activated = false;
+        loaded = true;
+        if(type > 0) typeOverride = type;
+
+        // Anything else to initalise
+        vy = 0;
+
+    // Load the object's sprite and palette
+    //------------------------------------------------------------------------
+        PA.CreateSprite(MAINSCREEN, sprite, 32, 32, objClass.sprite);
+        setSpriteXY(MAINSCREEN, sprite, x-(GlobalCamera.camera.x>>8), y - (GlobalCamera.camera.y>>8));
+        alive = true;
+    }
+
 
     public void Update() {
         UpdateCentre();
@@ -123,45 +160,8 @@ static class Objects {
 
     public static int[] sprite = new int[96];
     
-    public static void createObject(ObjectClass objClass, int x, int y, int type) {
-        // Initialise and set our struct + variables
-        //------------------------------------------------------------------------
-        var obj = new ObjectInfo();
+    public static void AddObject(ObjectInfo obj) {
         objects.Add(obj);
-
-        // Starting positions, can be used to reset the object
-        obj.startX = x << 8;        
-        obj.startY = y << 8;
-        
-        // Object class: defines the attributes and AI, unless otherwise specified
-        obj.objClass = objClass;
-
-        // Coordinates, X and Y
-        obj.x = x << 8;
-        obj.y = y << 8;
-
-        // Center positions, very useful for small sprites in a large canvas
-        obj.UpdateCentre();
-
-        // Sprite number and rotation slot
-        obj.sprite = getSprite();
-        //obj.rotsetSlot = getRotsetSlot();
-
-        // Misc. stuff
-        obj.cpuStopPos = new Random().Next(15, 196);
-        obj.moveDirection = -1;
-        obj.activated = false;
-        obj.loaded = true;
-        if(type > 0) obj.typeOverride = type;
-
-        // Anything else to initalise
-        obj.vy = 0;
-
-    // Load the object's sprite and palette
-    //------------------------------------------------------------------------
-        PA.CreateSprite(MAINSCREEN, obj.sprite, 32, 32, objClass.sprite);
-        setSpriteXY(MAINSCREEN, obj.sprite, x-(GlobalCamera.camera.x>>8), y - (GlobalCamera.camera.y>>8));
-        obj.alive = true;
     }
 
     public static int getSprite() {
