@@ -12,5 +12,5 @@ static class Defines {
     public static int selectedCharacter;
     public static int selectedItem;
 
-    public static int playerPoints = 0;
+    public static float playerPoints = 0;
 }

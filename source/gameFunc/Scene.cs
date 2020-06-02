@@ -59,7 +59,7 @@ class Scene {
         foreach (var obj in Objects)
         {
             obj.UpdateCentre();
-            setSpriteXY(MAINSCREEN, obj.sprite, (obj.x-Camera.x)>>8, (obj.y-Camera.y)>>8);
+            setSpriteXY(MAINSCREEN, obj.sprite, obj.x - (Camera.x>>8), obj.y - (Camera.y>>8));
         }    
 
         midBgX -= Level.midscroll;
@@ -71,8 +71,8 @@ class Scene {
     }
 
     public bool InCanvas(ObjectInfo obj) {
-        int x = obj.x;
-        int y = obj.y;
+        int x = (int)obj.x;
+        int y = (int)obj.y;
         if ((x-Camera.x)>>8 > 256 || (y-Camera.y)>>8 > 192 || (x-Camera.x)>>8 < -64 || (y-Camera.y)>>8 < -64) return false;
         return true;
     }

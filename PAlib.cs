@@ -167,10 +167,10 @@ static class PA {
         Game.LoadQueue.Enqueue(s.Load);
     }
 
-    public static void SetSpriteXY(byte screen, int sprite, int x, int y) {
+    public static void SetSpriteXY(byte screen, int sprite, float x, float y) {
         // Hacky sprite specific positioning
         var s = GetScreen(screen).Sprites[sprite];
-        s.Pos = new Vector2(x + 2 + s.Size.X / 2 , y + s.Size.Y - 1); 
+        s.Pos = new Vector2((int)(x + 2 + s.Size.X / 2), (int)(y + s.Size.Y - 1)); 
     }
 
     public static void SetSpriteAnim(byte screen, int sprite, int animframe) {
@@ -187,7 +187,7 @@ static class PA {
 
     }
 
-    public static int Distance(int x1, int y1, int x2, int y2) {
+    public static int Distance(float x1, float y1, float x2, float y2) {
         var v1 = new Vector2(x1, y1);
         var v2 = new Vector2(x2, y2);
         return(int)(v2 - v1).LengthSquared();

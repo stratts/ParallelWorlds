@@ -3,7 +3,8 @@ using System;
 struct ObjectClass {
     public string name;
     public string sprite;
-    public int speed, weight, jumpPower, width, height;
+    public int width, height;
+    public float speed, weight, jumpPower;
     public (int start, int end) idle;
     public (int start, int end) walk, run, hurt, jump, fall;
     public int animSpeed;
@@ -51,8 +52,8 @@ static class Classes {
     public static void setClasses() {
         FROG.name = "Frog";
         FROG.sprite = CA.rootf("/characters/Frog/frog.png");
-        FROG.speed = 512;
-        FROG.weight = 80;
+        FROG.speed = 2;
+        FROG.weight = 80f / 256;
         FROG.ai = AI.generalCharacter;
         FROG.width = 24;
         FROG.height = 28;
@@ -70,8 +71,8 @@ static class Classes {
 
         DUMMY.name = "Dummy";
         DUMMY.sprite = CA.rootf("/characters/Frog/frog.png");
-        DUMMY.speed = 256;
-        DUMMY.weight = 80;
+        DUMMY.speed = 1;
+        DUMMY.weight = 80f / 256;
         DUMMY.ai = AI.generalCPU;
         DUMMY.width = 24;
         DUMMY.height = 28;

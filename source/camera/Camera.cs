@@ -90,10 +90,10 @@ class Camera {
         const int bottom_border = screenHeight - v_border;
 
         // Just to make the code easier to read
-        int x = (target.cx) >> 8;
-        int y = (target.cy) >> 8;
-        int maxspeedx = (target.objClass.speed);
-        int maxspeedy = (target.vy);  
+        int x = (int)target.cx;
+        int y = (int)target.cy;
+        int maxspeedx = (int)target.objClass.speed << 8;
+        int maxspeedy = (int)(target.vy * 256);  
         int camerax = (this.x) >> 8;
         int cameray = (this.y) >> 8;
         int vy_speed = 5; // Fixed point division... the smaller the number, the faster the speed

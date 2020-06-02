@@ -21,7 +21,7 @@ static class Functions {
         }
     }
 
-    public static void setSpriteXY(byte screen, int sprite, int x, int y)
+    public static void setSpriteXY(byte screen, int sprite, float x, float y)
     {
         if (x >= 256 || y >= 192 || x <= -64 || y <= -64) PA.SetSpriteXY(screen, sprite, 256, 192);
         else PA.SetSpriteXY(screen, sprite, x, y);
@@ -40,10 +40,10 @@ static class Functions {
             {
                 if (i >= ar.Count) break;
                 ObjectInfo obj = ar[i];
-                if(PA.Distance(current.x>>8, current.y>>8, obj.x>>8, obj.y>>8) < oldDistance && current != obj)
+                if(PA.Distance(current.x, current.y, obj.x, obj.y) < oldDistance && current != obj)
                 {
                     place = i;
-                    oldDistance = PA.Distance(current.x>>8, current.y>>8, obj.x>>8, obj.y>>8);
+                    oldDistance = PA.Distance(current.x, current.y, obj.x, obj.y);
                 }
 
             }
@@ -57,8 +57,8 @@ static class Functions {
         var player = scene.Objects[0];
 
         CA.SimpleText(screen, 4, 6, "- Player/camera info -");
-        CA.SimpleText(screen, 4, 14, "Player position X: {0}", scene.Objects[0].x>>8);
-        CA.SimpleText(screen, 4, 22, "Player position Y: {0}", scene.Objects[0].y>>8);
+        CA.SimpleText(screen, 4, 14, "Player position X: {0}", (int)scene.Objects[0].x);
+        CA.SimpleText(screen, 4, 22, "Player position Y: {0}", (int)scene.Objects[0].y);
         CA.SimpleText(screen, 4, 30, "Camera position X: {0}", scene.Camera.x>>8);
         CA.SimpleText(screen, 4, 38, "Camera position Y: {0}", scene.Camera.y>>8);
 

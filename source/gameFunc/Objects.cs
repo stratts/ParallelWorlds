@@ -7,16 +7,16 @@ using static Defines;
 using static Levels;
 
 class ObjectInfo {
-    public int x, y;
-    public int cx, cy;
-    public int vy, vx;
+    public float x, y;
+    public float cx, cy;
+    public float vy, vx;
     public ObjectClass objClass;
     public int sprite;
     public int currentFrame, frameCount;
     public bool alive;
-    public int oldposx, newposx, relspeedx;
-    public int oldposy, newposy, relspeedy;
-    public int startX, startY;
+    public float oldposx, newposx, relspeedx;
+    public float oldposy, newposy, relspeedy;
+    public float startX, startY;
     public int moveDirection;
     public bool jumping;
     public int action;
@@ -41,20 +41,20 @@ class ObjectInfo {
         return -1;
     }
 
-    public ObjectInfo(ObjectClass objClass, int x, int y, int type) {
+    public ObjectInfo(ObjectClass objClass, float x, float y, int type) {
         // Initialise and set our struct + variables
         //------------------------------------------------------------------------
 
         // Starting positions, can be used to reset the object
-        startX = x << 8;        
-        startY = y << 8;
+        startX = x;        
+        startY = y;
         
         // Object class: defines the attributes and AI, unless otherwise specified
         this.objClass = objClass;
 
         // Coordinates, X and Y
-        this.x = x << 8;
-        this.y = y << 8;
+        this.x = x;
+        this.y = y;
 
         // Center positions, very useful for small sprites in a large canvas
         UpdateCentre();
@@ -86,8 +86,8 @@ class ObjectInfo {
     }
 
     public void UpdateCentre() {
-        cx = x + (32 << 8);
-        cy = (y + (64<<8)) - (objClass.height << 8);
+        cx = x + 32;
+        cy = y + 64 - objClass.height;
     }
 
     public void Kill() {
@@ -126,39 +126,39 @@ class ObjectInfo {
     public void CheckCollision() {
         if(rightCollision(this)) 
         {
-            if(relspeedx <= -256) x += relspeedx;
-            else x -= 256;
+            if(relspeedx <= -1) x += relspeedx;
+            else x -= 1;
         }
 
         if(leftCollision(this))
         {
-            if(relspeedx >= 256) x += relspeedx;
-            else x += 256;
+            if(relspeedx >= 1) x += relspeedx;
+            else x += 1;
         }
 
         if(upCollision(this)) 
         {
-            if(relspeedy <= -256) y -= relspeedy;
-            else y += 256;
+            if(relspeedy <= -1) y -= relspeedy;
+            else y += 1;
             vy = 0;
         }
 
         if(downCollision(this))
         {
-            if(relspeedy >= 256) y -= relspeedy;
-            else y -= 512;
+            if(relspeedy >= 1) y -= relspeedy;
+            else y -= 2;
             action = 0;
         }
     }
 
     public void AddGravity() {
         y += vy;
-        if(!touchingGround(this) && vy < currentLevel.gravity) vy += objClass.weight;
+        if(!touchingGround(this) && vy < (float)currentLevel.gravity / 256) vy += objClass.weight;
         else if(touchingGround(this)) vy = 0;
     }
 
     public bool InStageZone() {
-        if (y>>8 > currentLevel.height + 256) return false;
+        if (y > currentLevel.height + 256) return false;
         return true;
     }
 }

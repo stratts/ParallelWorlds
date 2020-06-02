@@ -54,11 +54,11 @@ static class AI {
         if(Pad.Newpress.Up && touchingGround(obj)) 
         {
             obj.action = 1;
-            obj.vy = -1800;
+            obj.vy = -1800f / 256;
             obj.jumping = true;
         }
 
-        if(obj.vy > 512) obj.action = 2;
+        if(obj.vy > 2) obj.action = 2;
         else if(obj.jumping && obj.vy > 0) obj.action = 2;
 
         if(obj.action == 1) obj.Animate(Animation.Jump);
@@ -84,20 +84,20 @@ static class AI {
         obj.oldposx = obj.x;
         var objects = scene.Objects;
 
-        if((objects[lowestXinObj(obj, objects, 3)].x - obj.x)>>8 < -(objects[lowestXinObj(obj, objects, 3)].objClass.width+2) || (objects[lowestXinObj(obj, objects, 3)].x - obj.x)>>8 > objects[lowestXinObj(obj, objects, 3)].objClass.width+2)
+        if((objects[lowestXinObj(obj, objects, 3)].x - obj.x) < -(objects[lowestXinObj(obj, objects, 3)].objClass.width+2) || (objects[lowestXinObj(obj, objects, 3)].x - obj.x) > objects[lowestXinObj(obj, objects, 3)].objClass.width+2)
         {
             if(objects[lowestXinObj(obj, objects, 3)].x > obj.x)
             {
                 PA.SetSpriteHflip(MAINSCREEN, obj.sprite, 0);
                 if(!obj.jumping) obj.action = 1;
-                obj.x += obj.objClass.speed-PA.RandMax(128);
+                obj.x += obj.objClass.speed-(((float)PA.RandMax(128)) / 256);
             }
 
             else if(objects[lowestXinObj(obj, objects, 3)].x < obj.x)
             {   
                 PA.SetSpriteHflip(MAINSCREEN, obj.sprite, 1);
                 if(!obj.jumping) obj.action = 1;
-                obj.x -= obj.objClass.speed-PA.RandMax(128);
+                obj.x -= obj.objClass.speed-(((float)PA.RandMax(128)) / 256);
             }
 
             /*if(((objects[lowestXinObj(objects, 3)].x - obj.x)>>8 < -80 || (objects[lowestXinObj(objects, 3)].x - obj.x)>>8 > 80) && !obj.jumping)
@@ -111,7 +111,7 @@ static class AI {
 
             if((leftCollision(obj) || rightCollision(obj)) && (!rightCollisionLarge(obj) && !leftCollisionLarge(obj)) && !obj.jumping) 
             {
-                obj.vy = -1400;
+                obj.vy = -1400f / 256;
                 obj.action = 2;
                 obj.jumping = true;
             }
@@ -120,7 +120,7 @@ static class AI {
         else obj.action = 0;
 
         obj.AddGravity();
-        if(!touchingGround(obj) && obj.vy > 512) obj.action = 3;
+        if(!touchingGround(obj) && obj.vy > 2f) obj.action = 3;
 
         if(touchingGround(obj)) 
         {
@@ -208,12 +208,12 @@ static class AI {
             if(objectCollisionTop(objects[0], obj) && objects[0].vy>0 && obj.alive) 
             {
                 obj.alive = false;
-                if(objects[0].relspeedx >= 0) playerPoints += (objects[0].vy<<2)*(objects[0].relspeedx+1);
+                if(objects[0].relspeedx >= 0) playerPoints += (objects[0].vy/4)*(objects[0].relspeedx+1);
                 else playerPoints += objects[0].vy*-(objects[0].relspeedx+1);
                 if(!obj.jumping)
                 {
-                    obj.vy = -500;
-                    objects[0].vy = -1200;
+                    obj.vy = -500f / 256;
+                    objects[0].vy = -1200f / 256;
                     obj.jumping = true;
                 }
             }
@@ -249,7 +249,7 @@ static class AI {
         obj.Animate(Animation.Idle);
 
         obj.y += obj.vy;
-        if(!touchingGround(obj)) obj.vy += 80;
+        if(!touchingGround(obj)) obj.vy += 80f / 256;
 
         if(touchingGround(obj)) obj.vy = 0;
 
@@ -259,7 +259,7 @@ static class AI {
         obj.relspeedy = obj.vy;
         obj.CheckCollision();
 
-        if (obj.y>>8 > currentLevel.height + 256)
+        if (obj.y > currentLevel.height + 256)
         {
             obj.y = obj.startY;
             obj.x = obj.startX;
