@@ -14,6 +14,27 @@ struct ObjectClass {
     public bool created;
     public int createdSprite;
     //u16 *spritebuf, *palbuf;
+
+    public (int start, int end) GetFrames(Animation animation) {
+        switch (animation) {
+            case Animation.Idle: return idle;
+            case Animation.Walk: return walk;
+            case Animation.Run: return run;
+            case Animation.Hurt: return hurt;
+            case Animation.Jump: return jump;
+            case Animation.Fall: return fall;
+            default: return idle;
+        }
+    }
+}
+
+enum Animation {
+    Idle,
+    Walk,
+    Run,
+    Jump,
+    Hurt,
+    Fall
 }
 
 static class Classes {

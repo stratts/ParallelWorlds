@@ -21,13 +21,7 @@ static class AI {
                 PA.SetSpriteHflip(MAINSCREEN, obj.sprite, 1);
 
                     obj.x -= obj.objClass.speed;
-                    if(obj.action == 0)
-                        obj.Animate( 
-                                    obj.objClass.walk.start, 
-                                    obj.objClass.walk.end, 
-                                    obj.objClass.animSpeed);
-                
-
+                    if(obj.action == 0)  obj.Animate(Animation.Walk);
             }
 
             // Moving right
@@ -36,25 +30,15 @@ static class AI {
                 PA.SetSpriteHflip(MAINSCREEN, obj.sprite, 0);
 
                     obj.x += obj.objClass.speed;
-                    if(obj.action == 0)
-                        obj.Animate( 
-                                        obj.objClass.walk.start, 
-                                        obj.objClass.walk.end, 
-                                        obj.objClass.animSpeed);
-
+                    if(obj.action == 0) obj.Animate(Animation.Walk);
             }
-
-
 
             // End movement code
         }
 
         else if(obj.action == 0)
         {
-                obj.Animate( 
-                                    obj.objClass.idle.start, 
-                                    obj.objClass.idle.end, 
-                                    obj.objClass.animSpeed);
+                obj.Animate(Animation.Idle);
         }
 
 
@@ -77,18 +61,8 @@ static class AI {
         if(obj.vy > 512) obj.action = 2;
         else if(obj.jumping && obj.vy > 0) obj.action = 2;
 
-        if(obj.action == 1) obj.Animate( 
-                                                    obj.objClass.jump.start, 
-                                                    obj.objClass.jump.end, 
-                                                    obj.objClass.animSpeed);
-                    
-
-        else if(obj.action == 2)obj.Animate(
-                                                        obj.objClass.fall.start, 
-                                                        obj.objClass.fall.end, 
-                                                        obj.objClass.animSpeed);
-                    
-
+        if(obj.action == 1) obj.Animate(Animation.Jump);
+        else if(obj.action == 2)obj.Animate(Animation.Fall);
 
         obj.newposx = obj.x;
         obj.relspeedx = obj.oldposx - obj.newposx;
@@ -148,8 +122,6 @@ static class AI {
         obj.AddGravity();
         if(!touchingGround(obj) && obj.vy > 512) obj.action = 3;
 
-        
-
         if(touchingGround(obj)) 
         {
             obj.vy = 0;
@@ -159,26 +131,13 @@ static class AI {
         switch(obj.action)
         {
             case 0:
-                obj.Animate( 
-                        obj.objClass.idle.start, 
-                        obj.objClass.idle.end, 
-                        obj.objClass.animSpeed); break;
+                obj.Animate(Animation.Idle); break;
             case 1:
-                obj.Animate( 
-                        obj.objClass.walk.start, 
-                        obj.objClass.walk.end, 
-                        obj.objClass.animSpeed); break;
-
+                obj.Animate(Animation.Walk); break;
             case 2:
-                obj.Animate( 
-                        obj.objClass.jump.start, 
-                        obj.objClass.jump.end, 
-                        obj.objClass.animSpeed); break;
+                obj.Animate(Animation.Jump); break;
             case 3:
-                obj.Animate( 
-                        obj.objClass.fall.start, 
-                        obj.objClass.fall.end, 
-                        obj.objClass.animSpeed); break;
+                obj.Animate(Animation.Fall); break;
         }
 
         obj.newposx = obj.x;
@@ -240,16 +199,10 @@ static class AI {
             switch(obj.action)
             {
                 case 1:
-                    obj.Animate(
-                        obj.objClass.walk.start,
-                        obj.objClass.walk.end,
-                        obj.objClass.animSpeed); break;
+                    obj.Animate(Animation.Walk); break;
 
                 default:
-                    obj.Animate(
-                        obj.objClass.idle.start,
-                        obj.objClass.idle.end,
-                        obj.objClass.animSpeed); break;
+                    obj.Animate(Animation.Idle); break;
             }
 
             if(objectCollisionTop(objects[0], obj) && objects[0].vy>0 && obj.alive) 
@@ -293,10 +246,7 @@ static class AI {
         obj.oldposx = obj.x;
         obj.oldposy = obj.y;
 
-        obj.Animate( 
-                                    obj.objClass.idle.start, 
-                                    obj.objClass.idle.end, 
-                                    obj.objClass.animSpeed);
+        obj.Animate(Animation.Idle);
 
         obj.y += obj.vy;
         if(!touchingGround(obj)) obj.vy += 80;

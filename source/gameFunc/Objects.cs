@@ -107,7 +107,9 @@ class ObjectInfo {
         PA.DeleteSprite(MAINSCREEN, sprite);
     }
 
-    public void Animate(int startFrame, int endFrame, int frameSpeed) {
+    public void Animate(Animation animation) {
+        var (startFrame, endFrame) = objClass.GetFrames(animation);
+        int frameSpeed = objClass.animSpeed;
         frameCount++;
         if (frameCount >= frameSpeed)
         {

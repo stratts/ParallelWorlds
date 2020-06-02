@@ -54,7 +54,8 @@ public static partial class Rooms {
                 PA.WaitForVBL();
                 CA.Update16c();
             }
-            if(Pad.Newpress.Start) { paused = true; }
+            if (Pad.Newpress.Start) { paused = true; }
+            if (Pad.Newpress.Select) break;
   
             if(Pad.Newpress.B && Pad.Newpress.L && Pad.Newpress.R) { 
                 scene.AddObject(new ObjectInfo(DUMMY, player.x>>8, player.y>>8, 0)); 
@@ -72,5 +73,8 @@ public static partial class Rooms {
             PA.WaitForVBL();
             CA.Update16c();    
         }     
+
+        CA.FadeOut(0); 
+        PA.Reset();
     }
 }

@@ -18,6 +18,7 @@ class Scene {
     }
 
     public void Load() {
+        PA.Reset();
         Level.Load();
 
         int i = 1;

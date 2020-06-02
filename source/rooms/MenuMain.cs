@@ -36,14 +36,14 @@ public static partial class Rooms {
             if(Pad.Newpress.Up && selectedLevel > 0) selectedLevel--;
             if(Pad.Newpress.Down && selectedLevel < LEVELNUM) selectedLevel++;
 
-            if(Pad.Newpress.A) break;
+            if(Pad.Newpress.A) {
+                CA.FadeOut(0); 
+                mainGame();
+                CA.FadeIn(0); 
+            }
 
             PA.WaitForVBL();
             CA.Update16c();
-        }
-
-        CA.FadeOut(0); 
-
-        mainGame();
+        }      
     }
 }

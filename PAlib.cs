@@ -61,6 +61,12 @@ static class PA {
         public Sprite[] Sprites = new Sprite[128];
         public List<Text> Text = new List<Text>();
         public float Brightness { get; set; } = 1;
+
+        public void Reset() {
+            for (int i = 0; i < Backgrounds.Length; i++) Backgrounds[i] = null;
+            for (int i = 0; i < Sprites.Length; i++) Sprites[i] = null;
+            Text.Clear();
+        }
     }
 
     public static ParallelWorlds.ParallelWorlds Game { get; set; }
@@ -128,6 +134,11 @@ static class PA {
         if (_firstVBLWait) _firstVBLWait = false;
         else Updated.Set();
         TriggerUpdate.WaitOne(); 
+    }
+
+    public static void Reset() {
+        TopScreen.Reset();
+        BottomScreen.Reset();
     }
 
     public static void ClearText() {
