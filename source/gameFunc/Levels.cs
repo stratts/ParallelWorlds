@@ -14,73 +14,42 @@ struct LevelInfo {
     public int width, height, friction, gravity;
     public int midscroll, backscroll;
 
+    private bool TryLoadBackground(byte screen, byte layer, string name) {
+        string rootPath = CA.rootf("/levels"); 
+        string bgPath = String.Format("{0}/{1}/{2}.png", rootPath, this.name, name);
+        if (!File.Exists(bgPath)) return false;
+        PA.EasyLoadBackground(screen, layer, bgPath);
+        PA.HideBg(screen, layer);
+        return true;
+    }
+
     public void Load()
     {
         Levels.currentLevel = this;
 
-        string levelPath;
-        string rootPath;
-
         PA.Init16cBg(0, 0);
         PA.Init16cBg(1, 0);
-
-        bool midLoaded, backLoaded;
-
-        rootPath = CA.rootf("/levels"); 
-        levelPath = String.Format("{0}/{1}/{2}.png", rootPath, name, "StageBG");
 
         CA.Information(1, "Loading...");
         CA.FadeIn(0);
 
-        if(!File.Exists(levelPath))
-        {
-            displayError(String.Format("Could not load stage for {0}.", name));
-        }
-        else 
-        {
-            PA.EasyLoadBackground(MAINSCREEN, 1, levelPath);
-            PA.HideBg(MAINSCREEN, 1);
+        if (!TryLoadBackground(MAINSCREEN, 1, "StageBG")) {
+             displayError(String.Format("Could not load stage for {0}.", name));
         }
 
-        levelPath = String.Format("{0}/{1}/{2}.png", rootPath, name, "MidBG");
-        if(File.Exists(levelPath)) 
-        {
-            PA.EasyLoadBackground(MAINSCREEN, 2, levelPath);
-            PA.HideBg(MAINSCREEN, 2);
-            midLoaded = true;
-        }
-        else midLoaded = false;
+        bool midLoaded = TryLoadBackground(MAINSCREEN, 2, "MidBG");
+        bool backLoaded = TryLoadBackground(MAINSCREEN, 3, "BackBG");
 
-        levelPath = String.Format("{0}/{1}/{2}.png", rootPath, name, "BackBG");
-        if(File.Exists(levelPath)) 
-        {
-            PA.EasyLoadBackground(MAINSCREEN, 3, levelPath);
-            PA.HideBg(MAINSCREEN, 3);
-            backLoaded = true;
-        }
-        else backLoaded = false;
-
-        levelPath = String.Format("{0}/{1}/{2}.png", rootPath, name, "CollisionMap");
-        if(File.Exists(levelPath)) 
-        {
-            PA.EasyLoadBackground(MISCSCREEN, 3, levelPath);
-            PA.HideBg(MAINSCREEN, 3);
-        }
-        else
-        {
+        if (!TryLoadBackground(MISCSCREEN, 3, "CollisionMap")) {
             displayError(String.Format("Could not load collision map for {0}.", name));
         }
 
         CA.FadeOut(0);
         CA.Update16c();
 
-        //PA_DeleteBg(1, 0);
-        //PA_DeleteBg(0, 0);
-
         PA.ShowBg(MAINSCREEN, 1);
-        if(midLoaded) PA.ShowBg(MAINSCREEN, 2);
-        if(backLoaded) PA.ShowBg(MAINSCREEN, 3);
-
+        if (midLoaded) PA.ShowBg(MAINSCREEN, 2);
+        if (backLoaded) PA.ShowBg(MAINSCREEN, 3);
 
         if(music != null)
         {
