@@ -1,5 +1,4 @@
 using System.Collections;
-using IniParser;
 
 using static Defines;
 using static Levels;
@@ -8,32 +7,9 @@ using static Functions;
 
 public static partial class Rooms {
     public static void mainGame() {
-        //AS_MP3StreamPlay(rootf("music/jumper.mp3"));
-        int i = 1;
-
-        var path = CA.rootf("/levels") + $"/{Jelli.level[selectedLevel].name}/config.ini";
-        var data = new FileIniDataParser().ReadFile(path);
 
         var scene = new Scene(Jelli.level[selectedLevel]);
-        scene.Level.Load();
-
-        while(true)
-        {
-            string key = $"Object{i}";
-            if(data.Sections.ContainsSection(key))
-            {
-                scene.AddObject(new ObjectInfo(classes[int.Parse(data[key]["class"])],
-                                    int.Parse(data[key]["x"]),
-                                     int.Parse(data[key]["y"]),
-                                    0
-                ));
-                int flip = -1;
-                if (data[key].ContainsKey("flip")) flip = int.Parse(data[key]["flip"]);
-                scene.Objects[i-1].moveDirection = flip;
-            }
-            else break;
-            i++;
-        }
+        scene.Load();
 
         var player = scene.Objects[0];
         var camera = scene.Camera;
@@ -52,6 +28,7 @@ public static partial class Rooms {
         while (true)
         {
             //start_test();
+            int i = 1;
             i++;
 
             if(i >= 60) { i = 0; timer++; }

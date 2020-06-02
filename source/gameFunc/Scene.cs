@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 using static Functions;
 using static Defines;
+using static Classes;
+using IniParser;
 
 class Scene {
     private int midBgX = 0, backBgX = 0;
@@ -13,6 +15,32 @@ class Scene {
 
     public Scene(LevelInfo level) {
         Level = level;
+    }
+
+    public void Load() {
+        Level.Load();
+
+        int i = 1;
+        var path = CA.rootf("/levels") + $"/{Level.name}/config.ini";
+        var data = new FileIniDataParser().ReadFile(path);
+
+        while(true)
+        {
+            string key = $"Object{i}";
+            if(data.Sections.ContainsSection(key))
+            {
+                AddObject(new ObjectInfo(classes[int.Parse(data[key]["class"])],
+                                    int.Parse(data[key]["x"]),
+                                     int.Parse(data[key]["y"]),
+                                    0
+                ));
+                int flip = -1;
+                if (data[key].ContainsKey("flip")) flip = int.Parse(data[key]["flip"]);
+                Objects[i-1].moveDirection = flip;
+            }
+            else break;
+            i++;
+        }
     }
 
     public void AddObject(ObjectInfo obj) {
