@@ -13,6 +13,93 @@ struct LevelInfo {
     public string collision;
     public int width, height, friction, gravity;
     public int midscroll, backscroll;
+
+    public void Load()
+    {
+        Levels.currentLevel = this;
+
+        string levelPath;
+        string rootPath;
+
+        PA.Init16cBg(0, 0);
+        PA.Init16cBg(1, 0);
+
+        bool midLoaded, backLoaded;
+
+        rootPath = CA.rootf("/levels"); 
+        levelPath = String.Format("{0}/{1}/{2}.png", rootPath, name, "StageBG");
+
+        CA.Information(1, "Loading...");
+        CA.FadeIn(0);
+
+        if(!File.Exists(levelPath))
+        {
+            displayError(String.Format("Could not load stage for {0}.", name));
+        }
+        else 
+        {
+            PA.EasyLoadBackground(MAINSCREEN, 1, levelPath);
+            PA.HideBg(MAINSCREEN, 1);
+        }
+
+        levelPath = String.Format("{0}/{1}/{2}.png", rootPath, name, "MidBG");
+        if(File.Exists(levelPath)) 
+        {
+            PA.EasyLoadBackground(MAINSCREEN, 2, levelPath);
+            PA.HideBg(MAINSCREEN, 2);
+            midLoaded = true;
+        }
+        else midLoaded = false;
+
+        levelPath = String.Format("{0}/{1}/{2}.png", rootPath, name, "BackBG");
+        if(File.Exists(levelPath)) 
+        {
+            PA.EasyLoadBackground(MAINSCREEN, 3, levelPath);
+            PA.HideBg(MAINSCREEN, 3);
+            backLoaded = true;
+        }
+        else backLoaded = false;
+
+        levelPath = String.Format("{0}/{1}/{2}.png", rootPath, name, "CollisionMap");
+        if(File.Exists(levelPath)) 
+        {
+            PA.EasyLoadBackground(MISCSCREEN, 3, levelPath);
+            PA.HideBg(MAINSCREEN, 3);
+        }
+        else
+        {
+            displayError(String.Format("Could not load collision map for {0}.", name));
+        }
+
+        CA.FadeOut(0);
+        CA.Update16c();
+
+        //PA_DeleteBg(1, 0);
+        //PA_DeleteBg(0, 0);
+
+        PA.ShowBg(MAINSCREEN, 1);
+        if(midLoaded) PA.ShowBg(MAINSCREEN, 2);
+        if(backLoaded) PA.ShowBg(MAINSCREEN, 3);
+
+
+        if(music != null)
+        {
+            string musicPath = CA.rootf("/music/") + music;
+            PA.PlayOgg(musicPath);
+        }   
+    }
+
+    public bool getCollisionPix(byte screen, byte bglayer, int x, int y) {
+        int xPos = x;
+        int yPos = y;
+
+        if(xPos > width - 1) xPos = width - 1;
+        if(xPos < 0) xPos = 0;
+        if(yPos > height - 1) yPos = height - 1;
+        if (yPos < 0) yPos = 0;
+
+        return PA.EasyBgGetPixel(screen, bglayer, xPos, yPos);
+    }
 }
 
 class WorldInfo {
@@ -22,7 +109,7 @@ class WorldInfo {
 
 static class Levels {
     public static WorldInfo currentWorld;
-    public static int currentLevel;
+    public static LevelInfo currentLevel;
 
     public static WorldInfo Jelli = new WorldInfo();
 
@@ -48,91 +135,7 @@ static class Levels {
         }
     }
 
-    public static void loadLevel(WorldInfo world, int levelNum)
-    {
-        currentWorld = world;
-        currentLevel = levelNum;
-
-        string levelPath;
-        string rootPath;
-
-        PA.Init16cBg(0, 0);
-        PA.Init16cBg(1, 0);
-
-        bool midLoaded, backLoaded;
-
-        rootPath = CA.rootf("/levels"); 
-        levelPath = String.Format("{0}/{1}/{2}.png", rootPath, world.level[levelNum].name, "StageBG");
-
-        CA.Information(1, "Loading...");
-        CA.FadeIn(0);
-
-        if(!File.Exists(levelPath))
-        {
-            displayError(String.Format("Could not load stage for {0}.", world.level[levelNum].name));
-        }
-        else 
-        {
-            PA.EasyLoadBackground(MAINSCREEN, 1, levelPath);
-            PA.HideBg(MAINSCREEN, 1);
-        }
-
-        levelPath = String.Format("{0}/{1}/{2}.png", rootPath, world.level[levelNum].name, "MidBG");
-        if(File.Exists(levelPath)) 
-        {
-            PA.EasyLoadBackground(MAINSCREEN, 2, levelPath);
-            PA.HideBg(MAINSCREEN, 2);
-            midLoaded = true;
-        }
-        else midLoaded = false;
-
-        levelPath = String.Format("{0}/{1}/{2}.png", rootPath, world.level[levelNum].name, "BackBG");
-        if(File.Exists(levelPath)) 
-        {
-            PA.EasyLoadBackground(MAINSCREEN, 3, levelPath);
-            PA.HideBg(MAINSCREEN, 3);
-            backLoaded = true;
-        }
-        else backLoaded = false;
-
-        levelPath = String.Format("{0}/{1}/{2}.png", rootPath, world.level[levelNum].name, "CollisionMap");
-        if(File.Exists(levelPath)) 
-        {
-            PA.EasyLoadBackground(MISCSCREEN, 3, levelPath);
-            PA.HideBg(MAINSCREEN, 3);
-        }
-        else
-        {
-            displayError(String.Format("Could not load collision map for {0}.", world.level[levelNum].name));
-        }
-
-        CA.FadeOut(0);
-        CA.Update16c();
-
-        //PA_DeleteBg(1, 0);
-        //PA_DeleteBg(0, 0);
-
-        PA.ShowBg(MAINSCREEN, 1);
-        if(midLoaded) PA.ShowBg(MAINSCREEN, 2);
-        if(backLoaded) PA.ShowBg(MAINSCREEN, 3);
-
-
-        if(world.level[levelNum].music != null)
-        {
-            string music = CA.rootf("/music/") + world.level[levelNum].music;
-            PA.PlayOgg(music);
-        }   
-    }
-
     public static bool getCollisionPix(byte screen, byte bglayer, int x, int y) {
-        int xPos = x;
-        int yPos = y;
-
-        if(xPos > currentWorld.level[currentLevel].width - 1) xPos = currentWorld.level[currentLevel].width - 1;
-        if(xPos < 0) xPos = 0;
-        if(yPos > currentWorld.level[currentLevel].height - 1) yPos = currentWorld.level[currentLevel].height - 1;
-        if (yPos < 0) yPos = 0;
-
-        return PA.EasyBgGetPixel(screen, bglayer, xPos, yPos);
+        return currentLevel.getCollisionPix(screen, bglayer, x, y);
     }
 }

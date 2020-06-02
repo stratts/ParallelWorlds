@@ -8,16 +8,15 @@ using static Functions;
 
 public static partial class Rooms {
     public static void mainGame() {
-        loadLevel(Jelli, selectedLevel);
-        
         //AS_MP3StreamPlay(rootf("music/jumper.mp3"));
         int i = 1;
 
-        var path = CA.rootf("/levels") + $"/{Jelli.level[currentLevel].name}/config.ini";
+        var path = CA.rootf("/levels") + $"/{Jelli.level[selectedLevel].name}/config.ini";
         var data = new FileIniDataParser().ReadFile(path);
 
-        var scene = new Scene(Jelli.level[currentLevel]);
-        
+        var scene = new Scene(Jelli.level[selectedLevel]);
+        scene.Level.Load();
+
         while(true)
         {
             string key = $"Object{i}";
@@ -40,7 +39,7 @@ public static partial class Rooms {
         var camera = scene.Camera;
 
         camera.SetPos(0, (player.x>>8) - 128, (player.y>>8) - 96);
-        camera.Target(player, currentWorld.level[currentLevel].width, currentWorld.level[currentLevel].height);
+        camera.Target(player, scene.Level.width, scene.Level.height);
         
         scene.Update();
 

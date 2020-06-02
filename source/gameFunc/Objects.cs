@@ -151,12 +151,12 @@ class ObjectInfo {
 
     public void AddGravity() {
         y += vy;
-        if(!touchingGround(this) && vy < currentWorld.level[currentLevel].gravity) vy += objClass.weight;
+        if(!touchingGround(this) && vy < currentLevel.gravity) vy += objClass.weight;
         else if(touchingGround(this)) vy = 0;
     }
 
     public bool InStageZone() {
-        if (y>>8 > currentWorld.level[currentLevel].height + 256) return false;
+        if (y>>8 > currentLevel.height + 256) return false;
         return true;
     }
 }

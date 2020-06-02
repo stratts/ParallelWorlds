@@ -309,7 +309,7 @@ static class AI {
         obj.relspeedy = obj.vy;
         obj.CheckCollision();
 
-        if (obj.y>>8 > currentWorld.level[currentLevel].height + 256)
+        if (obj.y>>8 > currentLevel.height + 256)
         {
             obj.y = obj.startY;
             obj.x = obj.startX;
