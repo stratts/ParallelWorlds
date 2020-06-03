@@ -79,7 +79,7 @@ class ObjectInfo
 
         // Load the object's sprite and palette
         //------------------------------------------------------------------------
-        PA.CreateSprite(MAINSCREEN, sprite, 32, 32, objClass.sprite);
+        PA.CreateSprite(MAINSCREEN, sprite, 32, 32, objClass.spriteOffset, objClass.sprite);
         alive = true;
     }
 
@@ -92,8 +92,8 @@ class ObjectInfo
 
     public void UpdateCentre()
     {
-        cx = x + 32;
-        cy = y + 64 - objClass.height;
+        cx = x + objClass.width / 2;
+        cy = y + objClass.height / 2;
     }
 
     public void Kill()

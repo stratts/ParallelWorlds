@@ -48,7 +48,7 @@ static class Collisions
         int playerheight = obj.objClass.height;
         int playerwidth = obj.objClass.width;
         int playerx = (int)obj.cx;
-        int playery = (int)obj.y + 62;
+        int playery = (int)obj.y + playerheight - 2;
 
         if (getCollisionPix(MISCSCREEN, 3, playerx, playery - playerheight)) return true;
         if (getCollisionPix(MISCSCREEN, 3, (playerx - (playerwidth >> 1)) + COLLISION_BORDER, playery - playerheight)) return true;
@@ -65,7 +65,7 @@ static class Collisions
         int playerheight = obj.objClass.height;
         int playerwidth = obj.objClass.width;
         int playerx = (int)obj.cx;
-        int playery = (int)obj.y + 62;
+        int playery = (int)obj.y + playerheight - 2;
 
 
         if (getCollisionPix(MISCSCREEN, 3, playerx, playery)) return true;
@@ -81,7 +81,7 @@ static class Collisions
         int playerheight = obj.objClass.height;
         int playerwidth = obj.objClass.width;
         int playerx = (int)obj.cx;
-        int playery = (int)obj.y + 63;
+        int playery = (int)obj.y + playerheight - 1;
 
         if (getCollisionPix(MISCSCREEN, 3, playerx, playery)) return true;
         if (getCollisionPix(MISCSCREEN, 3, (playerx - (playerwidth >> 1)) + COLLISION_BORDER, playery)) return true;
@@ -96,7 +96,7 @@ static class Collisions
         int playerheight = obj.objClass.height;
         int playerwidth = obj.objClass.width;
         int playerx = (int)obj.cx;
-        int playery = (int)obj.y + 62;
+        int playery = (int)obj.y + playerheight - 2;
 
         if (getCollisionPix(MISCSCREEN, 3, playerx - (playerwidth >> 1), playery - COLLISION_BORDER)) return true;
         if (getCollisionPix(MISCSCREEN, 3, playerx - (playerwidth >> 1), playery - (playerheight >> 1))) return true;
@@ -114,7 +114,7 @@ static class Collisions
         int playerheight = obj.objClass.height;
         int playerwidth = obj.objClass.width;
         int playerx = (int)obj.cx;
-        int playery = (int)obj.y + 62;
+        int playery = (int)obj.y + playerheight - 2;
 
 
         if (getCollisionPix(MISCSCREEN, 3, playerx + (playerwidth >> 1), playery - COLLISION_BORDER)) return true;
@@ -133,7 +133,7 @@ static class Collisions
         int playerheight = obj.objClass.height;
         int playerwidth = obj.objClass.width;
         int playerx = (int)obj.cx;
-        int playery = (int)obj.y + 24;
+        int playery = (int)obj.y + playerheight / 2;
 
         if (getCollisionPix(MISCSCREEN, 3, playerx - (playerwidth >> 1), playery - COLLISION_BORDER)) return true;
         if (getCollisionPix(MISCSCREEN, 3, playerx - (playerwidth >> 1), playery - (playerheight >> 1))) return true;
@@ -148,7 +148,7 @@ static class Collisions
         int playerheight = obj.objClass.height;
         int playerwidth = obj.objClass.width;
         int playerx = (int)obj.cx;
-        int playery = (int)obj.y + 32;
+        int playery = (int)obj.y + playerheight / 2;
 
 
         if (getCollisionPix(MISCSCREEN, 3, playerx + (playerwidth >> 1), playery - COLLISION_BORDER)) return true;

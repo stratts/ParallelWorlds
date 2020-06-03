@@ -160,7 +160,7 @@ namespace ParallelWorlds
                 var effects = SpriteEffects.None;
                 if (sprite.Flip) effects = SpriteEffects.FlipHorizontally;
 
-                _spriteBatch.Draw(sprite.Texture, sprite.Pos, sourceRect, Color.White, 0,
+                _spriteBatch.Draw(sprite.Texture, sprite.Pos + sprite.Offset.ToVector2(), sourceRect, Color.White, 0,
                     Vector2.Zero, 1, effects, 0);
             }
 

@@ -1,9 +1,11 @@
 using System;
+using Microsoft.Xna.Framework;
 
 struct ObjectClass
 {
     public string name;
     public string sprite;
+    public Point spriteOffset { get; set; }
     public int width, height;
     public float speed, weight, jumpPower;
     public (int start, int end) idle;
@@ -58,6 +60,7 @@ static class Classes
     {
         FROG.name = "Frog";
         FROG.sprite = CA.rootf("/characters/Frog/frog.png");
+        FROG.spriteOffset = new Point(-4, -8);
         FROG.speed = 2;
         FROG.weight = 80f / 256;
         FROG.ai = AI.generalCharacter;
@@ -77,6 +80,7 @@ static class Classes
 
         DUMMY.name = "Dummy";
         DUMMY.sprite = CA.rootf("/characters/Frog/frog.png");
+        DUMMY.spriteOffset = new Point(-4, -8);
         DUMMY.speed = 1;
         DUMMY.weight = 80f / 256;
         DUMMY.ai = AI.generalCPU;

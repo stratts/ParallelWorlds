@@ -20,6 +20,7 @@ static class PA
     public class Sprite
     {
         public Vector2 Pos { get; set; }
+        public Point Offset { get; set; }
         public Texture2D Texture { get; set; }
         public bool Loaded { get; private set; } = false;
         public string Path { get; }
@@ -186,10 +187,11 @@ static class PA
         return 0;
     }
 
-    public static void CreateSprite(byte screen, int sprite, int width, int height, string path)
+    public static void CreateSprite(byte screen, int sprite, int width, int height, Point offset, string path)
     {
         var s = new Sprite(path);
         s.Size = new Point(width, height);
+        s.Offset = offset;
         GetScreen(screen).Sprites[sprite] = s;
         Game.LoadQueue.Enqueue(s.Load);
     }
@@ -198,7 +200,7 @@ static class PA
     {
         // Hacky sprite specific positioning
         var s = GetScreen(screen).Sprites[sprite];
-        s.Pos = new Vector2((int)(x + 2 + s.Size.X / 2), (int)(y + s.Size.Y - 1));
+        s.Pos = new Vector2((int)x, (int)y);
     }
 
     public static void SetSpriteAnim(byte screen, int sprite, int animframe)
