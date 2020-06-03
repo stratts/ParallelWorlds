@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-
 using static Collisions;
-using static Functions;
 using static Defines;
+using static Functions;
 using static Levels;
 
-class ObjectInfo {
+class ObjectInfo
+{
     public float x, y;
     public float cx, cy;
     public float vy, vx;
@@ -28,27 +28,31 @@ class ObjectInfo {
     public int rotsetSlot;
     public bool loaded;
 
-    public static int[] sprites = new int[96]; 
+    public static int[] sprites = new int[96];
 
-    public static int getSprite() {
+    public static int getSprite()
+    {
         int i;
-        for(i=32;i<128;i++){
-            if(sprites[i] == 0){
+        for (i = 32; i < 128; i++)
+        {
+            if (sprites[i] == 0)
+            {
                 sprites[i] = 1;
                 return i;
-            }           
+            }
         }
         return -1;
     }
 
-    public ObjectInfo(ObjectClass objClass, float x, float y, int type) {
+    public ObjectInfo(ObjectClass objClass, float x, float y, int type)
+    {
         // Initialise and set our struct + variables
         //------------------------------------------------------------------------
 
         // Starting positions, can be used to reset the object
-        startX = x;        
+        startX = x;
         startY = y;
-        
+
         // Object class: defines the attributes and AI, unless otherwise specified
         this.objClass = objClass;
 
@@ -68,46 +72,52 @@ class ObjectInfo {
         moveDirection = -1;
         activated = false;
         loaded = true;
-        if(type > 0) typeOverride = type;
+        if (type > 0) typeOverride = type;
 
         // Anything else to initalise
         vy = 0;
 
-    // Load the object's sprite and palette
-    //------------------------------------------------------------------------
+        // Load the object's sprite and palette
+        //------------------------------------------------------------------------
         PA.CreateSprite(MAINSCREEN, sprite, 32, 32, objClass.sprite);
         alive = true;
     }
 
 
-    public void Update(Scene scene) {
+    public void Update(Scene scene)
+    {
         UpdateCentre();
-        if(loaded) objClass.ai(this, scene);
+        if (loaded) objClass.ai(this, scene);
     }
 
-    public void UpdateCentre() {
+    public void UpdateCentre()
+    {
         cx = x + 32;
         cy = y + 64 - objClass.height;
     }
 
-    public void Kill() {
+    public void Kill()
+    {
         alive = false;
         PA.SetSpriteXY(MAINSCREEN, sprite, 256, 192);
     }
 
-    public void Revive() {
+    public void Revive()
+    {
         alive = true;
         PA.SetSpriteXY(MAINSCREEN, sprite, x, y);
     }
 
-    public void Delete() {
+    public void Delete()
+    {
         sprites[this.sprite] = 0;
         alive = false;
         loaded = false;
         PA.DeleteSprite(MAINSCREEN, sprite);
     }
 
-    public void Animate(Animation animation) {
+    public void Animate(Animation animation)
+    {
         var (startFrame, endFrame) = objClass.GetFrames(animation);
         int frameSpeed = objClass.animSpeed;
         frameCount++;
@@ -123,41 +133,44 @@ class ObjectInfo {
         PA.SetSpriteAnim(MAINSCREEN, sprite, currentFrame);
     }
 
-    public void CheckCollision() {
-        if(rightCollision(this)) 
+    public void CheckCollision()
+    {
+        if (rightCollision(this))
         {
-            if(relspeedx <= -1) x += relspeedx;
+            if (relspeedx <= -1) x += relspeedx;
             else x -= 1;
         }
 
-        if(leftCollision(this))
+        if (leftCollision(this))
         {
-            if(relspeedx >= 1) x += relspeedx;
+            if (relspeedx >= 1) x += relspeedx;
             else x += 1;
         }
 
-        if(upCollision(this)) 
+        if (upCollision(this))
         {
-            if(relspeedy <= -1) y -= relspeedy;
+            if (relspeedy <= -1) y -= relspeedy;
             else y += 1;
             vy = 0;
         }
 
-        if(downCollision(this))
+        if (downCollision(this))
         {
-            if(relspeedy >= 1) y -= relspeedy;
+            if (relspeedy >= 1) y -= relspeedy;
             else y -= 2;
             action = 0;
         }
     }
 
-    public void AddGravity() {
+    public void AddGravity()
+    {
         y += vy;
-        if(!touchingGround(this) && vy < (float)currentLevel.gravity / 256) vy += objClass.weight;
-        else if(touchingGround(this)) vy = 0;
+        if (!touchingGround(this) && vy < (float)currentLevel.gravity / 256) vy += objClass.weight;
+        else if (touchingGround(this)) vy = 0;
     }
 
-    public bool InStageZone() {
+    public bool InStageZone()
+    {
         if (y > currentLevel.height + 256) return false;
         return true;
     }

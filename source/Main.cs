@@ -1,11 +1,12 @@
 using System.Collections;
-
-using static Levels;
 using static Classes;
+using static Levels;
 
-public static partial class Rooms {
+public static partial class Rooms
+{
 
-    public static void main() {
+    public static void main()
+    {
         PA.SetBrightness(0, -31);
         PA.SetBrightness(1, -31);
 
@@ -22,7 +23,7 @@ public static partial class Rooms {
 
         CA.FadeOut(0);
         CA.Update16c();
-    
+
         //- Start the game -----------------------------------------------------
         mainMenu();
     }

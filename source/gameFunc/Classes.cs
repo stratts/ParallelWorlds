@@ -1,6 +1,7 @@
 using System;
 
-struct ObjectClass {
+struct ObjectClass
+{
     public string name;
     public string sprite;
     public int width, height;
@@ -16,8 +17,10 @@ struct ObjectClass {
     public int createdSprite;
     //u16 *spritebuf, *palbuf;
 
-    public (int start, int end) GetFrames(Animation animation) {
-        switch (animation) {
+    public (int start, int end) GetFrames(Animation animation)
+    {
+        switch (animation)
+        {
             case Animation.Idle: return idle;
             case Animation.Walk: return walk;
             case Animation.Run: return run;
@@ -29,7 +32,8 @@ struct ObjectClass {
     }
 }
 
-enum Animation {
+enum Animation
+{
     Idle,
     Walk,
     Run,
@@ -38,7 +42,8 @@ enum Animation {
     Fall
 }
 
-static class Classes {
+static class Classes
+{
     //--------------------------------------------------------------
     // Start defining characters
     //--------------------------------------------------------------
@@ -49,7 +54,8 @@ static class Classes {
 
     public static ObjectClass[] classes;
 
-    public static void setClasses() {
+    public static void setClasses()
+    {
         FROG.name = "Frog";
         FROG.sprite = CA.rootf("/characters/Frog/frog.png");
         FROG.speed = 2;
@@ -82,6 +88,6 @@ static class Classes {
         DUMMY.walk.start = 12;
         DUMMY.walk.end = 23;
 
-        classes = new [] { LINK, FROG, DUMMY };
+        classes = new[] { LINK, FROG, DUMMY };
     }
 }

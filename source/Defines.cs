@@ -1,4 +1,5 @@
-static class Defines {
+static class Defines
+{
     public const string VERSION = "Version 0.2";
 
     public const byte MAINSCREEN = 1;

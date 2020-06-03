@@ -3,8 +3,9 @@ using System.Collections.Generic;
 
 using static Collisions;
 
-static class Functions {
-    
+static class Functions
+{
+
     public static void displayError(string error_text)
     {
         //PA_ResetBgSys();
@@ -15,7 +16,7 @@ static class Functions {
         string buffer = "Error:\n" + error_text;
         //PA16cTextAlign(ALIGN_CENTER);
         PA.SimpleText(1, 0, 0, buffer, true);
-        while(true)
+        while (true)
         {
             PA.WaitForVBL();
         }
@@ -34,13 +35,13 @@ static class Functions {
         int oldDistance = 10000000;
         int place = 0;
 
-        if(size > 1)
+        if (size > 1)
         {
-            for(i=0;i<size+1;i++)
+            for (i = 0; i < size + 1; i++)
             {
                 if (i >= ar.Count) break;
                 ObjectInfo obj = ar[i];
-                if(PA.Distance(current.x, current.y, obj.x, obj.y) < oldDistance && current != obj)
+                if (PA.Distance(current.x, current.y, obj.x, obj.y) < oldDistance && current != obj)
                 {
                     place = i;
                     oldDistance = PA.Distance(current.x, current.y, obj.x, obj.y);
@@ -49,7 +50,7 @@ static class Functions {
             }
         }
 
-        return place;   
+        return place;
     }
 
     public static void displayDebug(byte screen, Scene scene)
@@ -59,8 +60,8 @@ static class Functions {
         CA.SimpleText(screen, 4, 6, "- Player/camera info -");
         CA.SimpleText(screen, 4, 14, "Player position X: {0}", (int)scene.Objects[0].x);
         CA.SimpleText(screen, 4, 22, "Player position Y: {0}", (int)scene.Objects[0].y);
-        CA.SimpleText(screen, 4, 30, "Camera position X: {0}", scene.Camera.x>>8);
-        CA.SimpleText(screen, 4, 38, "Camera position Y: {0}", scene.Camera.y>>8);
+        CA.SimpleText(screen, 4, 30, "Camera position X: {0}", scene.Camera.x >> 8);
+        CA.SimpleText(screen, 4, 38, "Camera position Y: {0}", scene.Camera.y >> 8);
 
         CA.SimpleText(screen, 4, 58, "- Collisions -");
         CA.SimpleText(screen, 4, 66, "Left collision: {0}", leftCollision(player));
@@ -74,5 +75,5 @@ static class Functions {
         CA.SimpleText(screen, 4, 116, "- Hardware -");
         CA.SimpleText(screen, 4, 124, "CPU usage: {0} percent", "?");
         CA.SimpleText(screen, 4, 132, "Memory in use: {0} MB", GC.GetTotalMemory(false) / 1_000_000);
-    }   
+    }
 }
