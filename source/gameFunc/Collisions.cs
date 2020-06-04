@@ -5,41 +5,28 @@ static class Collisions
 {
     public static bool objectCollision(ObjectInfo obj1, ObjectInfo obj2)
     {
-        //grab sprite demensions (center positions and length and width)
-        int w1 = obj1.objClass.width;
-        int h1 = obj1.objClass.height;
-        int x1 = (int)obj1.cx;
-        int y1 = (int)obj1.cy;
+        // Get edges of both rectangles
+        int left1 = (int)obj1.x;
+        int up1 = (int)obj1.y;
+        int right1 = left1 + obj1.objClass.width;
+        int down1 = up1 + obj1.objClass.height;
 
-        int w2 = obj2.objClass.width;
-        int h2 = obj2.objClass.height;
-        int x2 = (int)obj2.cx;
-        int y2 = (int)obj2.cy;
+        int left2 = (int)obj2.x;
+        int up2 = (int)obj2.y;
+        int right2 = left2 + obj2.objClass.width;
+        int down2 = up2 + obj2.objClass.height;
 
-        if (obj1 != obj2)
-            return (((x2 >= x1 - ((w1 + w2) >> 1)) && (x2 <= x1 + ((w1 + w2) >> 1)) && (y2 >= y1 - ((h1 + h2) >> 1)) && (y2 <= y1 + ((h1 + h2) >> 1))));
-        return false;
+        if (left1 > right2 || right1 < left2 || up1 > down2 || down1 < up2) return false;
+        return true;
     }
 
     public static bool objectCollisionTop(ObjectInfo obj1, ObjectInfo obj2)
     {
-        //grab sprite demensions (center positions and length and width)
-        int w1 = obj1.objClass.width;
-        int h1 = obj1.objClass.height;
-        int x1 = (int)obj1.cx;
-        int y1 = (int)obj1.cy;
-
-        int w2 = obj2.objClass.width;
-        int h2 = obj2.objClass.height;
-        int x2 = (int)obj2.cx;
-        int y2 = (int)obj2.cy;
-
-        if (obj1 != obj2 && (y1 + (h1 >> 1)) - h1 < y2 - (h2))
-            return (((x2 >= x1 - ((w1 + w2) >> 1)) && (x2 <= x1 + ((w1 + w2) >> 1)) && (y2 >= y1 - ((h1 + h2) >> 1)) && (y2 <= y1 + ((h1 + h2) >> 1))));
-
-        return false;
+        int down1 = (int)obj1.y + obj1.objClass.height;
+        int up2 = (int)obj2.y;
+        // Return true if collision point is within top quarter of object
+        return objectCollision(obj1, obj2) && down1 - up2 < obj2.objClass.height / 4;
     }
-
 
     public static bool upCollision(ObjectInfo obj)
     {

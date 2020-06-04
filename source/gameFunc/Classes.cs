@@ -83,7 +83,7 @@ static class Classes
         DUMMY.spriteOffset = new Point(-4, -8);
         DUMMY.speed = 1;
         DUMMY.weight = 80f / 256;
-        DUMMY.ai = AI.generalCPU;
+        DUMMY.ai = AI.aiGenericGround;
         DUMMY.width = 24;
         DUMMY.height = 28;
         DUMMY.animSpeed = 3;
