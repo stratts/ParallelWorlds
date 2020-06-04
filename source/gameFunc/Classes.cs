@@ -60,11 +60,11 @@ static class Classes
     {
         FROG.name = "Frog";
         FROG.sprite = CA.rootf("/characters/Frog/frog.png");
-        FROG.spriteOffset = new Point(-4, -8);
+        FROG.spriteOffset = new Point(-8, -5);
         FROG.speed = 2;
         FROG.weight = 80f / 256;
         FROG.ai = AI.generalCharacter;
-        FROG.width = 24;
+        FROG.width = 16;
         FROG.height = 28;
         FROG.animSpeed = 3;
         FROG.idle.start = 0;
@@ -80,11 +80,11 @@ static class Classes
 
         DUMMY.name = "Dummy";
         DUMMY.sprite = CA.rootf("/characters/Frog/frog.png");
-        DUMMY.spriteOffset = new Point(-4, -8);
+        DUMMY.spriteOffset = new Point(-8, -5);
         DUMMY.speed = 1;
         DUMMY.weight = 80f / 256;
-        DUMMY.ai = AI.aiGenericGround;
-        DUMMY.width = 24;
+        DUMMY.ai = AI.generalCPU;
+        DUMMY.width = 16;
         DUMMY.height = 28;
         DUMMY.animSpeed = 3;
         DUMMY.idle.start = 0;

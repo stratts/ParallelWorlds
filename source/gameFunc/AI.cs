@@ -110,7 +110,7 @@ static class AI
                 }
             }*/
 
-            if ((leftCollision(obj) || rightCollision(obj)) && (!rightCollisionLarge(obj) && !leftCollisionLarge(obj)) && !obj.jumping)
+            if ((leftCollision(obj) || rightCollision(obj)) && !obj.jumping)
             {
                 obj.vy = -1400f / 256;
                 obj.action = 2;

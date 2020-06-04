@@ -28,119 +28,55 @@ static class Collisions
         return objectCollision(obj1, obj2) && down1 - up2 < obj2.objClass.height / 4;
     }
 
+    public enum LineDir { Horizontal, Vertical }
+
+    public static bool lineCollision((int x, int y) start, LineDir direction, int length)
+    {
+        (int x, int y) vector;
+        if (direction == LineDir.Horizontal) vector = (1, 0);
+        else vector = (0, 1);
+
+        for (int i = 0; i < length; i++)
+        {
+            if (getCollisionPix(MISCSCREEN, 3, start.x + vector.x * i, start.y + vector.y * i)) return true;
+            if (getCollisionPix(MISCSCREEN, 3, start.x - vector.x * i, start.y - vector.y * i)) return true;
+        }
+
+        return false;
+    }
+
     public static bool upCollision(ObjectInfo obj)
     {
         if (!obj.alive) return false;
-
-        int playerheight = obj.objClass.height;
-        int playerwidth = obj.objClass.width;
-        int playerx = (int)obj.cx;
-        int playery = (int)obj.y + playerheight - 2;
-
-        if (getCollisionPix(MISCSCREEN, 3, playerx, playery - playerheight)) return true;
-        if (getCollisionPix(MISCSCREEN, 3, (playerx - (playerwidth >> 1)) + COLLISION_BORDER, playery - playerheight)) return true;
-        if (getCollisionPix(MISCSCREEN, 3, (playerx + (playerwidth >> 1)) - COLLISION_BORDER, playery - playerheight)) return true;
-        return false;
-
-
+        return lineCollision(((int)obj.cx, (int)obj.y),
+            LineDir.Horizontal, (obj.objClass.width / 2));
     }
 
     public static bool downCollision(ObjectInfo obj)
     {
         if (!obj.alive) return false;
-
-        int playerheight = obj.objClass.height;
-        int playerwidth = obj.objClass.width;
-        int playerx = (int)obj.cx;
-        int playery = (int)obj.y + playerheight - 2;
-
-
-        if (getCollisionPix(MISCSCREEN, 3, playerx, playery)) return true;
-        if (getCollisionPix(MISCSCREEN, 3, (playerx - (playerwidth >> 1)) + COLLISION_BORDER, playery)) return true;
-        if (getCollisionPix(MISCSCREEN, 3, (playerx + (playerwidth >> 1)) - COLLISION_BORDER, playery)) return true;
-        return false;
+        return lineCollision(((int)obj.cx, (int)obj.y + obj.objClass.height),
+            LineDir.Horizontal, (obj.objClass.width / 2));
     }
 
     public static bool touchingGround(ObjectInfo obj)
     {
         if (!obj.alive) return false;
-
-        int playerheight = obj.objClass.height;
-        int playerwidth = obj.objClass.width;
-        int playerx = (int)obj.cx;
-        int playery = (int)obj.y + playerheight - 1;
-
-        if (getCollisionPix(MISCSCREEN, 3, playerx, playery)) return true;
-        if (getCollisionPix(MISCSCREEN, 3, (playerx - (playerwidth >> 1)) + COLLISION_BORDER, playery)) return true;
-        if (getCollisionPix(MISCSCREEN, 3, (playerx + (playerwidth >> 1)) - COLLISION_BORDER, playery)) return true;
-        return false;
+        return lineCollision(((int)obj.cx, (int)obj.y + obj.objClass.height + 1),
+            LineDir.Horizontal, (obj.objClass.width / 2));
     }
 
     public static bool leftCollision(ObjectInfo obj)
     {
         if (!obj.alive) return false;
-
-        int playerheight = obj.objClass.height;
-        int playerwidth = obj.objClass.width;
-        int playerx = (int)obj.cx;
-        int playery = (int)obj.y + playerheight - 2;
-
-        if (getCollisionPix(MISCSCREEN, 3, playerx - (playerwidth >> 1), playery - COLLISION_BORDER)) return true;
-        if (getCollisionPix(MISCSCREEN, 3, playerx - (playerwidth >> 1), playery - (playerheight >> 1))) return true;
-        if (getCollisionPix(MISCSCREEN, 3, playerx - (playerwidth >> 1), playery - (playerheight >> 2))) return true;
-        if (getCollisionPix(MISCSCREEN, 3, playerx - (playerwidth >> 1), (playery - playerheight) + COLLISION_BORDER)) return true;
-        if (getCollisionPix(MISCSCREEN, 3, playerx - (playerwidth >> 1), (playery - playerheight) + (playerheight >> 2) + (playerheight >> 3))) return true;
-        if (getCollisionPix(MISCSCREEN, 3, playerx - (playerwidth >> 1), (playery - playerheight) + (playerheight >> 3))) return true;
-        return false;
+        return lineCollision(((int)obj.x, (int)obj.cy),
+            LineDir.Vertical, (obj.objClass.height / 2) - 6);
     }
 
     public static bool rightCollision(ObjectInfo obj)
     {
         if (!obj.alive) return false;
-
-        int playerheight = obj.objClass.height;
-        int playerwidth = obj.objClass.width;
-        int playerx = (int)obj.cx;
-        int playery = (int)obj.y + playerheight - 2;
-
-
-        if (getCollisionPix(MISCSCREEN, 3, playerx + (playerwidth >> 1), playery - COLLISION_BORDER)) return true;
-        if (getCollisionPix(MISCSCREEN, 3, playerx + (playerwidth >> 1), playery - (playerheight >> 1))) return true;
-        if (getCollisionPix(MISCSCREEN, 3, playerx + (playerwidth >> 1), playery - (playerheight >> 2))) return true;
-        if (getCollisionPix(MISCSCREEN, 3, playerx + (playerwidth >> 1), (playery - playerheight) + COLLISION_BORDER)) return true;
-        if (getCollisionPix(MISCSCREEN, 3, playerx + (playerwidth >> 1), (playery - playerheight) + (playerheight >> 2) + (playerheight >> 3))) return true;
-        if (getCollisionPix(MISCSCREEN, 3, playerx + (playerwidth >> 1), (playery - playerheight) + (playerheight >> 3))) return true;
-        return false;
-    }
-
-    public static bool leftCollisionLarge(ObjectInfo obj)
-    {
-        if (!obj.alive) return false;
-
-        int playerheight = obj.objClass.height;
-        int playerwidth = obj.objClass.width;
-        int playerx = (int)obj.cx;
-        int playery = (int)obj.y + playerheight / 2;
-
-        if (getCollisionPix(MISCSCREEN, 3, playerx - (playerwidth >> 1), playery - COLLISION_BORDER)) return true;
-        if (getCollisionPix(MISCSCREEN, 3, playerx - (playerwidth >> 1), playery - (playerheight >> 1))) return true;
-        if (getCollisionPix(MISCSCREEN, 3, playerx - (playerwidth >> 1), (playery - playerheight) + COLLISION_BORDER)) return true;
-        return false;
-    }
-
-    public static bool rightCollisionLarge(ObjectInfo obj)
-    {
-        if (!obj.alive) return false;
-
-        int playerheight = obj.objClass.height;
-        int playerwidth = obj.objClass.width;
-        int playerx = (int)obj.cx;
-        int playery = (int)obj.y + playerheight / 2;
-
-
-        if (getCollisionPix(MISCSCREEN, 3, playerx + (playerwidth >> 1), playery - COLLISION_BORDER)) return true;
-        if (getCollisionPix(MISCSCREEN, 3, playerx + (playerwidth >> 1), playery - (playerheight >> 1))) return true;
-        if (getCollisionPix(MISCSCREEN, 3, playerx + (playerwidth >> 1), (playery - playerheight) + COLLISION_BORDER)) return true;
-        return false;
+        return lineCollision(((int)obj.x + obj.objClass.width, (int)obj.cy),
+            LineDir.Vertical, (obj.objClass.height / 2) - 6);
     }
 }
