@@ -63,13 +63,8 @@ struct LevelInfo
 
     public bool getCollisionPix(byte screen, byte bglayer, int x, int y)
     {
-        int xPos = x;
-        int yPos = y;
-
-        if (xPos > width - 1) xPos = width - 1;
-        if (xPos < 0) xPos = 0;
-        if (yPos > height - 1) yPos = height - 1;
-        if (yPos < 0) yPos = 0;
+        int xPos = Math.Min(width - 1, Math.Max(0, x));
+        int yPos = Math.Min(height - 1, Math.Max(0, y));
 
         return PA.EasyBgGetPixel(screen, bglayer, xPos, yPos);
     }
@@ -110,10 +105,5 @@ static class Levels
             i++;
             LEVELNUM++;
         }
-    }
-
-    public static bool getCollisionPix(byte screen, byte bglayer, int x, int y)
-    {
-        return currentLevel.getCollisionPix(screen, bglayer, x, y);
     }
 }

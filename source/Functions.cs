@@ -35,6 +35,7 @@ static class Functions
 
         foreach (ObjectInfo obj in scene.Objects)
         {
+            if (obj == current) continue;
             var dist = PA.Distance(current.x, current.y, obj.x, obj.y);
             if (minDist == -1 || dist < minDist)
             {

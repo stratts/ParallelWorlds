@@ -38,8 +38,8 @@ static class Collisions
 
         for (int i = 0; i < length; i++)
         {
-            if (getCollisionPix(MISCSCREEN, 3, start.x + vector.x * i, start.y + vector.y * i)) return true;
-            if (getCollisionPix(MISCSCREEN, 3, start.x - vector.x * i, start.y - vector.y * i)) return true;
+            if (currentLevel.getCollisionPix(MISCSCREEN, 3, start.x + vector.x * i, start.y + vector.y * i)) return true;
+            if (currentLevel.getCollisionPix(MISCSCREEN, 3, start.x - vector.x * i, start.y - vector.y * i)) return true;
         }
 
         return false;

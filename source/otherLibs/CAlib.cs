@@ -32,53 +32,29 @@ public static class CA
         PA.QueueClearText = true;
     }
 
+    private static void Fade(sbyte from, sbyte to)
+    {
+        sbyte i = from;
+        sbyte inc = (sbyte)Math.Sign(to - from);
+
+        while (i != to + inc)
+        {
+            PA.SetBrightness(0, i);
+            PA.SetBrightness(1, i);
+            PA.WaitForVBL();
+            i += (sbyte)Math.Sign(to - from);
+        }
+    }
+
     public static void FadeOut(byte type)
     {
-        sbyte i;
-
-        if (type == 1)
-        {
-            for (i = 0; i <= 31; i++)
-            {
-                PA.SetBrightness(0, i);
-                PA.SetBrightness(1, i);
-                PA.WaitForVBL();
-            }
-        }
-
-        else if (type == 0)
-        {
-            for (i = 0; i >= -31; i--)
-            {
-                PA.SetBrightness(0, i);
-                PA.SetBrightness(1, i);
-                PA.WaitForVBL();
-            }
-        }
+        if (type == 1) Fade(0, 31);
+        else if (type == 0) Fade(0, -31);
     }
 
     public static void FadeIn(byte type)
     {
-        sbyte i;
-
-        if (type == 1)
-        {
-            for (i = 31; i >= 0; i--)
-            {
-                PA.SetBrightness(0, i);
-                PA.SetBrightness(1, i);
-                PA.WaitForVBL();
-            }
-        }
-
-        else if (type == 0)
-        {
-            for (i = -31; i <= 0; i++)
-            {
-                PA.SetBrightness(0, i);
-                PA.SetBrightness(1, i);
-                PA.WaitForVBL();
-            }
-        }
+        if (type == 1) Fade(31, 0);
+        else if (type == 0) Fade(-31, 0);
     }
 }
