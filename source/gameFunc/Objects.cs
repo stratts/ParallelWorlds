@@ -18,8 +18,6 @@ class ObjectInfo
     public float oldposy, newposy, relspeedy;
     public float startX, startY;
     public int moveDirection;
-    public bool jumping;
-    public int action;
     public int cpuStopPos;
     public int typeOverride;
     public int i;
@@ -158,7 +156,6 @@ class ObjectInfo
         {
             if (relspeedy >= 1) y -= relspeedy;
             else y -= 2;
-            action = 0;
         }
     }
 

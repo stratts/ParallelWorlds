@@ -8,6 +8,7 @@ static class AI
 
     public static void generalCharacter(ObjectInfo obj, Scene scene)
     {
+        Animation animation = Animation.Idle;
         obj.oldposx = obj.x;
 
         if (Pad.Held.Left || Pad.Held.Right)
@@ -20,56 +21,36 @@ static class AI
             if (Pad.Held.Left)
             {
                 PA.SetSpriteHflip(MAINSCREEN, obj.sprite, 1);
-
                 obj.x -= obj.objClass.speed;
-                if (obj.action == 0) obj.Animate(Animation.Walk);
             }
 
             // Moving right
             if (Pad.Held.Right)
             {
                 PA.SetSpriteHflip(MAINSCREEN, obj.sprite, 0);
-
                 obj.x += obj.objClass.speed;
-                if (obj.action == 0) obj.Animate(Animation.Walk);
             }
 
             // End movement code
+            animation = Animation.Walk;
         }
-
-        else if (obj.action == 0)
-        {
-            obj.Animate(Animation.Idle);
-        }
-
 
         obj.AddGravity();
 
-        if (touchingGround(obj))
+        if (touchingGround(obj)) obj.vy = 0;
+        else
         {
-            obj.vy = 0;
-            obj.action = 0;
-            obj.jumping = false;
+            if (obj.vy > 2) animation = Animation.Fall;
+            else if (obj.vy < 0) animation = Animation.Jump;
         }
-
-        if (Pad.Newpress.Up && touchingGround(obj))
-        {
-            obj.action = 1;
-            obj.vy = -1800f / 256;
-            obj.jumping = true;
-        }
-
-        if (obj.vy > 2) obj.action = 2;
-        else if (obj.jumping && obj.vy > 0) obj.action = 2;
-
-        if (obj.action == 1) obj.Animate(Animation.Jump);
-        else if (obj.action == 2) obj.Animate(Animation.Fall);
+        if (Pad.Newpress.Up && touchingGround(obj)) obj.vy = -1800f / 256;
 
         obj.newposx = obj.x;
         obj.relspeedx = obj.oldposx - obj.newposx;
         obj.relspeedy = obj.vy;
 
         obj.CheckCollision();
+        obj.Animate(animation);
 
         if (!obj.InStageZone())
         {
@@ -82,22 +63,22 @@ static class AI
 
     public static void generalCPU(ObjectInfo obj, Scene scene)
     {
+        Animation animation = Animation.Idle;
         obj.oldposx = obj.x;
         var objects = scene.Objects;
+        var closest = objects[lowestXinObj(obj, objects, 3)];
 
-        if ((objects[lowestXinObj(obj, objects, 3)].x - obj.x) < -(objects[lowestXinObj(obj, objects, 3)].objClass.width + 2) || (objects[lowestXinObj(obj, objects, 3)].x - obj.x) > objects[lowestXinObj(obj, objects, 3)].objClass.width + 2)
+        if ((closest.x - obj.x) < -(closest.objClass.width + 2) || (closest.x - obj.x) > closest.objClass.width + 2)
         {
-            if (objects[lowestXinObj(obj, objects, 3)].x > obj.x)
+            if (closest.x > obj.x)
             {
                 PA.SetSpriteHflip(MAINSCREEN, obj.sprite, 0);
-                if (!obj.jumping) obj.action = 1;
                 obj.x += obj.objClass.speed - (((float)PA.RandMax(128)) / 256);
             }
 
-            else if (objects[lowestXinObj(obj, objects, 3)].x < obj.x)
+            else if (closest.x < obj.x)
             {
                 PA.SetSpriteHflip(MAINSCREEN, obj.sprite, 1);
-                if (!obj.jumping) obj.action = 1;
                 obj.x -= obj.objClass.speed - (((float)PA.RandMax(128)) / 256);
             }
 
@@ -110,36 +91,22 @@ static class AI
                 }
             }*/
 
-            if ((leftCollision(obj) || rightCollision(obj)) && !obj.jumping)
-            {
-                obj.vy = -1400f / 256;
-                obj.action = 2;
-                obj.jumping = true;
-            }
-        }
+            animation = Animation.Walk;
 
-        else obj.action = 0;
+            if ((leftCollision(obj) || rightCollision(obj)) && touchingGround(obj)) obj.vy = -1400f / 256;
+        }
 
         obj.AddGravity();
-        if (!touchingGround(obj) && obj.vy > 2f) obj.action = 3;
 
-        if (touchingGround(obj))
+        if (!touchingGround(obj))
         {
-            obj.vy = 0;
-            obj.jumping = false;
+            if (obj.vy > 2) animation = Animation.Fall;
+            else if (obj.vy < 0) animation = Animation.Jump;
         }
 
-        switch (obj.action)
-        {
-            case 0:
-                obj.Animate(Animation.Idle); break;
-            case 1:
-                obj.Animate(Animation.Walk); break;
-            case 2:
-                obj.Animate(Animation.Jump); break;
-            case 3:
-                obj.Animate(Animation.Fall); break;
-        }
+        if (touchingGround(obj)) obj.vy = 0;
+
+        obj.Animate(animation);
 
         obj.newposx = obj.x;
         obj.relspeedx = obj.oldposx - obj.newposx;
@@ -157,6 +124,7 @@ static class AI
     public static void aiGenericGround(ObjectInfo obj, Scene scene)
     {
         var objects = scene.Objects;
+        Animation animation = Animation.Idle;
         // Only activate the AI when the object is visible
         if (scene.InCanvas(obj)) obj.activated = true;
 
@@ -164,7 +132,6 @@ static class AI
         if (obj.activated && obj.alive)
         {
             obj.x += obj.objClass.speed * obj.moveDirection;
-
 
             if (leftCollision(obj) || rightCollision(obj)) obj.i++;
             else obj.i = 0;
@@ -179,8 +146,6 @@ static class AI
 
             else if (obj.i > 5)
             {
-                obj.action = 0;
-
                 if (obj.i > 40)
                 {
                     if (leftCollision(obj)) PA.SetSpriteHflip(MAINSCREEN, obj.sprite, 0);
@@ -190,32 +155,22 @@ static class AI
 
             else
             {
-                obj.action = 1;
+                animation = Animation.Walk;
                 if (obj.moveDirection == -1) PA.SetSpriteHflip(MAINSCREEN, obj.sprite, 1);
                 else PA.SetSpriteHflip(MAINSCREEN, obj.sprite, 0);
             }
 
-
-
-            switch (obj.action)
-            {
-                case 1:
-                    obj.Animate(Animation.Walk); break;
-
-                default:
-                    obj.Animate(Animation.Idle); break;
-            }
+            obj.Animate(animation);
 
             if (objectCollisionTop(objects[0], obj) && objects[0].vy > 0 && obj.alive)
             {
                 obj.alive = false;
                 if (objects[0].relspeedx >= 0) playerPoints += (objects[0].vy / 4) * (objects[0].relspeedx + 1);
                 else playerPoints += objects[0].vy * -(objects[0].relspeedx + 1);
-                if (!obj.jumping)
+                if (obj.vy >= 0)
                 {
                     obj.vy = -500f / 256;
                     objects[0].vy = -1200f / 256;
-                    obj.jumping = true;
                 }
             }
 
