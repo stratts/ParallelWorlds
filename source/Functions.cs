@@ -28,29 +28,22 @@ static class Functions
         else PA.SetSpriteXY(screen, sprite, x, y);
     }
 
-
-    public static int lowestXinObj(ObjectInfo current, List<ObjectInfo> ar, int size)
+    public static ObjectInfo FindClosestObject(ObjectInfo current, Scene scene)
     {
-        int i;
-        int oldDistance = 10000000;
-        int place = 0;
+        int minDist = -1;
+        ObjectInfo minObj = null;
 
-        if (size > 1)
+        foreach (ObjectInfo obj in scene.Objects)
         {
-            for (i = 0; i < size + 1; i++)
+            var dist = PA.Distance(current.x, current.y, obj.x, obj.y);
+            if (minDist == -1 || dist < minDist)
             {
-                if (i >= ar.Count) break;
-                ObjectInfo obj = ar[i];
-                if (PA.Distance(current.x, current.y, obj.x, obj.y) < oldDistance && current != obj)
-                {
-                    place = i;
-                    oldDistance = PA.Distance(current.x, current.y, obj.x, obj.y);
-                }
-
+                minDist = dist;
+                minObj = obj;
             }
         }
 
-        return place;
+        return minObj;
     }
 
     public static void displayDebug(byte screen, Scene scene)

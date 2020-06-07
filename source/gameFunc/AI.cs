@@ -66,7 +66,7 @@ static class AI
         Animation animation = Animation.Idle;
         obj.oldposx = obj.x;
         var objects = scene.Objects;
-        var closest = objects[lowestXinObj(obj, objects, 3)];
+        var closest = FindClosestObject(obj, scene);
 
         if ((closest.x - obj.x) < -(closest.objClass.width + 2) || (closest.x - obj.x) > closest.objClass.width + 2)
         {
