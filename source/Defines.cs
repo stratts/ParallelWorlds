@@ -1,3 +1,5 @@
+using Microsoft.Xna.Framework;
+
 static class Defines
 {
     public const string VERSION = "Version 0.2";
@@ -14,4 +16,6 @@ static class Defines
     public static int selectedItem;
 
     public static float playerPoints = 0;
+
+    public static Point ScreenSize;
 }

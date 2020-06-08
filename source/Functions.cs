@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 
 using static Collisions;
+using static Defines;
 
 static class Functions
 {
@@ -24,7 +25,7 @@ static class Functions
 
     public static void setSpriteXY(byte screen, int sprite, float x, float y)
     {
-        if (x >= 256 || y >= 192 || x <= -64 || y <= -64) PA.SetSpriteXY(screen, sprite, 256, 192);
+        if (x >= ScreenSize.X || y >= ScreenSize.Y || x <= -64 || y <= -64) PA.SetSpriteXY(screen, sprite, -64, -64);
         else PA.SetSpriteXY(screen, sprite, x, y);
     }
 

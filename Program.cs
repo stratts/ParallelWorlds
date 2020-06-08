@@ -11,8 +11,8 @@ namespace ParallelWorlds
     class ParallelWorlds : Game
     {
         private int _scale = 2;
-        private int _width = 256;
-        private int _height = 192;
+        private int _width = 400;
+        private int _height = 240;
         private Point _windowSize;
         private SpriteBatch _spriteBatch;
 
@@ -55,6 +55,8 @@ namespace ParallelWorlds
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _topScreen = CreateRenderTarget();
             _bottomScreen = CreateRenderTarget();
+
+            Defines.ScreenSize = new Point(_width, _height);
 
             PA.Game = this;
             _gameThread.Start();

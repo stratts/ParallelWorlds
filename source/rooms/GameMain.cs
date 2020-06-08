@@ -4,6 +4,8 @@ using static Defines;
 using static Functions;
 using static Levels;
 
+using Microsoft.Xna.Framework;
+
 public static partial class Rooms
 {
     public static void mainGame()
@@ -17,6 +19,7 @@ public static partial class Rooms
 
         camera.SetPos(0, (int)player.x >> 8 - 128, (int)player.y >> 8 - 96);
         camera.Target(player, scene.Level.width, scene.Level.height);
+        camera.Size = ScreenSize;
 
         scene.Update();
 

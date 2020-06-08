@@ -75,11 +75,5 @@ class Scene
         PA.EasyBgScrollXY(MAINSCREEN, 3, (Camera.x + backBgX) / 4, Camera.y / 4);
     }
 
-    public bool InCanvas(ObjectInfo obj)
-    {
-        int x = (int)obj.x;
-        int y = (int)obj.y;
-        if ((x - Camera.x) > 256 || (y - Camera.y) > 192 || (x - Camera.x) < -64 || (y - Camera.y) < -64) return false;
-        return true;
-    }
+    public bool InCanvas(ObjectInfo obj) => Camera.InCanvas((int)obj.x, (int)obj.y);
 }

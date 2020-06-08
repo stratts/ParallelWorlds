@@ -1,4 +1,5 @@
 using System;
+using Microsoft.Xna.Framework;
 
 // Main camera struct
 class Camera
@@ -10,6 +11,7 @@ class Camera
     public bool set; // Function specific variable - not used (?)
     public int type; // Camera mode
     public int limitl, limith; // Scroll limits
+    public Point Size { get; set; }
 
     public Camera(int type = 0)
     {
@@ -78,20 +80,26 @@ class Camera
         else return false;
     }*/
 
+    public bool InCanvas(int x, int y)
+    {
+        if ((x - this.x) > Size.X || (y - this.y) > Size.Y || (x - this.x) < -64 || (y - this.y) < -64) return false;
+        return true;
+    }
+
     // Main camera scrolling function
     public void Scroll()
     {
-        const int screenWidth = 256;
-        const int screenHeight = 192;
-        const int padding = screenWidth / 20;
-        const int h_border = screenWidth / 3;
-        const int v_border = screenHeight / 3;
+        int screenWidth = Size.X;
+        int screenHeight = Size.Y;
+        int padding = screenWidth / 20;
+        int h_border = screenWidth / 3;
+        int v_border = screenHeight / 3;
 
         // Constants, to eliminate magic numbers
-        const int top_border = v_border;
-        const int left_border = h_border;
-        const int right_border = screenWidth - h_border;
-        const int bottom_border = screenHeight - v_border;
+        int top_border = v_border;
+        int left_border = h_border;
+        int right_border = screenWidth - h_border;
+        int bottom_border = screenHeight - v_border;
 
         // Just to make the code easier to read
         float x = target.cx;

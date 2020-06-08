@@ -97,7 +97,7 @@ class ObjectInfo
     public void Kill()
     {
         alive = false;
-        PA.SetSpriteXY(MAINSCREEN, sprite, 256, 192);
+        PA.SetSpriteXY(MAINSCREEN, sprite, -64, -64);
     }
 
     public void Revive()
