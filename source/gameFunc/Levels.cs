@@ -12,7 +12,7 @@ struct LevelInfo
     public string stagebg, midbg, backbg;
     public string collision;
     public int width, height, friction, gravity;
-    public int midscroll, backscroll;
+    public float midscroll, backscroll;
 
     private bool TryLoadBackground(byte screen, byte layer, string name)
     {
@@ -100,8 +100,8 @@ static class Levels
             Jelli.level[i].width = int.Parse(data["Level"]["width"]);
             Jelli.level[i].height = int.Parse(data["Level"]["height"]);
             Jelli.level[i].gravity = int.Parse(data["Level"]["gravity"]);
-            Jelli.level[i].midscroll = int.Parse(data["Scrolling"]["midscroll"]);
-            Jelli.level[i].backscroll = int.Parse(data["Scrolling"]["backscroll"]);
+            Jelli.level[i].midscroll = float.Parse(data["Scrolling"]["midscroll"]) / 256;
+            Jelli.level[i].backscroll = float.Parse(data["Scrolling"]["backscroll"]) / 256;
             i++;
             LEVELNUM++;
         }

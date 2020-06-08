@@ -126,7 +126,7 @@ static class PA
     }
 
     public static void EasyBgScrollXY(byte screen, byte layer,
-            int x, int y)
+            float x, float y)
     {
         var background = GetBackground(screen, layer);
         if (background != null) background.Pos = new Vector2(x, y);

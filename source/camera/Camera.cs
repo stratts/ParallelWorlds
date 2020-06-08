@@ -3,8 +3,8 @@ using System;
 // Main camera struct
 class Camera
 {
-    public int x, y; // Camera's postion
-    public int xscroll, yscroll; // Current velocity
+    public float x, y; // Camera's postion
+    public float xscroll, yscroll; // Current velocity
     public ObjectInfo target;
     //int* targetx, * targety, *targetspeed, *targetvy; // 'Target' X and Y, used to adjust the camera
     public bool set; // Function specific variable - not used (?)
@@ -20,8 +20,8 @@ class Camera
     public void SetPos(int type, int x, int y)
     {
         this.type = type;
-        this.x = x << 8;
-        this.y = y << 8;
+        this.x = x;
+        this.y = y;
     }
 
     // Set the camera's target (to follow)
@@ -32,7 +32,7 @@ class Camera
         this.limith = limith;
     }
 
-    // Move the camera to a different place on the screen, using angles.
+    /*// Move the camera to a different place on the screen, using angles.
     public bool Set(int cx, int cy, int speed)
     {
         // Constants, to eliminate magic numbers
@@ -76,16 +76,16 @@ class Camera
 
         if (set1 && set2) return true;
         else return false;
-    }
+    }*/
 
     // Main camera scrolling function
     public void Scroll()
     {
         const int screenWidth = 256;
         const int screenHeight = 192;
-        const int padding = 10;
-        const int h_border = 80;
-        const int v_border = 60;
+        const int padding = screenWidth / 20;
+        const int h_border = screenWidth / 3;
+        const int v_border = screenHeight / 3;
 
         // Constants, to eliminate magic numbers
         const int top_border = v_border;
@@ -94,14 +94,14 @@ class Camera
         const int bottom_border = screenHeight - v_border;
 
         // Just to make the code easier to read
-        int x = (int)target.cx;
-        int y = (int)target.cy;
-        int maxspeedx = (int)target.objClass.speed << 8;
-        int maxspeedy = (int)(target.vy * 256);
-        int camerax = (this.x) >> 8;
-        int cameray = (this.y) >> 8;
-        int vy_speed = 5; // Fixed point division... the smaller the number, the faster the speed
-        int vx_speed = 5; // See above ^^
+        float x = target.cx;
+        float y = target.cy;
+        float maxspeedx = target.objClass.speed;
+        float maxspeedy = target.vy;
+        float camerax = this.x;
+        float cameray = this.y;
+        float vy_speed = 0.03f;
+        float vx_speed = 0.03f;
 
         /*                       *\
             'v*_speed' is the
@@ -112,25 +112,25 @@ class Camera
         // Camera types
         switch (type)
         {
-            case 0: vy_speed = 3; break;
+            case 0: vy_speed = 0.125f; break;
             case 1: break;
         }
 
         // Special conditions
-        if (target.objClass.speed == 0) maxspeedx = 1024;
+        if (target.objClass.speed == 0) maxspeedx = 4;
         if (maxspeedx < 0) maxspeedx = -maxspeedx;
-        if (target.vy == 0) maxspeedy = 1024;
+        if (target.vy == 0) maxspeedy = 4;
         if (maxspeedy < 0) maxspeedy = -maxspeedy;
 
         // Start main camera code
-        int overtakingspeedx = maxspeedx + (maxspeedx >> 2);
-        int overtakingspeedy = maxspeedy + (maxspeedy >> 2);
+        float overtakingspeedx = maxspeedx + (maxspeedx / 2);
+        float overtakingspeedy = maxspeedy + (maxspeedy / 2);
 
-        int accelerationx = maxspeedx >> vx_speed;
-        int accelerationy = maxspeedy >> vy_speed;
+        float accelerationx = maxspeedx * vx_speed;
+        float accelerationy = maxspeedy * vy_speed;
 
-        int canvasx = x - camerax;
-        int canvasy = y - cameray;
+        float canvasx = x - camerax;
+        float canvasy = y - cameray;
 
         if ((canvasx > right_border + padding && xscroll < overtakingspeedx) ||
             (canvasx < left_border - padding && xscroll > -overtakingspeedx))
@@ -180,25 +180,25 @@ class Camera
         this.y += yscroll;
 
         // Camera limits
-        if (this.x > (limitl - screenWidth) << 8)
+        if (this.x > (limitl - screenWidth))
         {
-            this.x = (limitl - screenWidth) << 8;
+            this.x = (limitl - screenWidth);
             //xscroll = -(xscroll>>1);
         }
 
-        if (this.x >> 8 < 0)
+        if (this.x < 0)
         {
             this.x = 0;
             //xscroll = -(xscroll>>1);
         }
 
-        if (this.y > (limith - screenHeight) << 8)
+        if (this.y > (limith - screenHeight))
         {
-            this.y = (limith - screenHeight) << 8;
+            this.y = (limith - screenHeight);
             //yscroll = -(yscroll>>1);
         }
 
-        if (this.y >> 8 < 0)
+        if (this.y < 0)
         {
             this.y = 0;
             //yscroll = -(yscroll>>1);

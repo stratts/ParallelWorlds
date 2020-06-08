@@ -54,8 +54,8 @@ static class Functions
         CA.SimpleText(screen, 4, 6, "- Player/camera info -");
         CA.SimpleText(screen, 4, 14, "Player position X: {0}", (int)scene.Objects[0].x);
         CA.SimpleText(screen, 4, 22, "Player position Y: {0}", (int)scene.Objects[0].y);
-        CA.SimpleText(screen, 4, 30, "Camera position X: {0}", scene.Camera.x >> 8);
-        CA.SimpleText(screen, 4, 38, "Camera position Y: {0}", scene.Camera.y >> 8);
+        CA.SimpleText(screen, 4, 30, "Camera position X: {0}", (int)scene.Camera.x);
+        CA.SimpleText(screen, 4, 38, "Camera position Y: {0}", (int)scene.Camera.y);
 
         CA.SimpleText(screen, 4, 58, "- Collisions -");
         CA.SimpleText(screen, 4, 66, "Left collision: {0}", leftCollision(player));
