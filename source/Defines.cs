@@ -1,3 +1,6 @@
+using System;
+using System.IO;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 
 static class Defines
@@ -9,7 +12,7 @@ static class Defines
 
     public static int LEVELNUM;
     public const int COLLISION_BORDER = 4;
-    public const string ROOTPATH = "data/ParallelWorlds";
+    public static string ROOTPATH = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + "/data/ParallelWorlds";
 
     public static int selectedLevel;
     public static int selectedCharacter;

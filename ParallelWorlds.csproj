@@ -19,7 +19,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="$(ProjectDir)data\**" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="$(ProjectDir)data\**">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </None>
   </ItemGroup>
 
 </Project>

@@ -45,7 +45,7 @@ namespace ParallelWorlds
             gdm.SynchronizeWithVerticalRetrace = true;
             IsFixedTimeStep = true;
 
-            Content.RootDirectory = "data/ParallelWorlds";
+            Content.RootDirectory = Defines.ROOTPATH;
         }
 
         protected override void Initialize()
